@@ -1,21 +1,35 @@
+import { computed } from 'vue'
 import { createI18n } from 'vue-i18n'
 
 import en from './en.json'
 import zhHans from './zh-Hans.json' // 简体中文
+import vi from './vi.json'
 
 const messages = {
   en,
   'zh-Hans': zhHans, // key 不能乱写，查看uniapp官网
+  vi,
 }
 
 const i18n = createI18n({
-  locale: uni.getLocale(), // 获取已设置的语言，fallback 语言需要再 manifest.config.ts 中设置
+  locale: uni.getStorageSync('Language') || uni.getLocale(),
+  fallbackLocale: 'zh-Hans',
   messages,
   allowComposition: true,
 })
 
 console.log(uni.getLocale())
 console.log(i18n.global.locale)
+
+export const currentLocale = computed(() => i18n.global.locale)
+
+export function setLocale(locale: string) {
+  if (!Object.prototype.hasOwnProperty.call(messages, locale))
+    return
+  i18n.global.locale = locale
+  uni.setLocale(locale)
+  uni.setStorageSync('Language', locale)
+}
 
 /**
  * 可以拿到原始的语言模板，非 vue 文件使用这个方法，
@@ -27,19 +41,19 @@ export function getTemplateByKey(key: string) {
     console.error(`[i18n] Function getTemplateByKey(), key param is required`)
     return ''
   }
-  const locale = uni.getLocale()
+  const locale = currentLocale.value
   console.log('locale:', locale)
 
-  const message = messages[locale] // 拿到某个多语言的所有模板（是一个对象)
+  const message = messages[locale] || zhHans // 未支持的系统语言使用中文
   if (Object.keys(message).includes(key)) {
     return message[key]
   }
 
   try {
     const keyList = key.split('.')
-    return keyList.reduce((pre, cur) => {
-      return pre[cur]
-    }, message)
+    return keyList.reduce((pre, cur) => pre?.[cur], message)
+      ?? keyList.reduce((pre, cur) => pre?.[cur], zhHans)
+      ?? key
   }
   catch (error) {
     console.error(`[i18n] Function getTemplateByKey(), key param ${key} is not existed.`)
@@ -61,9 +75,9 @@ function formatI18n(template: string, data?: any) {
     let result = data
     while (arr.length) {
       const first = arr.shift()
-      result = result[first]
+      result = result?.[first]
     }
-    return result
+    return result ?? match
   })
 }
 

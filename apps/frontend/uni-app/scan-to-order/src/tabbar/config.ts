@@ -24,37 +24,37 @@ export const selectedTabbarStrategy = TABBAR_STRATEGY_MAP.NATIVE_TABBAR
 // TODO: 2/3. 使用 NATIVE_TABBAR 时，更新下面的 tabbar 配置
 export const nativeTabbarList: NativeTabBarItem[] = [
   {
-    text: '首页',
+    text: '%tabbar.home%',
     pagePath: 'pages/home/index/index',
     iconPath: 'static/tabbar/home-off.png',
     selectedIconPath: 'static/tabbar/home-on.png',
   },
   {
-    text: '点餐',
+    text: '%tabbar.ordering%',
     pagePath: 'pages/ordering/index/index',
     iconPath: 'static/tabbar/index-off.png',
     selectedIconPath: 'static/tabbar/index-on.png',
   },
   {
-    text: '服务',
+    text: '%tabbar.service%',
     pagePath: 'pages/service/index/index',
     iconPath: 'static/tabbar/qc-off.png',
     selectedIconPath: 'static/tabbar/qc-on.png',
   },
   {
-    text: '取号',
+    text: '%tabbar.queue%',
     pagePath: 'pages/queue/index/index',
     iconPath: 'static/tabbar/qh-off.png',
     selectedIconPath: 'static/tabbar/qh-on.png',
   },
   {
-    text: '取餐',
+    text: '%tabbar.pickup%',
     pagePath: 'pages/pickup/index/index',
     iconPath: 'static/tabbar/qc-off.png',
     selectedIconPath: 'static/tabbar/qc-on.png',
   },
   {
-    text: '我的',
+    text: '%tabbar.me%',
     pagePath: 'pages/account/index/index',
     iconPath: 'static/tabbar/my-off.png',
     selectedIconPath: 'static/tabbar/my-on.png',

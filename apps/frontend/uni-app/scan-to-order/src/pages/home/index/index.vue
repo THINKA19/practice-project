@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { LanguageSwitcher } from '@/components/locale'
+
 definePage({
   type: 'home',
   style: {
@@ -9,6 +11,9 @@ definePage({
 
 <template>
   <view class="p-6">
+    <view class="mb-6">
+      <LanguageSwitcher />
+    </view>
     <view class="text-xl">
       这是首页测试页面
     </view>

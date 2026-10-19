@@ -1,0 +1,17 @@
+{
+  "tabbar": {
+    "home": "Trang chủ",
+    "ordering": "Đặt món",
+    "service": "Dịch vụ",
+    "queue": "Lấy số",
+    "pickup": "Nhận món",
+    "me": "Tôi"
+  },
+  "alova": {
+    "title": "Yêu cầu Alova"
+  },
+  "common": {
+    "selectLang": "Ngôn ngữ",
+    "cancel": "Hủy"
+  }
+}

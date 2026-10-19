@@ -1,11 +1,19 @@
 {
-  "tabbar.home": "首页",
-  "tabbar.about": "关于",
-  "tabbar.me": "我的",
-  "tabbar.i18n": "多语言",
-  "i18n.title": "中文标题",
-  "alova.title": "Alova 请求",
-  "weight": "{heavy}公斤",
-  "detail": "{0}cm, {1}公斤",
-  "introduction": "我是 {name},身高:{detail.height},体重:{detail.weight}"
+  "tabbar": {
+    "home": "首页",
+    "about": "关于",
+    "me": "我的",
+    "i18n": "多语言",
+    "ordering": "点餐",
+    "service": "服务",
+    "queue": "取号",
+    "pickup": "取餐"
+  },
+  "alova": {
+    "title": "Alova 请求"
+  },
+  "common": {
+    "selectLang": "切换语言",
+    "cancel": "取消"
+  }
 }
