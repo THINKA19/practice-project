@@ -2,9 +2,12 @@ import type { UserRole } from '@/api/types/login'
 import type { CustomTabBarItem, CustomTabBarItemBadge } from './types'
 import { computed, reactive, ref } from 'vue'
 import { useUserStore } from '@/store/user'
-import { HOME_PAGE } from '@/utils'
+import { pages } from '@/pages.json'
 
 import { tabbarList as _tabbarList, selectedTabbarStrategy, TABBAR_STRATEGY_MAP } from './config'
+
+// 直接读取页面配置，避免与 utils/index 循环导入。
+const HOME_PAGE = `/${(pages.find(page => page.type === 'home') || pages[0]).path}`
 
 /**
  * 当前 tabbar 页面的缓存 key。
