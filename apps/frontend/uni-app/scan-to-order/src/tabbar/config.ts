@@ -19,21 +19,45 @@ export const TABBAR_STRATEGY_MAP = {
 // 如果是使用 NO_TABBAR(0)，nativeTabbarList 和 customTabbarList 都不生效
 // 如果是使用 NATIVE_TABBAR(1)，只需要配置 nativeTabbarList，customTabbarList 不生效
 // 如果是使用 CUSTOM_TABBAR(2)，只需要配置 customTabbarList，nativeTabbarList 不生效
-export const selectedTabbarStrategy = TABBAR_STRATEGY_MAP.CUSTOM_TABBAR
+export const selectedTabbarStrategy = TABBAR_STRATEGY_MAP.NATIVE_TABBAR
 
 // TODO: 2/3. 使用 NATIVE_TABBAR 时，更新下面的 tabbar 配置
 export const nativeTabbarList: NativeTabBarItem[] = [
   {
-    iconPath: 'static/tabbar/home.png',
-    selectedIconPath: 'static/tabbar/homeHL.png',
-    pagePath: 'pages/index/index',
-    text: '%tabbar.home%',
+    text: '首页',
+    pagePath: 'pages/home/index/index',
+    iconPath: 'static/tabbar/home-off.png',
+    selectedIconPath: 'static/tabbar/home-on.png',
   },
   {
-    iconPath: 'static/tabbar/personal.png',
-    selectedIconPath: 'static/tabbar/personalHL.png',
-    pagePath: 'pages/me/me',
-    text: '%tabbar.me%',
+    text: '点餐',
+    pagePath: 'pages/ordering/index/index',
+    iconPath: 'static/tabbar/index-off.png',
+    selectedIconPath: 'static/tabbar/index-on.png',
+  },
+  {
+    text: '服务',
+    pagePath: 'pages/service/index/index',
+    iconPath: 'static/tabbar/qc-off.png',
+    selectedIconPath: 'static/tabbar/qc-on.png',
+  },
+  {
+    text: '取号',
+    pagePath: 'pages/queue/index/index',
+    iconPath: 'static/tabbar/qh-off.png',
+    selectedIconPath: 'static/tabbar/qh-on.png',
+  },
+  {
+    text: '取餐',
+    pagePath: 'pages/pickup/index/index',
+    iconPath: 'static/tabbar/qc-off.png',
+    selectedIconPath: 'static/tabbar/qc-on.png',
+  },
+  {
+    text: '我的',
+    pagePath: 'pages/account/index/index',
+    iconPath: 'static/tabbar/my-off.png',
+    selectedIconPath: 'static/tabbar/my-on.png',
   },
 ]
 
