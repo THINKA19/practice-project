@@ -17,7 +17,7 @@ jobs:
     steps:
       # 必须先检出代码，才能找到下面的本地 Action
       - name: 检出代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: 准备环境
         uses: ./.github/actions/setup
