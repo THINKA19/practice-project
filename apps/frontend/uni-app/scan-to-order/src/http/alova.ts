@@ -1,11 +1,16 @@
+import { useTokenStore } from '@/store/token'
 import type { uniappRequestAdapter } from '@alova/adapter-uniapp'
 import type { IResponse } from './types'
 import AdapterUniapp from '@alova/adapter-uniapp'
 import { createAlova } from 'alova'
 import { createServerTokenAuthentication } from 'alova/client'
 import VueHook from 'alova/vue'
+import { createMockRequestAdapter } from '@/mock'
+import { USE_MOCK } from '@/mock/config'
 import { toLoginPage } from '@/utils/toLoginPage'
 import { ContentTypeEnum, ResultEnum, ShowMessage } from './tools/enum'
+
+const requestRevisions = new WeakMap<object, number>()
 
 // 配置动态Tag
 export const API_DOMAINS = {
@@ -43,7 +48,9 @@ const { onAuthRequired, onResponseRefreshToken } = createServerTokenAuthenticati
  */
 const alovaInstance = createAlova({
   baseURL: API_DOMAINS.DEFAULT,
-  ...AdapterUniapp(),
+  ...AdapterUniapp({
+    mockRequest: USE_MOCK ? createMockRequestAdapter() : undefined,
+  }),
   timeout: 5000,
   statesHook: VueHook,
 
@@ -56,16 +63,10 @@ const alovaInstance = createAlova({
     }
 
     const { config } = method
-    const ignoreAuth = !config.meta?.ignoreAuth
-    console.log('ignoreAuth===>', ignoreAuth)
-    // 处理认证信息   自行处理认证问题
-    if (ignoreAuth) {
-      const token = 'getToken()'
-      if (!token) {
-        throw new Error('[请求错误]：未登录')
-      }
-      // method.config.headers.token = token;
-    }
+    const session = useTokenStore().updateNowTime()
+    requestRevisions.set(method, session.sessionRevision)
+    if (!config.meta?.ignoreAuth && session.validToken)
+      method.config.headers.Authorization = `Bearer ${session.validToken}`
 
     // 处理动态域名
     if (config.meta?.domain) {
@@ -82,6 +83,15 @@ const alovaInstance = createAlova({
       data: rawData,
       errMsg,
     } = response as UniNamespace.RequestSuccessCallbackResult
+
+    const session = useTokenStore()
+    if (requestRevisions.get(method) !== session.sessionRevision)
+      throw new Error('会话已变化，忽略旧请求结果')
+    if (statusCode === 401 || (rawData as IResponse)?.code === ResultEnum.Unauthorized) {
+      session.clearSession()
+      toLoginPage()
+      throw new Error('登录已过期，请重新登录')
+    }
 
     // 处理特殊请求类型（上传/下载）
     if (requestType === 'upload' || requestType === 'download') {

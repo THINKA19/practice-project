@@ -1,19 +1,308 @@
 {
   "tabbar": {
     "home": "Home",
-    "about": "About",
-    "me": "Me",
-    "i18n": "I18n",
-    "ordering": "Order",
-    "service": "Services",
+    "order": "Order",
+    "service": "Service",
     "queue": "Queue",
-    "pickup": "Pickup"
-  },
-  "alova": {
-    "title": "Alova Request"
+    "order-details": "Pickup",
+    "me": "Me",
+    "i18n": "I18n"
   },
   "common": {
-    "selectLang": "Language",
-    "cancel": "Cancel"
+    "selectLang": "Select Language",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "empty": "No Data",
+    "loading": "Loading",
+    "noMore": "No more items",
+    "loadFailed": "Failed to load",
+    "retry": "Tap to retry",
+    "pageNotFound": "Page not found"
+  },
+  "coupons": {
+    "title": "Coupons",
+    "tabs": ["Can Fetch", "Available", "Invalid", "Exchange"],
+    "Vouchers": "Vouchers",
+    "over": "Over",
+    "btn": "Fetch",
+    "expire": "exp",
+    "toUse": "Use",
+    "inputpassword": "Input password",
+    "Cominglate": "Cominglate",
+    "receivedgreedy": "You have received it, you cannot receive it anymore",
+    "pointsinsufficient": "Your points are insufficient",
+    "Expired": "Expired",
+    "Successfullyclaimed": "Success",
+    "number": "Code",
+    "numberPlaceholder": "Please enter the coupon Code",
+    "pwd": "Password",
+    "pwdPlaceholder": "Please enter password",
+    "enternum": "Enter the coupon number",
+    "password": "password",
+    "change": "Exchange",
+    "Redemption": "Redemption successful",
+    "Invitingcoupons": "Inviting you to collect coupons",
+    "exchangeTitle": "Redeem Coupon",
+    "exchangeSubtitle": "Enter the code to claim your exclusive discount",
+    "exchanging": "Redeeming...",
+    "loadingMore": "Loading...",
+    "noMore": "No more"
+  },
+  "welfare": {
+    "title": "Welfare Center",
+    "tabAvailable": "Available",
+    "tabReceived": "Received",
+    "total": "{count} coupon(s)",
+    "emptyAvailable": "No coupons available",
+    "emptyReceived": "No coupons received yet",
+    "threshold": "Over {amount}",
+    "universal": "For all orders",
+    "claim": "Claim",
+    "claiming": "Claiming",
+    "toUse": "Use",
+    "claimSuccess": "Claimed"
+  },
+  "groupBuying": {
+    "title": "Group Buy",
+    "total": "{count} deal(s)",
+    "empty": "No group buys available",
+    "joined": "{count} joined",
+    "remainDay": "Left {d}d {h}h {m}m",
+    "remainHour": "Left {h}h {m}m {s}s",
+    "ended": "Ended",
+    "join": "Join",
+    "discount": "{percent}% OFF"
+  },
+  "groupBuyingDetail": {
+    "title": "Deal Detail",
+    "notFound": "Item not found",
+    "joined": "{count} joined",
+    "save": "Save ¥{amount}",
+    "countdownDay": "{d}d {time}",
+    "remain": "{time} left",
+    "ended": "This deal has ended",
+    "needCount": "{count} more to unlock",
+    "enough": "Group is ready",
+    "number": "Quantity",
+    "total": "Total",
+    "submit": "Join now",
+    "submitFailed": "Failed to create the order, please retry"
+  },
+  "card": {
+    "title": "Gift Card",
+    "tabBuy": "Buy",
+    "tabMy": "Mine",
+    "exchangeEntry": "Redeem Code",
+    "exchangeDesc": "Enter a code to claim a gift card",
+    "giftSending": "Sending",
+    "giftToFriend": "Send to friend",
+    "cancelShare": "Cancel sharing",
+    "usageLogs": "Usage history",
+    "validUntil": "Valid until",
+    "times": "times",
+    "wechatUser": "WeChat User",
+    "sentBy": "From {name}",
+    "confirmPay": "Confirm Payment",
+    "exchange": {
+      "title": "Redeem Gift Card",
+      "subtitle": "Please enter your gift card code",
+      "codeLabel": "Redeem Code",
+      "codePlaceholder": "Enter redeem code",
+      "codeTips": "Please enter the complete gift card code",
+      "agreePrefix": "I have read and agree to",
+      "agreement": "Gift Card Service Agreement",
+      "submit": "Redeem Now",
+      "tipsTitle": "Tips",
+      "tip1": "Each code can only be used once",
+      "tip2": "The gift card will be added to your account after redemption",
+      "tip3": "Contact customer service if you have any questions",
+      "success": "Redeemed successfully",
+      "inputRequired": "Please enter the redeem code",
+      "agreeRequired": "Please agree to the agreement first"
+    },
+    "receive": {
+      "title": "Receive Gift Card",
+      "friend": "Friend",
+      "sharePlaceholder": "sent you a gift card",
+      "action": "Add to my account",
+      "warmTips": "You can view it in \"Me\" - \"Gift Card\" after receiving",
+      "success": "Received successfully",
+      "gotIt": "Got it"
+    },
+    "send": {
+      "title": "Send Gift Card",
+      "subtitle": "Share your love and good times",
+      "remarkLabel": "Message",
+      "sharePlaceholder": "A gift card for you",
+      "action": "Share with friend now"
+    },
+    "logs": {
+      "title": "Usage History",
+      "subtitle": "Card Consumption Record",
+      "empty": "No usage records",
+      "emptyTips": "Your usage records will appear here after you spend with the gift card.",
+      "amount": "Amount",
+      "balance": "Balance"
+    }
+  },
+  "wallet": {
+    "title": "My Wallet",
+    "balance": "Balance",
+    "frozen": "Frozen",
+    "accountRecords": "Account Records",
+    "recharge": "Top Up",
+    "confine": "Top-up",
+    "sendBadge": "Get ¥{amount}",
+    "customAmount": "Custom",
+    "customAmountTitle": "Custom Top-up Amount",
+    "amount": "Top-up Amount",
+    "amountPlaceholder": "Please enter the top-up amount",
+    "confirmBtn": "Top Up",
+    "payNow": "Pay ¥{amount}",
+    "cancel": "Cancel",
+    "confirmPay": "Confirm Payment",
+    "paySuccess": "Payment successful",
+    "amountRequired": "Please enter the top-up amount",
+    "amountInvalid": "Top-up amount must be greater than 0",
+    "totalRecharge": "Total top-up",
+    "times": "{count} times",
+    "statusSuccess": "Success",
+    "payLog": {
+      "title": "Top-up History",
+      "entryDesc": "View top-up details",
+      "empty": "No top-up records",
+      "emptyTips": "Top up now to enjoy more rewards~"
+    },
+    "cashLog": {
+      "title": "Withdrawal History",
+      "entryDesc": "View withdrawal records",
+      "empty": "No transaction records",
+      "emptyTips": "Every income and expense will be recorded here~"
+    },
+    "scoreLog": {
+      "title": "Points History",
+      "unit": "pts",
+      "empty": "No points records",
+      "emptyTips": "Buy drinks to earn points now"
+    }
+  },
+  "home": {
+    "user": {
+      "coupon": "Coupon"
+    },
+    "delivery": {
+      "delivery": "Delivery Method",
+      "pickup": "Pickup",
+      "rider": "Rider Delivery",
+      "takeout": "Delivery"
+    },
+    "feaature": {
+      "moreService": "More Services",
+      "favorites": "Favorites",
+      "memberCard": "Member Card",
+      "groupBuy": "Group Buy",
+      "welfare": "Welfare"
+    }
+  },
+  "vip": {
+    "title": "VIP",
+    "consumption": "Total Consumption",
+    "notVIP": "Not VIP",
+    "tip": "Consumption Reaches, Upgrade Automatically",
+    "growth": "Member Growth System",
+    "growthName": "Level",
+    "growthDiscount": "Discount",
+    "growthConsumption": "Consumption",
+    "profile": "Note: When the shopping consumption reaches the specified standard, it will automatically become a member of that level"
+  },
+  "favorites": {
+    "title": "My Favorites",
+    "total": "{count} favorite(s)",
+    "empty": "No favorites yet",
+    "collectAt": "Collected on",
+    "cancelTitle": "Tips",
+    "cancelConfirm": "Remove '{name}' from favorites?",
+    "cancelSuccess": "Removed from favorites"
+  },
+  "queue": {
+    "title": "Queue",
+    "heroTitle": "Smart Queue",
+    "selectType": "Choose a queue",
+    "tapToGet": "Tap to take a number",
+    "currentQueue": "Now serving",
+    "myNumber": "My Number",
+    "expectedWaiting": "Est. wait",
+    "minutes": " min",
+    "empty": "No queue available",
+    "success": "Number taken"
+  },
+  "orderDetail": {
+    "title": "Order Detail",
+    "closed": "Closed",
+    "closedTips": "This order was cancelled",
+    "noPay": "Unpaid",
+    "noPayTips": "Please complete the payment soon",
+    "payNow": "Pay Now",
+    "pickingUp": "Ready for Pickup",
+    "qudanhao": "Pickup No.",
+    "showToStaff": "Show this code to the staff",
+    "delivering": "Delivering",
+    "deliveringTips": "The rider is on the way",
+    "showToRider": "Show this code to the rider",
+    "finished": "Completed",
+    "finishedTips": "Thank you for visiting, see you next time",
+    "shopInfo": "Store",
+    "contact": "Call",
+    "logisticsInfo": "Delivery Info",
+    "goodsTitle": "Items",
+    "total": "Total",
+    "orderInfo": "Order Info",
+    "dateAdd": "Ordered at",
+    "cancelTime": "Cancelled at",
+    "paySuccess": "Payment successful",
+    "order": "Order",
+    "payable": "Amount Due",
+    "orderNo": "Order No."
+  },
+  "orderDoing": {
+    "title": "Preparing",
+    "empty": "No orders in progress",
+    "emptyTips": "Let's grab a cup",
+    "goOrder": "Order Now",
+    "qudanhao": "Pickup No.",
+    "pickTips": "Show the pickup code to the staff",
+    "qrcodeLabel": "Verification code",
+    "delivering": "Delivering",
+    "deliveryQrcodeLabel": "Delivery code",
+    "logisticsInfo": "Delivery Info",
+    "orderDetail": "Order Details",
+    "total": "Total",
+    "dateAdd": "Ordered at",
+    "footer": "Enjoy every sip"
+  },
+  "orderScan": {
+    "title": "Scan & Verify",
+    "headerTitle": "Order Verification",
+    "headerTips": "Please confirm the info below",
+    "logisticsInfo": "Delivery Info",
+    "goodsInfo": "Items",
+    "couponInfo": "Discount",
+    "feeInfo": "Payment Details",
+    "goodsAmount": "Subtotal",
+    "freight": "Delivery Fee",
+    "realAmount": "Amount Paid",
+    "confirmVerification": "Confirm",
+    "verified": "Verified"
+  },
+  "demo": {
+    "i18n": {
+      "title": "En Title"
+    },
+    "alova": {
+      "title": "Alova Request"
+    },
+    "weight": "{heavy}KG",
+    "detail": "{0}cm, {1}KG",
+    "introduction": "I am {name},height:{detail.height},weight:{detail.weight}"
   }
 }

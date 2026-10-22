@@ -1,3 +1,4 @@
+import { useTokenStore } from './token'
 import type { IUserInfoRes } from '@/api/types/login'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -42,7 +43,11 @@ export const useUserStore = defineStore(
      * 获取用户信息
      */
     const fetchUserInfo = async () => {
+      const token = useTokenStore()
+      const started = token.sessionRevision
       const res = await getUserInfo()
+      if (started !== token.sessionRevision)
+        return
       setUserInfo(res)
       return res
     }

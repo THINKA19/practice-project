@@ -36,8 +36,8 @@ export function refreshToken(refreshToken: string) {
 /**
  * 获取用户信息
  */
-export function getUserInfo() {
-  return http.get<IUserInfoRes>('/user/info')
+export function getUserInfo(token?: string) {
+  return http.get<IUserInfoRes>('/user/info', undefined, token ? { Authorization: `Bearer ${token}` } : undefined)
 }
 
 /**

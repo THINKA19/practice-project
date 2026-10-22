@@ -1,19 +1,308 @@
 {
   "tabbar": {
     "home": "首页",
-    "about": "关于",
-    "me": "我的",
-    "i18n": "多语言",
-    "ordering": "点餐",
+    "order": "点餐",
     "service": "服务",
     "queue": "取号",
-    "pickup": "取餐"
-  },
-  "alova": {
-    "title": "Alova 请求"
+    "order-details": "取餐",
+    "me": "我的",
+    "i18n": "多语言"
   },
   "common": {
-    "selectLang": "切换语言",
-    "cancel": "取消"
+    "selectLang": "选择语言",
+    "cancel": "取消",
+    "confirm": "确定",
+    "empty": "暂无数据",
+    "loading": "正在加载",
+    "noMore": "已经到底啦",
+    "loadFailed": "加载失败",
+    "retry": "点击重试",
+    "pageNotFound": "页面不存在"
+  },
+  "coupons": {
+    "title": "优惠券",
+    "tabs": ["可领", "已领", "失效", "口令"],
+    "Vouchers": "代金券",
+    "over": "满",
+    "btn": "立即领取",
+    "expire": "到期",
+    "toUse": "立即使用",
+    "inputpassword": "请输入口令",
+    "Cominglate": "来晚了",
+    "receivedgreedy": "你领过了，别贪心哦~",
+    "pointsinsufficient": "您的积分不足~",
+    "Expired": "已过期~",
+    "Successfullyclaimed": "领取成功~",
+    "number": "券号",
+    "numberPlaceholder": "请输入券号",
+    "pwd": "密码",
+    "pwdPlaceholder": "请输入密码",
+    "enternum": "请输入券号",
+    "password": "请输入密码",
+    "change": "立即兑换",
+    "Redemption": "兑换成功",
+    "Invitingcoupons": "邀您领取优惠券",
+    "exchangeTitle": "兑换优惠券",
+    "exchangeSubtitle": "输入口令码，领取专属优惠",
+    "exchanging": "兑换中...",
+    "loadingMore": "加载中...",
+    "noMore": "没有更多了"
+  },
+  "welfare": {
+    "title": "福利中心",
+    "tabAvailable": "可领取",
+    "tabReceived": "已领取",
+    "total": "共 {count} 张券",
+    "emptyAvailable": "暂无可领取的优惠券",
+    "emptyReceived": "还没有领取过优惠券",
+    "threshold": "满 {amount} 可用",
+    "universal": "全场通用",
+    "claim": "领取",
+    "claiming": "领取中",
+    "toUse": "去使用",
+    "claimSuccess": "领取成功"
+  },
+  "groupBuying": {
+    "title": "团购专区",
+    "total": "共 {count} 个团购",
+    "empty": "暂无进行中的团购",
+    "joined": "已团 {count} 份",
+    "remainDay": "剩余 {d}天{h}时{m}分",
+    "remainHour": "剩余 {h}时{m}分{s}秒",
+    "ended": "已结束",
+    "join": "去拼团",
+    "discount": "省 {percent}%"
+  },
+  "groupBuyingDetail": {
+    "title": "拼团详情",
+    "notFound": "商品不存在",
+    "joined": "已有 {count} 人参加",
+    "save": "立省 ¥{amount}",
+    "countdownDay": "{d}天 {time}",
+    "remain": "剩余 {time}",
+    "ended": "本团已结束",
+    "needCount": "还差 {count} 人成团",
+    "enough": "人数已满，立即成团",
+    "number": "购买数量",
+    "total": "合计",
+    "submit": "立即拼团",
+    "submitFailed": "下单信息生成失败，请重试"
+  },
+  "card": {
+    "title": "礼品卡",
+    "tabBuy": "购买",
+    "tabMy": "我的",
+    "exchangeEntry": "兑换码",
+    "exchangeDesc": "输入兑换码领取礼品卡",
+    "giftSending": "赠送中",
+    "giftToFriend": "转赠好友",
+    "cancelShare": "取消分享",
+    "usageLogs": "使用记录",
+    "validUntil": "有效期",
+    "times": "次",
+    "wechatUser": "微信用户",
+    "sentBy": "{name}送出",
+    "confirmPay": "确认支付",
+    "exchange": {
+      "title": "礼品卡兑换",
+      "subtitle": "请输入您的礼品卡兑换码",
+      "codeLabel": "兑换码",
+      "codePlaceholder": "请输入兑换码",
+      "codeTips": "请输入完整的礼品卡兑换码",
+      "agreePrefix": "我已阅读并同意",
+      "agreement": "《礼品卡服务协议》",
+      "submit": "立即兑换",
+      "tipsTitle": "温馨提示",
+      "tip1": "每个兑换码仅可使用一次",
+      "tip2": "兑换成功后将自动存入您的账户",
+      "tip3": "如有疑问请联系客服咨询",
+      "success": "兑换成功",
+      "inputRequired": "请输入兑换码",
+      "agreeRequired": "请先同意协议"
+    },
+    "receive": {
+      "title": "礼品卡领取",
+      "friend": "好友",
+      "sharePlaceholder": "送你一张礼品卡",
+      "action": "领取到我的账户",
+      "warmTips": "领取后可在\"我的\"-\"礼品卡\"中查看",
+      "success": "领取成功",
+      "gotIt": "知道了"
+    },
+    "send": {
+      "title": "赠送礼品卡",
+      "subtitle": "传递心意，分享美好时光",
+      "remarkLabel": "赠送留言",
+      "sharePlaceholder": "送你一张礼品卡",
+      "action": "立即分享给好友"
+    },
+    "logs": {
+      "title": "消费记录",
+      "subtitle": "Card Consumption Record",
+      "empty": "暂无消费记录",
+      "emptyTips": "使用礼品卡消费后，记录会显示在这里哦～",
+      "amount": "消费金额",
+      "balance": "剩余余额"
+    }
+  },
+  "wallet": {
+    "title": "我的钱包",
+    "balance": "余额",
+    "frozen": "冻结金额",
+    "accountRecords": "账户记录",
+    "recharge": "余额充值",
+    "confine": "充值到账",
+    "sendBadge": "送¥{amount}",
+    "customAmount": "自定义金额",
+    "customAmountTitle": "自定义充值金额",
+    "amount": "充值金额",
+    "amountPlaceholder": "请输入充值金额",
+    "confirmBtn": "确认充值",
+    "payNow": "实付 ¥{amount}",
+    "cancel": "取消",
+    "confirmPay": "确认支付",
+    "paySuccess": "支付成功",
+    "amountRequired": "请输入充值金额",
+    "amountInvalid": "充值金额需大于 0",
+    "totalRecharge": "累计充值",
+    "times": "{count} 次",
+    "statusSuccess": "成功",
+    "payLog": {
+      "title": "充值记录",
+      "entryDesc": "查看充值明细",
+      "empty": "暂无充值记录",
+      "emptyTips": "快去充值享受更多优惠吧~"
+    },
+    "cashLog": {
+      "title": "提现记录",
+      "entryDesc": "查看提现记录",
+      "empty": "暂无资金明细",
+      "emptyTips": "您的每一笔收支都会记录在这里哦~"
+    },
+    "scoreLog": {
+      "title": "积分记录",
+      "unit": "积分",
+      "empty": "暂无积分记录",
+      "emptyTips": "快去购买奶茶赚取积分吧"
+    }
+  },
+  "home": {
+    "user": {
+      "coupon": "优惠券"
+    },
+    "delivery": {
+      "delivery": "配送方式",
+      "pickup": "到店自取",
+      "rider": "骑手配送",
+      "takeout": "外卖配送"
+    },
+    "feaature": {
+      "moreService": "更多服务",
+      "favorites": "收藏",
+      "memberCard": "会员卡",
+      "groupBuy": "团购",
+      "welfare": "福利"
+    }
+  },
+  "vip": {
+    "title": "会员",
+    "consumption": "累计消费",
+    "notVIP": "非会员",
+    "tip": "消费达到金额可自动成为会员",
+    "growth": "会员成长体系",
+    "growthName": "级别名称",
+    "growthDiscount": "购物折扣",
+    "growthConsumption": "消费标准(元)",
+    "profile": "注：当购物消费达指定标准自动成为该级别会员"
+  },
+  "favorites": {
+    "title": "我的收藏",
+    "total": "共 {count} 件收藏",
+    "empty": "还没有收藏的商品",
+    "collectAt": "收藏于",
+    "cancelTitle": "提示",
+    "cancelConfirm": "确定取消收藏「{name}」吗？",
+    "cancelSuccess": "已取消收藏"
+  },
+  "queue": {
+    "title": "排队取号",
+    "heroTitle": "智能取号",
+    "selectType": "选择取号类型",
+    "tapToGet": "点击立即取号",
+    "currentQueue": "当前排队",
+    "myNumber": "我的号码",
+    "expectedWaiting": "预计等待",
+    "minutes": "分钟",
+    "empty": "暂无排队信息",
+    "success": "取号成功"
+  },
+  "orderDetail": {
+    "title": "订单详情",
+    "closed": "已关闭",
+    "closedTips": "订单已取消",
+    "noPay": "待支付",
+    "noPayTips": "请尽快完成支付",
+    "payNow": "立即支付",
+    "pickingUp": "等待取餐",
+    "qudanhao": "取单号",
+    "showToStaff": "出示此码给店员核销",
+    "delivering": "配送中",
+    "deliveringTips": "骑手正在火速配送中",
+    "showToRider": "出示此码给骑手",
+    "finished": "已完成",
+    "finishedTips": "感谢您的光临，期待再次为您服务",
+    "shopInfo": "店铺信息",
+    "contact": "联系",
+    "logisticsInfo": "收货信息",
+    "goodsTitle": "订单商品",
+    "total": "合计",
+    "orderInfo": "订单信息",
+    "dateAdd": "下单时间",
+    "cancelTime": "取消时间",
+    "paySuccess": "支付成功",
+    "order": "订单",
+    "payable": "应付金额",
+    "orderNo": "订单号"
+  },
+  "orderDoing": {
+    "title": "取餐中",
+    "empty": "还没有制作中的订单",
+    "emptyTips": "去买一杯吧",
+    "goOrder": "去下单",
+    "qudanhao": "取单号",
+    "pickTips": "请向店员出示取餐码",
+    "qrcodeLabel": "核销二维码",
+    "delivering": "配送中",
+    "deliveryQrcodeLabel": "配送核销码",
+    "logisticsInfo": "配送信息",
+    "orderDetail": "订单明细",
+    "total": "合计",
+    "dateAdd": "下单时间",
+    "footer": "享受每一口美好"
+  },
+  "orderScan": {
+    "title": "扫码核销",
+    "headerTitle": "订单核销详情",
+    "headerTips": "请确认以下信息",
+    "logisticsInfo": "配送信息",
+    "goodsInfo": "商品信息",
+    "couponInfo": "优惠信息",
+    "feeInfo": "费用明细",
+    "goodsAmount": "商品金额",
+    "freight": "运费",
+    "realAmount": "实付金额",
+    "confirmVerification": "确认核销",
+    "verified": "核销完成"
+  },
+  "demo": {
+    "i18n": {
+      "title": "中文标题"
+    },
+    "alova": {
+      "title": "Alova 请求"
+    },
+    "weight": "{heavy}公斤",
+    "detail": "{0}cm, {1}公斤",
+    "introduction": "我是 {name},身高:{detail.height},体重:{detail.weight}"
   }
 }

@@ -9,6 +9,8 @@ declare module '*.vue' {
 }
 
 interface ImportMetaEnv {
+  /** Alova Mock 开关，仅开发模式有效；缺省关闭 */
+  readonly VITE_USE_MOCK?: 'true' | 'false'
   /** 网站标题，应用名称 */
   readonly VITE_APP_TITLE: string
   /** 服务端口号 */

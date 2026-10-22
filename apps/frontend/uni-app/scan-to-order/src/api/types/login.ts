@@ -1,3 +1,10 @@
+/** 当前登录端身份，与权限角色 role/roles 分开。 */
+export type SessionIdentity = 'customer' | 'shop' | 'rider'
+
+export function isSessionIdentity(value: unknown): value is SessionIdentity {
+  return value === 'customer' || value === 'shop' || value === 'rider'
+}
+
 // 认证模式类型
 export type AuthMode = 'single' | 'double'
 
@@ -26,6 +33,8 @@ export type IAuthLoginRes = ISingleTokenRes | IDoubleTokenRes
 export type UserRole = string
 
 export interface IUserInfoRes {
+  /** 当前端身份；后台登录必须由服务端明确返回，不从权限 roles 推测。 */
+  identity?: SessionIdentity
   userId: number
   username: string
   nickname: string

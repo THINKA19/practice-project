@@ -1,17 +1,308 @@
 {
   "tabbar": {
     "home": "Trang chủ",
-    "ordering": "Đặt món",
+    "order": "Đặt món",
     "service": "Dịch vụ",
     "queue": "Lấy số",
-    "pickup": "Nhận món",
-    "me": "Tôi"
-  },
-  "alova": {
-    "title": "Yêu cầu Alova"
+    "order-details": "Nhận món",
+    "me": "Cá nhân",
+    "i18n": "Đa ngôn ngữ"
   },
   "common": {
-    "selectLang": "Ngôn ngữ",
-    "cancel": "Hủy"
+    "selectLang": "Chọn ngôn ngữ",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "empty": "Không có dữ liệu",
+    "loading": "Đang tải",
+    "noMore": "Đã hết dữ liệu",
+    "loadFailed": "Tải thất bại",
+    "retry": "Nhấn để thử lại",
+    "pageNotFound": "Không tìm thấy trang"
+  },
+  "coupons": {
+    "title": "Phiếu giảm giá",
+    "tabs": ["Có thể nhận", "Đã nhận", "Hết hiệu lực", "Đổi mã"],
+    "Vouchers": "Phiếu giảm giá",
+    "over": "Đơn từ",
+    "btn": "Nhận ngay",
+    "expire": "Hết hạn",
+    "toUse": "Dùng ngay",
+    "inputpassword": "Vui lòng nhập mật khẩu",
+    "Cominglate": "Đã quá muộn rồi",
+    "receivedgreedy": "Bạn đã nhận rồi, đừng tham lam nhé~",
+    "pointsinsufficient": "Điểm của bạn không đủ~",
+    "Expired": "Đã hết hạn~",
+    "Successfullyclaimed": "Nhận thành công~",
+    "number": "Số phiếu",
+    "numberPlaceholder": "Vui lòng nhập số phiếu",
+    "pwd": "Mật khẩu",
+    "pwdPlaceholder": "Vui lòng nhập mật khẩu",
+    "enternum": "Vui lòng nhập số phiếu",
+    "password": "Vui lòng nhập mật khẩu",
+    "change": "Đổi ngay",
+    "Redemption": "Đổi thành công",
+    "Invitingcoupons": "Mời bạn nhận phiếu giảm giá",
+    "exchangeTitle": "Đổi phiếu giảm giá",
+    "exchangeSubtitle": "Nhập mã để nhận ưu đãi riêng",
+    "exchanging": "Đang đổi...",
+    "loadingMore": "Đang tải...",
+    "noMore": "Không còn nữa"
+  },
+  "welfare": {
+    "title": "Trung tâm phúc lợi",
+    "tabAvailable": "Có thể nhận",
+    "tabReceived": "Đã nhận",
+    "total": "Tổng {count} phiếu",
+    "emptyAvailable": "Chưa có phiếu giảm giá",
+    "emptyReceived": "Chưa nhận phiếu giảm giá nào",
+    "threshold": "Đơn từ {amount}",
+    "universal": "Toàn bộ đơn",
+    "claim": "Nhận",
+    "claiming": "Đang nhận",
+    "toUse": "Sử dụng",
+    "claimSuccess": "Nhận thành công"
+  },
+  "groupBuying": {
+    "title": "Mua chung",
+    "total": "Tổng {count} nhóm",
+    "empty": "Chưa có nhóm mua chung",
+    "joined": "Đã có {count} người",
+    "remainDay": "Còn {d} ngày {h} giờ {m} phút",
+    "remainHour": "Còn {h} giờ {m} phút {s} giây",
+    "ended": "Đã kết thúc",
+    "join": "Tham gia",
+    "discount": "Giảm {percent}%"
+  },
+  "groupBuyingDetail": {
+    "title": "Chi tiết mua chung",
+    "notFound": "Không tìm thấy sản phẩm",
+    "joined": "Đã có {count} người tham gia",
+    "save": "Tiết kiệm ¥{amount}",
+    "countdownDay": "{d} ngày {time}",
+    "remain": "Còn {time}",
+    "ended": "Nhóm này đã kết thúc",
+    "needCount": "Còn thiếu {count} người để chốt",
+    "enough": "Đã đủ người, chốt nhóm ngay",
+    "number": "Số lượng",
+    "total": "Tổng cộng",
+    "submit": "Tham gia ngay",
+    "submitFailed": "Tạo đơn thất bại, vui lòng thử lại"
+  },
+  "card": {
+    "title": "Thẻ quà tặng",
+    "tabBuy": "Mua",
+    "tabMy": "Của tôi",
+    "exchangeEntry": "Mã đổi thưởng",
+    "exchangeDesc": "Nhập mã để nhận thẻ quà tặng",
+    "giftSending": "Đang tặng",
+    "giftToFriend": "Tặng bạn bè",
+    "cancelShare": "Hủy chia sẻ",
+    "usageLogs": "Lịch sử sử dụng",
+    "validUntil": "Hiệu lực đến",
+    "times": "lần",
+    "wechatUser": "Người dùng WeChat",
+    "sentBy": "{name} tặng",
+    "confirmPay": "Xác nhận thanh toán",
+    "exchange": {
+      "title": "Đổi thẻ quà tặng",
+      "subtitle": "Vui lòng nhập mã thẻ quà tặng của bạn",
+      "codeLabel": "Mã đổi thưởng",
+      "codePlaceholder": "Vui lòng nhập mã đổi thưởng",
+      "codeTips": "Vui lòng nhập đầy đủ mã thẻ quà tặng",
+      "agreePrefix": "Tôi đã đọc và đồng ý",
+      "agreement": "Thỏa thuận dịch vụ thẻ quà tặng",
+      "submit": "Đổi ngay",
+      "tipsTitle": "Lưu ý",
+      "tip1": "Mỗi mã chỉ có thể sử dụng một lần",
+      "tip2": "Thẻ quà tặng sẽ được thêm vào tài khoản của bạn sau khi đổi",
+      "tip3": "Liên hệ chăm sóc khách hàng nếu có thắc mắc",
+      "success": "Đổi thành công",
+      "inputRequired": "Vui lòng nhập mã đổi thưởng",
+      "agreeRequired": "Vui lòng đồng ý thỏa thuận trước"
+    },
+    "receive": {
+      "title": "Nhận thẻ quà tặng",
+      "friend": "Bạn bè",
+      "sharePlaceholder": "tặng bạn một thẻ quà tặng",
+      "action": "Nhận vào tài khoản của tôi",
+      "warmTips": "Sau khi nhận, xem tại \"Cá nhân\" - \"Thẻ quà tặng\"",
+      "success": "Nhận thành công",
+      "gotIt": "Đã hiểu"
+    },
+    "send": {
+      "title": "Tặng thẻ quà tặng",
+      "subtitle": "Trao yêu thương, chia sẻ khoảnh khắc đẹp",
+      "remarkLabel": "Lời nhắn",
+      "sharePlaceholder": "Tặng bạn một thẻ quà tặng",
+      "action": "Chia sẻ với bạn bè ngay"
+    },
+    "logs": {
+      "title": "Lịch sử sử dụng",
+      "subtitle": "Card Consumption Record",
+      "empty": "Chưa có lịch sử sử dụng",
+      "emptyTips": "Lịch sử sử dụng sẽ hiển thị ở đây sau khi bạn dùng thẻ quà tặng.",
+      "amount": "Số tiền",
+      "balance": "Số dư còn lại"
+    }
+  },
+  "wallet": {
+    "title": "Ví của tôi",
+    "balance": "Số dư",
+    "frozen": "Số dư đóng băng",
+    "accountRecords": "Lịch sử tài khoản",
+    "recharge": "Nạp số dư",
+    "confine": "Nạp vào",
+    "sendBadge": "Tặng ¥{amount}",
+    "customAmount": "Số tiền tùy chọn",
+    "customAmountTitle": "Số tiền nạp tùy chọn",
+    "amount": "Số tiền nạp",
+    "amountPlaceholder": "Vui lòng nhập số tiền nạp",
+    "confirmBtn": "Xác nhận nạp",
+    "payNow": "Thanh toán ¥{amount}",
+    "cancel": "Hủy",
+    "confirmPay": "Xác nhận thanh toán",
+    "paySuccess": "Thanh toán thành công",
+    "amountRequired": "Vui lòng nhập số tiền nạp",
+    "amountInvalid": "Số tiền nạp phải lớn hơn 0",
+    "totalRecharge": "Tổng nạp",
+    "times": "{count} lần",
+    "statusSuccess": "Thành công",
+    "payLog": {
+      "title": "Lịch sử nạp tiền",
+      "entryDesc": "Xem chi tiết nạp tiền",
+      "empty": "Chưa có lịch sử nạp tiền",
+      "emptyTips": "Nạp tiền ngay để nhận nhiều ưu đãi hơn~"
+    },
+    "cashLog": {
+      "title": "Lịch sử rút tiền",
+      "entryDesc": "Xem lịch sử rút tiền",
+      "empty": "Chưa có lịch sử giao dịch",
+      "emptyTips": "Mọi khoản thu chi đều được ghi lại tại đây~"
+    },
+    "scoreLog": {
+      "title": "Lịch sử điểm",
+      "unit": "điểm",
+      "empty": "Chưa có lịch sử điểm",
+      "emptyTips": "Mua trà sữa để tích điểm ngay"
+    }
+  },
+  "home": {
+    "user": {
+      "coupon": "Phiếu giảm giá"
+    },
+    "delivery": {
+      "delivery": "Phương thức giao hàng",
+      "pickup": "Lấy tại quán",
+      "rider": "Tài xế giao hàng",
+      "takeout": "Giao hàng"
+    },
+    "feaature": {
+      "moreService": "Dịch vụ khác",
+      "favorites": "Yêu thích",
+      "memberCard": "Thẻ thành viên",
+      "groupBuy": "Mua chung",
+      "welfare": "Phúc lợi"
+    }
+  },
+  "vip": {
+    "title": "Hội viên",
+    "consumption": "Tổng chi tiêu",
+    "notVIP": "Chưa là hội viên",
+    "tip": "Chi tiêu đạt mức sẽ tự động trở thành hội viên",
+    "growth": "Hệ thống cấp hội viên",
+    "growthName": "Tên cấp",
+    "growthDiscount": "Chiết khấu",
+    "growthConsumption": "Mức chi tiêu (đồng)",
+    "profile": "Lưu ý: Khi chi tiêu đạt mức quy định sẽ tự động trở thành hội viên cấp tương ứng"
+  },
+  "favorites": {
+    "title": "Yêu thích của tôi",
+    "total": "Tổng {count} mục yêu thích",
+    "empty": "Chưa có sản phẩm yêu thích",
+    "collectAt": "Đã yêu thích ngày",
+    "cancelTitle": "Thông báo",
+    "cancelConfirm": "Bỏ yêu thích '{name}'?",
+    "cancelSuccess": "Đã bỏ yêu thích"
+  },
+  "queue": {
+    "title": "Lấy số",
+    "heroTitle": "Lấy số thông minh",
+    "selectType": "Chọn loại xếp hàng",
+    "tapToGet": "Nhấn để lấy số ngay",
+    "currentQueue": "Đang gọi số",
+    "myNumber": "Số của tôi",
+    "expectedWaiting": "Dự kiến chờ",
+    "minutes": " phút",
+    "empty": "Chưa có thông tin xếp hàng",
+    "success": "Lấy số thành công"
+  },
+  "orderDetail": {
+    "title": "Chi tiết đơn hàng",
+    "closed": "Đã đóng",
+    "closedTips": "Đơn hàng đã được hủy",
+    "noPay": "Chưa thanh toán",
+    "noPayTips": "Vui lòng hoàn tất thanh toán sớm",
+    "payNow": "Thanh toán ngay",
+    "pickingUp": "Chờ lấy món",
+    "qudanhao": "Số lấy món",
+    "showToStaff": "Xuất trình mã này cho nhân viên",
+    "delivering": "Đang giao",
+    "deliveringTips": "Tài xế đang giao hàng",
+    "showToRider": "Xuất trình mã này cho tài xế",
+    "finished": "Đã hoàn thành",
+    "finishedTips": "Cảm ơn quý khách, hẹn gặp lại",
+    "shopInfo": "Thông tin cửa hàng",
+    "contact": "Gọi",
+    "logisticsInfo": "Thông tin nhận hàng",
+    "goodsTitle": "Món đã đặt",
+    "total": "Tổng cộng",
+    "orderInfo": "Thông tin đơn hàng",
+    "dateAdd": "Thời gian đặt",
+    "cancelTime": "Thời gian hủy",
+    "paySuccess": "Thanh toán thành công",
+    "order": "Đơn hàng",
+    "payable": "Số tiền cần trả",
+    "orderNo": "Mã đơn hàng"
+  },
+  "orderDoing": {
+    "title": "Đang pha chế",
+    "empty": "Chưa có đơn đang pha chế",
+    "emptyTips": "Hãy gọi một ly nhé",
+    "goOrder": "Đặt món",
+    "qudanhao": "Số lấy món",
+    "pickTips": "Xuất trình mã lấy món cho nhân viên",
+    "qrcodeLabel": "Mã xác nhận",
+    "delivering": "Đang giao",
+    "deliveryQrcodeLabel": "Mã giao hàng",
+    "logisticsInfo": "Thông tin nhận hàng",
+    "orderDetail": "Chi tiết đơn hàng",
+    "total": "Tổng cộng",
+    "dateAdd": "Thời gian đặt",
+    "footer": "Thưởng thức từng ngụm ngon"
+  },
+  "orderScan": {
+    "title": "Quét xác nhận",
+    "headerTitle": "Chi tiết xác nhận đơn",
+    "headerTips": "Vui lòng xác nhận thông tin bên dưới",
+    "logisticsInfo": "Thông tin nhận hàng",
+    "goodsInfo": "Thông tin món",
+    "couponInfo": "Thông tin ưu đãi",
+    "feeInfo": "Chi tiết chi phí",
+    "goodsAmount": "Tiền món",
+    "freight": "Phí giao hàng",
+    "realAmount": "Số tiền đã trả",
+    "confirmVerification": "Xác nhận",
+    "verified": "Xác nhận thành công"
+  },
+  "demo": {
+    "i18n": {
+      "title": "Tiêu đề tiếng Việt"
+    },
+    "alova": {
+      "title": "Yêu cầu Alova"
+    },
+    "weight": "{heavy}kg",
+    "detail": "{0}cm, {1}kg",
+    "introduction": "Tôi là {name}, chiều cao:{detail.height}, cân nặng:{detail.weight}"
   }
 }
