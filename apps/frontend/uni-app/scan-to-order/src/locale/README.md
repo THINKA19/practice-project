@@ -2,29 +2,42 @@
 
 ## 文件与职责
 
-- `zh-Hans.json`、`en.json`、`vi.json`：语言包唯一编辑源，由 Vue 和 uni-app 编译器直接读取。
-- `index.ts`：vue-i18n 实例、响应式语言状态、翻译、语言选择持久化及启动恢复。
-- `__tests__/locale.test.ts`：三语导航、缓存恢复、语言规范化、弹窗状态隔离测试。
-- `../components/locale/`：原有底部语言选择弹窗和 SVG 图标。
-- `../tabbar/i18n.ts`：原生导航文字更新，只在当前为 tabbar 页面时执行。
+- `zh-Hans.json`、`en.json`、`vi.json`：语言包唯一编辑源，保留嵌套业务对象，供 Vue 和 uni-app 编译器读取。
+- `index.ts`：语言实例、响应式状态、启动恢复、切换及普通 TS 字符串插值。
+- `../components/locale/`：语言选择入口、图标、选中状态和实例独立的弹层。
+- `../tabbar/index.vue`：当前页面可见时监听语言变化刷新原生导航，并在页面显示时补刷。
+- `../tabbar/i18n.ts`：解析导航键并执行原生导航更新；语言模块不依赖导航。
 
-## 编译兼容
+## 分类与使用
 
-语言文件统一放在框架约定的 `src/locale/*.json`，直接编辑并提交这些文件，无需生成副本。新增语言还需在 `index.ts` 导入并注册，同时更新支持语言列表和组件选项。
+`common` 放跨业务通用操作，`tabbar` 放导航标签，`home` 放首页自己的展示和提示。优惠券、取号等业务仍使用各自命名空间，不因为首页提供入口就搬入 `home`。
+首页按 `home.user`、`home.delivery`、`home.features`、`home.banner` 分类，不复制组件目录层级。旧拼写 `home.feaature` 已迁移为 `home.features`。
+三个语言文件保持相同的键和插值变量。新增文案同时维护三语；不使用顶层平铺键替代业务对象。
 
-## 使用与行为
+Vue 模板使用 `useI18n().t`；普通 TS 使用 `t`：
 
-语言包按模块使用嵌套对象：`tabbar` 管导航文案，`common` 管通用操作，`i18n` 管多语言示例，`alova` 管请求示例。新增文案放进所属模块对象，例如 `"tabbar": { "home": "首页" }`，不使用 `"tabbar.home"` 这样的顶层平铺属性。
-调用继续使用 `t('tabbar.home')` 或模板中的 `$t('tabbar.home')`。插值示例使用 `i18n.weight`、`i18n.detail`、`i18n.introduction`。
-原生导航由 `tabbar/i18n.ts` 解析 `%tabbar.home%`，需要由实际挂载的 tabbar 组件生命周期调用；语言模块本身不注册导航监听。
+```ts
+import { computed } from 'vue'
+import { t, setLocale } from '@/locale'
 
-通过 `setLocale(code)` 切换语言，通过 `currentLocale` 读取状态；支持简体中文、英语、越南语。
-启动优先读取 `Language` 缓存，无缓存则使用系统语言，未知语言回退简体中文；兼容 `zh_CN`、`en-US`、`vi-VN` 等值。
-切换时同步 Vue 语言、`Language` 缓存和 `uni.setLocale()`；缓存写入失败不会阻止当前会话切换。启动时恢复 Vue 语言，语言模块不额外调用系统语言同步。
+const guestName = computed(() => t('home.user.guest'))
+setLocale('vi')
+// 提示文案在事件触发时求值，不缓存已翻译的业务状态。
+uni.showToast({ title: t('common.pageNotFound'), icon: 'none' })
+```
 
-`%tabbar.xxx%` 用于导航配置，普通文字原样显示。Vue 使用已注册的 vue-i18n；普通 TypeScript 可使用 `t()`，支持平铺或嵌套键与变量插值。缺少越南语文案时回退中文，未知键返回键名。
+自定义 `t(key, data)` 仅返回字符串，支持命名及嵌套变量；缺失变量保留占位符。未知键、对象键和数组键返回键名，不抛出 replace 错误。需要数组内容时使用具体条目键或 Vue i18n 的资源 API；自定义入口不承诺复数或链接消息语法。
+演示文案位于 `demo`，例如 `demo.weight`。
 
-## 验证范围
+## 语言状态
 
-当前完成语言选择入口和原生底部导航三语切换，不等于所有业务页面已翻译。业务页面需要逐项补齐文案和替换硬编码文字。
-现有六项原生导航通过 H5 验证；原生 tabbar 的跨端标准上限为五项，发布小程序前必须明确入口取舍。
+支持 `zh-Hans`、`en`、`vi`。启动优先读取 `Language` 缓存，无缓存或读取失败时使用系统语言；通过 `normalizeLocale` 兼容 `zh_CN`、`en-US`、`vi_VN`，不支持的值回退中文。
+`setLocale` 接受支持的精确代码，非法值忽略。先更新当前会话，再分别尝试 `uni.setLocale` 和同步缓存；失败记录警告，不影响会话切换或关闭选择弹窗。缓存失败意味着下次启动未必保留本次选择。
+启动恢复仅设置 Vue 语言，不主动改变系统语言；页面显示时同步导航标签。
+
+## 覆盖与验证边界
+
+首页静态文案、游客兜底、轮播失败提示及语言弹层接入三语。用户昵称、接口会员等级名称、轮播图片中的文字和品牌名不由前端静态语言包自动翻译。其他业务页面需分别核对，不能据此认定全站已国际化。
+测试覆盖三语键/变量一致性、语言恢复与失败边界、已挂载首页切换和原生导航更新；浏览器布局、小程序和 App 真机表现仍需平台验收。现有导航入口数量不在本次调整范围内。
+
+导航资源遵循原有 tabbar/config.ts 的键：`tabbar.ordering` 和 `tabbar.pickup`。文案调整应修改三语 JSON，不重命名导航配置键。tabbar/index.vue 原有 onShow 负责页面显示时刷新；新增的可见性受控语言监听仅补齐停留当前页切换语言时的刷新。

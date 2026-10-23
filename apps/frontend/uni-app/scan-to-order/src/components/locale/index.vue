@@ -1,15 +1,29 @@
+<!--
+============================================================================
+【文件概述】统一语言选择组件，支持文字入口和仅图标入口，复用同一语言弹层。
+【方法与导出清单】默认组件；iconOnly 为 true 时隐藏入口文字，默认 false。
+【综合使用示例】
+import LocalePicker from '@/components/locale/index.vue'
+// 模板：<LocalePicker icon-only />，仅展示当前语言图标。
+============================================================================
+-->
 <script setup lang="ts">
 import { t } from '@/locale'
 import { useLanguage } from './composables/useLanguage'
+
+withDefaults(defineProps<{
+  /** 是否只显示触发图标；弹层内仍显示语言名称供选择。 */
+  iconOnly?: boolean
+}>(), { iconOnly: false })
 
 const { selectedLanguage, openLanguagePicker, showLangSheet, langOptions, selectLang } = useLanguage()
 </script>
 
 <template>
   <!-- 语言切换触发入口按钮 -->
-  <button class="language-button" @tap="openLanguagePicker">
+  <button class="language-button" :class="{ 'language-button--icon-only': iconOnly }" :aria-label="t('common.selectLang')" @tap="openLanguagePicker">
     <image class="language-icon" :src="selectedLanguage.icon" mode="aspectFit" />
-    <text>{{ t('common.selectLang') }} · {{ selectedLanguage.label }}</text>
+    <text v-if="!iconOnly">{{ t('common.selectLang') }} · {{ selectedLanguage.label }}</text>
   </button>
 
   <!-- 底部语言选择弹出层 (Popup) -->
@@ -55,6 +69,23 @@ const { selectedLanguage, openLanguagePicker, showLangSheet, langOptions, select
 .language-icon {
   width: 40rpx;
   height: 40rpx;
+}
+.language-button--icon-only {
+  flex-shrink: 0;
+  width: 56rpx;
+  height: 56rpx;
+  padding: 0;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2rpx 12rpx rgb(0 0 0 / 6%);
+}
+.language-button--icon-only::after {
+  border: none;
+}
+.language-button--icon-only .language-icon {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
 }
 .lang-picker__sheet {
   padding: 24rpx 32rpx;

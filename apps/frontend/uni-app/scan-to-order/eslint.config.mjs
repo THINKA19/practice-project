@@ -5,6 +5,8 @@ export default uniHelper({
   vue: true,
   markdown: false,
   ignores: [
+    // 历史参考资料不参与正式源码检查
+    'docs/reference/**',
     // 忽略uni_modules目录
     '**/uni_modules/',
     // 忽略原生插件目录

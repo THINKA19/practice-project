@@ -1,10 +1,10 @@
 {
   "tabbar": {
     "home": "Trang chủ",
-    "order": "Đặt món",
+    "ordering": "Đặt món",
     "service": "Dịch vụ",
     "queue": "Lấy số",
-    "order-details": "Nhận món",
+    "pickup": "Nhận món",
     "me": "Cá nhân",
     "i18n": "Đa ngôn ngữ"
   },
@@ -17,6 +17,7 @@
     "noMore": "Đã hết dữ liệu",
     "loadFailed": "Tải thất bại",
     "retry": "Nhấn để thử lại",
+    "navigationFailed": "Không thể mở trang này. Vui lòng thử lại.",
     "pageNotFound": "Không tìm thấy trang"
   },
   "coupons": {
@@ -187,17 +188,23 @@
     }
   },
   "home": {
+    "banner": {
+      "unsupportedLink": "Liên kết này chưa được hỗ trợ"
+    },
     "user": {
+      "guest": "Khách",
       "coupon": "Phiếu giảm giá"
     },
     "delivery": {
-      "delivery": "Phương thức giao hàng",
+      "title": "Phương thức giao hàng",
+      "pickupDescription": "Nhận món trực tiếp tại quán",
+      "takeoutDescription": "Giao đến địa chỉ của bạn",
       "pickup": "Lấy tại quán",
       "rider": "Tài xế giao hàng",
       "takeout": "Giao hàng"
     },
-    "feaature": {
-      "moreService": "Dịch vụ khác",
+    "features": {
+      "title": "Dịch vụ khác",
       "favorites": "Yêu thích",
       "memberCard": "Thẻ thành viên",
       "groupBuy": "Mua chung",

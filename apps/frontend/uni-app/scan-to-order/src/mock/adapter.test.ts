@@ -28,6 +28,19 @@ function respondFromNetwork() {
 }
 
 describe('现有 Alova 入口的 Mock 接入', () => {
+  it('首页轮播 API 经过 Mock 返回三张本地图片，其他类型为空且不访问网络', async () => {
+    await loadHttp(true)
+    const { bannerApi } = await import('@/pages/home/index/api/banner')
+    const banners = await bannerApi.banners('shouye')
+    expect(banners.map(item => item.picUrl)).toEqual([
+      '/static/images/home/banner/01.jpeg',
+      '/static/images/home/banner/02.jpeg',
+      '/static/images/home/banner/03.jpeg',
+    ])
+    expect(await bannerApi.banners('card')).toEqual([])
+    expect(uni.request).not.toHaveBeenCalled()
+  })
+
   it('唯一示例经过 Mock 和现有 responded 解包，不访问网络', async () => {
     await loadHttp(true)
     const { foo } = await import('@/api/foo-alova')

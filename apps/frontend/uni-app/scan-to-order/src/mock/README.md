@@ -9,7 +9,7 @@
 - 生产构建强制关闭 Mock；开关为 false 或缺省时也不启用。
 - 只作用于 `@/http/alova` 发出的请求，不拦截 `@/http/http` 或直接调用的 `uni.request`。
 - 已登记的方法和路径由 Mock 响应；**未登记接口继续请求真实后端**。这是按接口渐进联调的框架，不是离线演示后端。
-- 不模拟登录、支付、上传或任何已有业务。没有状态持久化、业务数据仓库或页面假数据开关。
+- 当前登记 /foo 示例及首页 GET /banner/list；不模拟登录、支付或上传。没有状态持久化、业务数据仓库或页面假数据开关。
 
 ## 架构与依赖方向
 
@@ -23,7 +23,7 @@ src/mock/
 ├── config.ts                  开关、固定延迟、失败概率、日志配置
 ├── modules/
 │   ├── index.ts               显式模块清单
-│   └── foo-alova.mock.ts      唯一接口示例，与 api/foo-alova.ts 同名
+│   └── foo-alova.mock.ts      基础接口示例，与 api/foo-alova.ts 同名
 ├── generators/
 │   ├── index.ts               运行时纯工厂出口
 │   ├── foo.ts                 示例 DTO 工厂，每次返回新对象
@@ -46,7 +46,7 @@ src/mock/
 
 原 `mock1 / mock2 / mock3` 是保留的对比参考，未导入、未注册，不属于本框架的运行依赖。其历史测试和缺失依赖也不代表新框架的验证结果。
 
-## 调用唯一示例
+## 调用示例
 
 复用已有 API：
 
@@ -60,10 +60,10 @@ const result = await foo().send()
 
 ## 新增模块的步骤
 
-1. 在 `src/api` 定义接口和 DTO，通过现有 `@/http/alova` 调用。
-2. 在 `generators` 添加返回新对象的纯工厂，并从 `generators/index.ts` 导出。
-3. 在 `modules` 创建与 API 文件同名的 `.mock.ts`，只编排路径、参数、工厂和响应。
-4. 在 `modules/index.ts` 登记一行。不要对象展开合并路由后再登记，否则重复键已经丢失。
+1. 在所属业务模块的 `api/` 定义接口和 DTO，通过现有 `@/http/alova` 调用。
+2. 在业务模块 `mock/` 按需添加返回新对象的纯工厂（如 banner/data.ts），不导出到全局 generators。
+3. 在业务模块 `mock/` 按功能分目录创建 `handlers.ts`（如 `banner/handlers.ts`），引用该模块 endpoints，只编排参数、工厂和响应；通过独立 mock/index.ts 暴露给装配层。
+4. 在全局 `modules/index.ts` 显式导入并登记模块 Mock 入口。不要对象展开合并路由后再登记，否则重复键已经丢失。
 5. 添加该接口的契约测试，确认方法、参数、响应和异常分支。
 
 每个路径显式写方法，例如 `[GET]/foo`。登记检查识别相同方法和路径（包括省略 GET、方法大小写）的重复，不分析不同参数化路径之间的语义重叠；重叠路径需由模块作者避免。
@@ -83,6 +83,14 @@ const result = await foo().send()
 运行 `pnpm exec vitest run src/mock/adapter.test.ts src/mock/framework.test.ts`。
 接入测试覆盖现有 HTTP 入口；框架测试覆盖重复登记、数据隔离、分页边界与故障注入。
 
-仅为使用 Mock，不需要迁移已经走 `http.ts` 的业务接口，也不要把两套 HTTP 封装串联调用。
+首页轮播按本次业务需求接入 Alova：GET /banner/list?type=shouye 返回 /static/images/home/banner/01.jpeg、02.jpeg、03.jpeg；其他类型返回空数组，无点击跳转目标。数据工厂每次返回独立对象。页面不直接导入 Mock。
+
+其他已走 http.ts 的接口不随本次需求迁移，也不要把两套 HTTP 封装串联调用。
 
 适配参数以已安装的 `@alova/adapter-uniapp` 为准，目前为 `AdapterUniapp({ mockRequest })`。
+
+## 业务 Mock 归属
+
+首页轮播已迁至 src/pages/home/index/mock：index.ts 为装配入口，banner/handlers.ts 为接口规则，banner/data.ts 为纯数据工厂。全局只负责显式登记和公共机制，首页运行时 index.ts 不导出 Mock。全局 adapter.test.ts 保留真实请求链集成测试，继续验证首页样本、空类型和网络回退。
+
+产物验证边界：本次 H5 生产构建通过，但脚本中仍能检索到 Mock 工厂和样本文字；生产开关关闭不等于相关代码已从产物剔除。本次仅迁移模块归属，未调整构建裁剪策略。

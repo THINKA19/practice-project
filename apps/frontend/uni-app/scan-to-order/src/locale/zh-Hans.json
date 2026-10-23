@@ -1,10 +1,10 @@
 {
   "tabbar": {
     "home": "首页",
-    "order": "点餐",
+    "ordering": "点餐",
     "service": "服务",
     "queue": "取号",
-    "order-details": "取餐",
+    "pickup": "取餐",
     "me": "我的",
     "i18n": "多语言"
   },
@@ -17,6 +17,7 @@
     "noMore": "已经到底啦",
     "loadFailed": "加载失败",
     "retry": "点击重试",
+    "navigationFailed": "暂时无法打开页面，请稍后重试",
     "pageNotFound": "页面不存在"
   },
   "coupons": {
@@ -187,17 +188,23 @@
     }
   },
   "home": {
+    "banner": {
+      "unsupportedLink": "暂不支持此链接"
+    },
     "user": {
+      "guest": "游客",
       "coupon": "优惠券"
     },
     "delivery": {
-      "delivery": "配送方式",
+      "title": "配送方式",
+      "pickupDescription": "到店领取，无需配送",
+      "takeoutDescription": "配送到您指定的地址",
       "pickup": "到店自取",
       "rider": "骑手配送",
       "takeout": "外卖配送"
     },
-    "feaature": {
-      "moreService": "更多服务",
+    "features": {
+      "title": "更多服务",
       "favorites": "收藏",
       "memberCard": "会员卡",
       "groupBuy": "团购",

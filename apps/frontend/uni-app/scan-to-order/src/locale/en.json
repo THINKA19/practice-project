@@ -1,10 +1,10 @@
 {
   "tabbar": {
     "home": "Home",
-    "order": "Order",
+    "ordering": "Order",
     "service": "Service",
     "queue": "Queue",
-    "order-details": "Pickup",
+    "pickup": "Pickup",
     "me": "Me",
     "i18n": "I18n"
   },
@@ -17,6 +17,7 @@
     "noMore": "No more items",
     "loadFailed": "Failed to load",
     "retry": "Tap to retry",
+    "navigationFailed": "Unable to open this page. Please try again.",
     "pageNotFound": "Page not found"
   },
   "coupons": {
@@ -187,17 +188,23 @@
     }
   },
   "home": {
+    "banner": {
+      "unsupportedLink": "This link is not supported yet"
+    },
     "user": {
+      "guest": "Guest",
       "coupon": "Coupon"
     },
     "delivery": {
-      "delivery": "Delivery Method",
+      "title": "Delivery Method",
+      "pickupDescription": "Collect your order in store",
+      "takeoutDescription": "Delivered to your address",
       "pickup": "Pickup",
       "rider": "Rider Delivery",
       "takeout": "Delivery"
     },
-    "feaature": {
-      "moreService": "More Services",
+    "features": {
+      "title": "More Services",
       "favorites": "Favorites",
       "memberCard": "Member Card",
       "groupBuy": "Group Buy",

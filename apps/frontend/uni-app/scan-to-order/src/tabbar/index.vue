@@ -1,5 +1,6 @@
 <script setup lang="ts">
-// i-carbon-code
+import { ref, watch } from 'vue'
+import { currentLocale } from '@/locale'
 import { customTabbarEnable, needHideNativeTabbar, tabbarCacheEnable } from './config'
 import { setTabbarItem } from './i18n'
 import { tabbarList, tabbarStore } from './store'
@@ -81,8 +82,17 @@ function getColorByIndex(index: number) {
 }
 
 // 注意，上面处理的是自定义tabbar，下面处理的是原生tabbar，参考：https://unibest.tech/base/10-i18n
+const pageVisible = ref(false)
+watch(currentLocale, () => {
+  if (pageVisible.value)
+    setTabbarItem()
+})
 onShow(() => {
+  pageVisible.value = true
   setTabbarItem()
+})
+onHide(() => {
+  pageVisible.value = false
 })
 </script>
 

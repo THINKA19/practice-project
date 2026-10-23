@@ -1,7 +1,7 @@
 /**
  * Mock 扩展入口：
- * 1. modules/<API 文件同名>.mock.ts：方法、路径、请求参数和场景。
- * 2. generators/：纯数据工厂，每次调用返回独立数据，无 HTTP / store 依赖。
+ * 1. 业务模块 mock/：专属路由和数据；全局 modules/ 保留示例与显式登记。
+ * 2. generators/：通用或示例工厂；业务专属工厂由业务模块维护。
  * 3. modules/index.ts：显式登记模块，初始化时检查重复路由。
  * 4. config.ts：开关和行为；utils/：响应信封、故障注入和登记检查。
  * 大型静态样本确有需要时放 fixtures/，由数据工厂读取。

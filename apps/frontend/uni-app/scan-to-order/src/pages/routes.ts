@@ -33,6 +33,16 @@ export const ClientRoutes = {
   Home: {
     /** 客户端主页（轮播图、热销推荐、点餐入口、营销活动位） */
     home: '/pages/home/index/index',
+    /** 首页用户入口：最简测试页。 */
+    memberCenter: '/pages/home/user/member-center/index',
+    coupons: '/pages/home/user/coupons/index',
+    /** 首页服务入口：最简测试页。 */
+    favorites: '/pages/home/service/favorites/index',
+    card: '/pages/home/service/card/index',
+    groupBuying: '/pages/home/service/group-buying/index',
+    welfare: '/pages/home/service/welfare/index',
+    /** 关于页面的保留目标，尚未实现。 */
+    about: '/pages/me/setting/about/index',
     /** 官方公告与资讯详情页（系统公告、门店节假日通知等） */
     noticeDetail: '/pages/home/notice/detail',
   },
@@ -43,7 +53,7 @@ export const ClientRoutes = {
     order: '/pages/ordering/index/index',
     /** 统一在线支付/收银台页面（支持微信支付、余额抵扣等） */
     pay: '/pages/ordering/pay/index',
-    /** 附近门店选择/切换列表页（距离排序、营业状态提示） */
+    /** 选店跳转测试页，接收 peisongType=zq/kd。 */
     shopSelect: '/pages/ordering/shop/select',
     /** 门店详情与资质介绍页（门店地址导航、营业时间、设施信息） */
     shopDetail: '/pages/ordering/shop/detail',

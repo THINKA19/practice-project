@@ -109,11 +109,13 @@ ApiError 保留 Network、Http、Protocol、Business 四大 kind。Network 的 r
 
 ## 6. 配置职责
 
-学习项目通过 `VITE_DATA_SOURCE` 选择请求来源：`mock` 使用 本地 Mock 服务（项目根目录：`src/mock/README.md`），`real` 或缺省继续真实请求。当前 `env/.env` 默认配置 `mock`。修改后需重启开发服务或重新构建；切换时清理前端缓存并重新进入。
+Mock 应接入项目既有请求适配或传输边界，不为目录调整另建一套 HTTP 链路。技术库、入口文件、环境变量名称和启用方式由目标项目确定并记录在项目说明中，通用规范不指定某个实现为唯一方案。
 
-数据源通过传输端口接入：client 只依赖 `HttpTransport`，不感知 Mock。应用启动时 `src/app/data-source.ts`（全项目唯一允许引用 `@/mock` 的生产文件）按 `VITE_DATA_SOURCE` 注册 `uniTransport` 或演示传输，并通过 `shared/platform/overrides` 注册登录 code、会话校验和支付的替身。真实构建由 vite.config.ts 的 `resolve.alias` 把 `@/mock` 及其任何子路径解析到 `src/mock/disabled.ts`。演示传输仍走原参数清理、认证注入、响应校验和解包。未登记接口明确失败，不回退真实网络。上传在 Mock 模式返回本地文件路径用于预览；真实模式继续验证 HTTP(S) 文件 URL。平台登录和支付通过已有 device 端口接入模拟实现，业务 API 和页面不增加模式判断。
+由统一装配入口登记领域 Mock，并检查重复的方法与路径。页面、组件及业务 API 不按数据源分叉；适配器和公共机制不包含领域专属数据。明确哪些请求链、上传或平台能力被模拟，不能因一个入口启用 Mock 就认为所有请求均已被覆盖。
 
-客户端不再导出 `MOCK_ENABLED`。业务代码不得按数据源分叉；某类后端服务是否接通用能力开关表达（`src/config/capabilities.ts`，如 `roleBackend` 对应 `VITE_ROLE_BACKEND_ENABLED`）。
+未命中请求可以按项目目标选择回退真实服务或明确失败；必须显式约定、可验证，迁移目录时不得隐式改变。环境开关由配置层统一管理，生产默认禁用 Mock；同时检查产物，不能把“运行时关闭”视为“模拟数据已从产物移除”。
+
+业务 Mock 的目录归属与迁移规则统一见 [业务组织规范 5.9](./business-architecture.md#59-mock领域模拟接口与数据按需)。具体接入现状、支持范围和迁移进度属于项目 README，不写入本通用规范。
 
 config.ts 独立存在，集中管理 HTTP 专属配置：
 
