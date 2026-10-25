@@ -5,6 +5,7 @@ import { serviceApi } from '../api/service'
 export function useActivityGallery() {
   const groups = ref<ActivityGalleryGroup[]>([])
   const loading = ref(true)
+  const failed = ref(false)
   let revision = 0
   onScopeDispose(() => {
     revision++
@@ -12,19 +13,22 @@ export function useActivityGallery() {
   async function loadGallery() {
     const request = ++revision
     loading.value = true
+    failed.value = false
     try {
       const result = await serviceApi.gallery()
       if (request === revision)
-        groups.value = result
+        groups.value = result.filter(group => group.images.length > 0)
     }
     catch {
-      if (request === revision)
+      if (request === revision) {
         groups.value = []
+        failed.value = true
+      }
     }
     finally {
       if (request === revision)
         loading.value = false
     }
   }
-  return { groups, loading, loadGallery }
+  return { groups, loading, failed, loadGallery }
 }

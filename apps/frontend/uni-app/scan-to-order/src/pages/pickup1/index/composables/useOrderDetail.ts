@@ -36,10 +36,13 @@ export function useOrderDetail() {
       if (request !== revision)
         return
       orderDetail.value = detail
-      if (detail.orderInfo.shopIdZt) {
-        const shop = await orderDetailApi.shop(detail.orderInfo.shopIdZt)
-        if (request === revision)
-          shopSubdetail.value = shop
+      if (detail?.orderInfo.shopIdZt) {
+        try {
+          const shop = await orderDetailApi.shop(detail.orderInfo.shopIdZt)
+          if (request === revision)
+            shopSubdetail.value = shop
+        }
+        catch { /* 门店信息失败不遮挡已获取的订单。 */ }
       }
     }
     catch {

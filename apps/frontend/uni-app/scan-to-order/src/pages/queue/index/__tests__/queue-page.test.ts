@@ -37,3 +37,27 @@ it('does not refresh or toast when taking a number completes after disposal', as
   await vm.refresh()
   expect(state.types).toHaveBeenCalledTimes(1)
 })
+
+it('keeps available types when personal records fail and prevents duplicate tickets', async () => {
+  state.myRecords.mockRejectedValueOnce(new Error('offline'))
+  const scope = effectScope()
+  const vm = scope.run(useQueuePage)!
+  await vm.refresh()
+  expect(vm.failed.value).toBe(false)
+  expect(vm.recordsFailed.value).toBe(true)
+  expect(vm.list.value).toHaveLength(1)
+  await vm.queuingGet(vm.list.value[0])
+  expect(state.take).not.toHaveBeenCalled()
+  scope.stop()
+})
+
+it('keeps personal tickets when queue types fail', async () => {
+  state.types.mockRejectedValueOnce(new Error('offline'))
+  state.myRecords.mockResolvedValueOnce([{ queuingLog: { id: 1, typeId: 1, status: 0, number: 1 }, queuingUpType: { id: 1, name: 'A' } }])
+  const scope = effectScope()
+  const vm = scope.run(useQueuePage)!
+  await vm.refresh()
+  expect(vm.failed.value).toBe(true)
+  expect(vm.mylist.value).toHaveLength(1)
+  scope.stop()
+})

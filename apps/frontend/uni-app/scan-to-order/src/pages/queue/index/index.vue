@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { PageState } from '@/components/page-state'
 /**
  * 排队取号（tab）：取号类型列表 + 我的号
  */
@@ -14,7 +15,7 @@ definePage({
 
 const { t } = useI18n()
 const vm = useQueuePage()
-const { list, mylist, loading, failed, active, taking } = vm
+const { list, mylist, loading, failed, recordsFailed, canViewRecords, active, taking } = vm
 
 onShow(() => {
   uni.setNavigationBarTitle({ title: t('tabbar.queue') })
@@ -23,110 +24,103 @@ onShow(() => {
 </script>
 
 <template>
-  <z-paging style="--wot-color-theme: #8b4513" fixed :use-page-scroll="false" :auto="false" :hide-empty-view="true" :refresher-enabled="false" :loading-more-enabled="false" :paging-style="{ background: 'linear-gradient(180deg,#fff5f0 0%,#fff9f6 50%,#fff 100%)' }">
-    <view class="queue-container">
-      <view class="header-section">
-        <view class="header-decoration" />
-        <view class="relative z-1">
-          <view class="title-main">
-            {{ t('queueFlow.title') }}
-          </view>
-          <view class="title-sub">
-            SMART QUEUE
-          </view>
+  <view class="fixed inset-x-0 bottom-[var(--window-bottom,0px)] top-[var(--window-top,0px)] flex flex-col overflow-hidden" style="background: linear-gradient(180deg,#fff5f0 0%,#fff9f6 50%,#fff 100%)">
+    <view class="header-section shrink-0">
+      <view class="header-decoration" />
+      <view class="relative z-1">
+        <view class="title-main">
+          {{ t('queueFlow.title') }}
         </view>
-      </view>
-
-      <view class="px-32rpx">
-        <view v-if="loading || failed || !list.length" class="py-120rpx text-center">
-          <view class="mb-24rpx text-120rpx opacity-60">
-            🍵
-          </view>
-          <view class="text-28rpx text-#999">
-            {{ t(loading ? 'common.loading' : failed ? 'common.loadFailed' : 'common.empty') }}
-            <wd-button v-if="failed" @click="vm.refresh()">
-              {{ t('common.retry') }}
-            </wd-button>
-          </view>
-        </view>
-        <view v-else class="mb-60rpx">
-          <view class="section-title">
-            <view class="title-dot" />
-            <text>{{ t('queueFlow.selectType') }}</text>
-          </view>
-          <view v-for="item in list" :key="item.id" :class="{ 'opacity-60': taking || active || (item.status !== undefined && item.status !== 0) }" class="card-item" @tap="vm.queuingGet(item)">
-            <view class="card-content">
-              <view class="flex flex-1 items-center">
-                <view class="mr-24rpx text-64rpx">
-                  ☕
-                </view>
-                <view class="flex-1">
-                  <view class="card-name">
-                    {{ item.name }}
-                  </view>
-                  <view class="text-24rpx text-#999">
-                    {{ t(item.status !== undefined && item.status !== 0 ? 'queueFlow.paused' : active ? 'queueFlow.hasActive' : 'queueFlow.take') }}
-                  </view>
-                </view>
-              </view>
-              <view class="pl-24rpx text-right">
-                <view class="mb-8rpx flex items-baseline justify-end">
-                  <view class="current-num">
-                    {{ t('queueFlow.current') }} {{ item.curNumber }}
-                  </view>
-                  <view class="ml-4rpx text-28rpx text-#999">
-                    / {{ t('queueFlow.issued') }} {{ item.numberGet }}
-                  </view>
-                </view>
-                <view class="text-22rpx text-#999">
-                  {{ t('queueFlow.waitingTables') }}: {{ item.numberWait }}
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
-
-        <view v-if="mylist.length > 0" class="mt-60rpx">
-          <view class="section-title">
-            <view class="title-dot" />
-            <text>{{ t('queue.myNumber') }}</text>
-          </view>
-          <view class="flex flex-col gap-24rpx">
-            <view v-for="item in mylist" :key="item.id" class="my-queue-card">
-              <view class="my-card-bg-decoration" />
-              <view class="relative z-1 mb-24rpx flex items-center justify-between">
-                <view class="my-card-type">
-                  {{ item.typeEntity?.name }}
-                </view>
-                <view class="my-card-number">
-                  {{ item.number }}
-                </view>
-              </view>
-              <view v-if="item.status === 0" class="relative mb-16rpx text-26rpx text-[#8b6f47]">
-                {{ t('queueFlow.ahead') }}: {{ item.aheadTables ?? '—' }}
-              </view>
-              <view v-if="item.status === 0 || item.status === 1" class="relative z-1 mb-20rpx flex gap-16rpx">
-                <wd-button v-if="item.status === 0 || item.status === 1" custom-class="!bg-[#8b4513] !border-[#8b4513] !text-white" :disabled="taking" @click="vm.cancel(item.id)">
-                  {{ t('queueFlow.cancel') }}
-                </wd-button>
-              </view>
-              <view class="relative z-1 flex flex-wrap items-center gap-16rpx">
-                <view class="status-tag">
-                  {{ t(`queueFlow.status${item.status}`) }}
-                </view>
-                <view v-if="item.waitMinitus" class="flex items-center text-26rpx text-#666">
-                  <text class="mr-8rpx text-28rpx">
-                    ⏱
-                  </text>
-                  <text>{{ t('queue.ExpectedWaiting') }}: {{ item.waitMinitus }}{{ t('queue.minutes') }}</text>
-                </view>
-              </view>
-            </view>
-          </view>
+        <view class="title-sub">
+          SMART QUEUE
         </view>
       </view>
     </view>
-  </z-paging>
+    <PageState v-if="!list.length && !mylist.length" fill :status="loading ? 'loading' : failed ? 'error' : 'empty'" :title="t(loading ? 'common.loading' : failed ? 'queueFlow.unavailable' : 'queueFlow.empty')" :description="!loading && !failed ? t('queueFlow.emptyHint') : undefined" />
+    <z-paging v-else style="--wot-color-theme: #8b4513; flex: 1; min-height: 0" :fixed="false" height="100%" :use-page-scroll="false" :auto="false" :hide-empty-view="true" :refresher-enabled="false" :loading-more-enabled="false" :paging-style="{ background: 'linear-gradient(180deg,#fff5f0 0%,#fff9f6 50%,#fff 100%)' }">
+      <view class="queue-container">
+        <view class="px-32rpx">
+          <PageState v-if="loading || failed || !list.length" :status="loading ? 'loading' : failed ? 'error' : 'empty'" compact :title="t(loading ? 'common.loading' : failed ? 'queueFlow.unavailable' : 'queueFlow.empty')" :description="!loading && !failed ? t('queueFlow.emptyHint') : undefined" />
+          <view v-else class="mb-60rpx">
+            <view class="section-title">
+              <view class="title-dot" />
+              <text>{{ t('queueFlow.selectType') }}</text>
+            </view>
+            <view v-for="item in list" :key="item.id" :class="{ 'opacity-60': taking || recordsFailed || active || (item.status !== undefined && item.status !== 0) }" class="card-item" @tap="vm.queuingGet(item)">
+              <view class="card-content">
+                <view class="flex flex-1 items-center">
+                  <view class="mr-24rpx text-64rpx">
+                    ☕
+                  </view>
+                  <view class="flex-1">
+                    <view class="card-name">
+                      {{ item.name }}
+                    </view>
+                    <view class="text-24rpx text-#999">
+                      {{ t(item.status !== undefined && item.status !== 0 ? 'queueFlow.paused' : active ? 'queueFlow.hasActive' : 'queueFlow.take') }}
+                    </view>
+                  </view>
+                </view>
+                <view class="pl-24rpx text-right">
+                  <view class="mb-8rpx flex items-baseline justify-end">
+                    <view class="current-num">
+                      {{ t('queueFlow.current') }} {{ item.curNumber }}
+                    </view>
+                    <view class="ml-4rpx text-28rpx text-#999">
+                      / {{ t('queueFlow.issued') }} {{ item.numberGet }}
+                    </view>
+                  </view>
+                  <view class="text-22rpx text-#999">
+                    {{ t('queueFlow.waitingTables') }}: {{ item.numberWait }}
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <view v-if="mylist.length > 0" class="mt-60rpx">
+            <view class="section-title">
+              <view class="title-dot" />
+              <text>{{ t('queue.myNumber') }}</text>
+            </view>
+            <view class="flex flex-col gap-24rpx">
+              <view v-for="item in mylist" :key="item.id" class="my-queue-card">
+                <view class="my-card-bg-decoration" />
+                <view class="relative z-1 mb-24rpx flex items-center justify-between">
+                  <view class="my-card-type">
+                    {{ item.typeEntity?.name }}
+                  </view>
+                  <view class="my-card-number">
+                    {{ item.number }}
+                  </view>
+                </view>
+                <view v-if="item.status === 0" class="relative mb-16rpx text-26rpx text-[#8b6f47]">
+                  {{ t('queueFlow.ahead') }}: {{ item.aheadTables ?? '—' }}
+                </view>
+                <view v-if="item.status === 0 || item.status === 1" class="relative z-1 mb-20rpx flex gap-16rpx">
+                  <wd-button v-if="item.status === 0 || item.status === 1" custom-class="!bg-[#8b4513] !border-[#8b4513] !text-white" :disabled="taking" @click="vm.cancel(item.id)">
+                    {{ t('queueFlow.cancel') }}
+                  </wd-button>
+                </view>
+                <view class="relative z-1 flex flex-wrap items-center gap-16rpx">
+                  <view class="status-tag">
+                    {{ t(`queueFlow.status${item.status}`) }}
+                  </view>
+                  <view v-if="item.waitMinitus" class="flex items-center text-26rpx text-#666">
+                    <text class="mr-8rpx text-28rpx">
+                      ⏱
+                    </text>
+                    <text>{{ t('queue.ExpectedWaiting') }}: {{ item.waitMinitus }}{{ t('queue.minutes') }}</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+          <PageState v-if="!loading && canViewRecords && !mylist.length && (list.length || recordsFailed)" :status="recordsFailed ? 'error' : 'empty'" compact :title="t(recordsFailed ? 'queueFlow.recordsUnavailable' : 'queueFlow.noRecords')" />
+        </view>
+      </view>
+    </z-paging>
+  </view>
 </template>
 
 <style lang="scss" scoped>

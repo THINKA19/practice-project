@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { PageState } from '@/components/page-state'
 /**
  * 取餐（tab 页，View：只做装配与渲染）
  * 来源：bee-master/pages/order-details/doing
@@ -35,28 +36,16 @@ onShow(() => {
         {{ t(value === 'pickup' ? 'orderDoing.qudanhao' : 'orderDoing.delivering') }}
       </wd-button>
     </view>
-    <view v-if="loading || failed || needsLogin" class="flex flex-1 flex-col items-center justify-center gap-24rpx p-32rpx text-center text-[#8b6f47]">
-      <text>{{ t(loading ? 'common.loading' : needsLogin ? 'pickupState.loginHint' : 'common.loadFailed') }}</text>
-      <wd-button v-if="!loading" :custom-class="needsLogin ? '!bg-[#169b50] !border-0 !text-white' : ''" @click="needsLogin ? toLoginPage() : vm.refresh()">
-        {{ t(needsLogin ? 'pickupState.login' : 'common.retry') }}
+    <PageState v-if="loading || failed || needsLogin" :status="loading ? 'loading' : needsLogin ? 'empty' : 'error'" :title="t(loading ? 'common.loading' : needsLogin ? 'pickupState.loginHint' : 'pickupState.unavailable')">
+      <wd-button v-if="!loading && needsLogin" custom-class="!bg-[#169b50] !border-0 !text-white" @click="toLoginPage()">
+        {{ t('pickupState.login') }}
       </wd-button>
-    </view>
-    <z-paging v-else-if="apiOk && !visibleItems.length" style="flex: 1; min-height: 0" :paging-style="{ background: 'transparent' }" :fixed="false" height="100%" :use-page-scroll="false" :auto="false" :hide-empty-view="true" :refresher-enabled="false" :loading-more-enabled="false">
-      <view class="no-order">
-        <view class="empty-icon">
-          🥤
-        </view>
-        <view class="content-1">
-          {{ t('orderDoing.empty') }}
-        </view>
-        <view class="content-2">
-          {{ t('orderDoing.emptyTips') }}
-        </view>
-        <view class="to-index-btn" @tap="vm.toIndexPage()">
-          {{ t('orderDoing.goOrder') }}
-        </view>
-      </view>
-    </z-paging>
+    </PageState>
+    <PageState v-else-if="apiOk && !visibleItems.length" status="empty" :title="t(!items.length ? 'pickupState.noOrders' : fulfillment === 'pickup' ? 'pickupState.noPickup' : 'pickupState.noDelivery')" :description="t(!items.length ? 'pickupState.emptyHint' : 'pickupState.filterHint')">
+      <wd-button v-if="!items.length" custom-class="!bg-[#169b50] !border-0 !text-white" @click="vm.toIndexPage()">
+        {{ t('orderDoing.goOrder') }}
+      </wd-button>
+    </PageState>
     <z-paging v-else-if="orderList" class="order-list" :paging-style="{ background: 'transparent' }" :fixed="false" height="100%" :use-page-scroll="false" :auto="false" :hide-empty-view="true" :refresher-enabled="false" :loading-more-enabled="false">
       <view v-for="item in visibleItems" :key="item.order.id" class="mb-24rpx">
         <DoingOrderCard :item="item" show-qrcode />
@@ -76,48 +65,6 @@ onShow(() => {
   right: 0;
   overflow: hidden;
   background: linear-gradient(135deg, #fff5e6 0%, #ffe4d1 50%, #fff0e6 100%);
-}
-
-.no-order {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 200rpx;
-}
-
-.empty-icon {
-  margin-bottom: 40rpx;
-  font-size: 120rpx;
-}
-
-.content-1 {
-  margin-top: 20rpx;
-  font-size: 32rpx;
-  font-weight: 500;
-  color: #8b6f47;
-  text-align: center;
-}
-
-.content-2 {
-  margin-top: 16rpx;
-  font-size: 28rpx;
-  color: #a89080;
-  text-align: center;
-}
-
-.to-index-btn {
-  width: 320rpx;
-  height: 88rpx;
-  margin-top: 60rpx;
-  font-size: 32rpx;
-  font-weight: 500;
-  line-height: 88rpx;
-  color: #fff;
-  text-align: center;
-  background: linear-gradient(135deg, #ff9f5a 0%, #ff7b3e 100%);
-  border-radius: 48rpx;
-  box-shadow: 0 8rpx 24rpx rgba(255, 159, 90, 0.3);
 }
 
 .order-list {

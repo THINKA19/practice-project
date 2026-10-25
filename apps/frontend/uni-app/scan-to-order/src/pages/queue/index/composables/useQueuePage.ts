@@ -12,7 +12,9 @@ export function useQueuePage() {
   const taking = ref(false)
   const loading = ref(false)
   const failed = ref(false)
+  const recordsFailed = ref(false)
   const session = useSession()
+  const canViewRecords = computed(() => session.hasLogin && session.identity === 'customer')
   const active = computed(() => mylist.value.some(r => r.status === 0 || r.status === 1))
   let revision = 0
   let disposed = false
@@ -27,15 +29,20 @@ export function useQueuePage() {
     const identity = session.sessionRevision
     loading.value = true
     failed.value = false
+    recordsFailed.value = false
     list.value = []
     mylist.value = []
     try {
       session.updateNowTime()
-      const results = await Promise.all([queueApi.types(), session.hasLogin && session.identity === 'customer' ? queueApi.myRecords() : Promise.resolve([])])
+      const results = await Promise.allSettled([queueApi.types(), session.hasLogin && session.identity === 'customer' ? queueApi.myRecords() : Promise.resolve([])])
       if (request !== revision || identity !== session.sessionRevision)
         return
-      list.value = results[0]
-      mylist.value = results[1].map(toMyQueueView)
+      failed.value = results[0].status === 'rejected'
+      recordsFailed.value = results[1].status === 'rejected'
+      if (results[0].status === 'fulfilled')
+        list.value = results[0].value
+      if (results[1].status === 'fulfilled')
+        mylist.value = results[1].value.map(toMyQueueView)
     }
     catch {
       if (request === revision)
@@ -50,7 +57,7 @@ export function useQueuePage() {
     void refresh()
   })
   async function perform(action: 'take' | 'cancel', id: number) {
-    if (taking.value || loading.value || failed.value || !requireIdentity('customer'))
+    if (taking.value || loading.value || (action === 'take' && (failed.value || recordsFailed.value)) || !requireIdentity('customer'))
       return
     const identity = session.sessionRevision
     taking.value = true
@@ -71,5 +78,5 @@ export function useQueuePage() {
       return
     return perform('take', type.id)
   }
-  return { list, mylist, taking, loading, failed, active, refresh, queuingGet, cancel: (id: number) => perform('cancel', id) }
+  return { list, mylist, recordsFailed, canViewRecords, taking, loading, failed, active, refresh, queuingGet, cancel: (id: number) => perform('cancel', id) }
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { PageState } from '@/components/page-state'
 import ServiceGalleryGroup from './components/ServiceGalleryGroup.vue'
 import { ContactDock } from '@/components/contact-dock'
 import { useServiceContacts } from './composables/useServiceContacts'
@@ -9,8 +10,7 @@ import { useActivityGallery } from './composables/useActivityGallery'
 defineOptions({ name: 'Service' })
 definePage({ style: { navigationBarTitleText: '服务', disableScroll: true } })
 const contacts = useServiceContacts()
-const { groups, loading, loadGallery } = useActivityGallery()
-onLoad(loadGallery)
+const { groups, loading, failed, loadGallery } = useActivityGallery()
 function setTitle() {
   uni.setNavigationBarTitle({ title: t('service.title') })
 }
@@ -18,6 +18,7 @@ const pageVisible = ref(false)
 onShow(() => {
   pageVisible.value = true
   setTitle()
+  loadGallery()
 })
 onHide(() => {
   pageVisible.value = false
@@ -33,15 +34,10 @@ watch(currentLocale, () => {
   <z-paging fixed :use-page-scroll="false" :auto="false" :hide-empty-view="true" :refresher-enabled="false" :loading-more-enabled="false" :paging-style="{ background: 'linear-gradient(180deg,#ffede8 0%,#fff5f1 50%,#fffaf7 100%)' }">
     <view class="pb-120rpx">
       <!-- 分组图文：标题 + 查看更多 + 横向滚动图 -->
-      <view class="w-full">
+      <view v-if="!loading && !failed" class="w-full">
         <ServiceGalleryGroup v-for="(group, groupIndex) in groups" :key="group.id" :group="group" :group-index="groupIndex" />
       </view>
-      <!-- 空态：接口返回空列表时兜底（加载中不显示，避免与 loading 文案打架） -->
-      <view v-if="!loading && !groups.length" class="mt-200rpx flex flex-col items-center">
-        <text class="text-28rpx text-[#999999]">
-          {{ t('service.empty') }}
-        </text>
-      </view>
+      <PageState v-if="loading || failed || !groups.length" :status="loading ? 'loading' : failed ? 'error' : 'empty'" :title="t(loading ? 'common.loading' : failed ? 'service.unavailable' : 'service.empty')" :description="!loading && !failed ? t('service.emptyHint') : undefined" />
     </view>
   </z-paging>
 

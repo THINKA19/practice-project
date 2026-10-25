@@ -30,3 +30,11 @@ group.id：分组标识；title：标题；images：图片数组；image.url/lab
 六组内容超过视口后由内部 z-paging 承担纵向滚动。
 
 联系方式通过 @/components/contact-dock 公共入口引入，账号配置由 useServiceContacts 提供；全局组件仅持有展示和交互逻辑。页面背景保持从浅粉到浅桃的全视口底色，底部不再渐变成纯白。
+
+## 空状态与异常展示
+
+页面每次显示时重新加载。加载、成功无活动和请求失败分别展示统一状态区；无活动保留联系方式，不提供重试按钮。
+
+状态展示采用已安装 Wot UI 的 `wd-empty` 和 `wd-loading`，业务操作由页面提供。
+
+公共状态统一接入 `src/components/page-state/index.vue`，通过 status 区分 loading、empty 和 error；加载固定为上方三点动画、下方统一加载文案。

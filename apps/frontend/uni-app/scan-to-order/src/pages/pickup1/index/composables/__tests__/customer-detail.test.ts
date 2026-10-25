@@ -2,9 +2,9 @@ import { effectScope } from 'vue'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { useOrderDetail } from '../useOrderDetail'
 
-const state = vi.hoisted(() => ({ preview: vi.fn(), demoPay: vi.fn(), list: vi.fn() }))
+const state = vi.hoisted(() => ({ preview: vi.fn(), demoPay: vi.fn(), shop: vi.fn(), list: vi.fn() }))
 vi.mock('@/pages/pickup/index', () => ({ pickupApi: { list: state.list } }))
-vi.mock('../../api/orders', () => ({ orderDetailApi: { preview: state.preview, demoPay: state.demoPay } }))
+vi.mock('../../api/orders', () => ({ orderDetailApi: { preview: state.preview, demoPay: state.demoPay, shop: state.shop } }))
 vi.mock('@/utils/project/feedback', () => ({ toast: vi.fn() }))
 vi.mock('@/locale', () => ({ t: (key: string) => key }))
 beforeEach(() => vi.resetAllMocks())
@@ -54,5 +54,27 @@ it('does not invalidate payment when the page refreshes during submission', asyn
   await pending
   expect(vm.orderDetail.value?.orderInfo.status).toBe(1)
   expect(vm.scene.value).toBe('pickup')
+  scope.stop()
+})
+
+it('keeps order details when only the store request fails', async () => {
+  const scope = effectScope()
+  const vm = scope.run(useOrderDetail)!
+  state.preview.mockResolvedValue({ orderInfo: { id: '201', status: 1, shopIdZt: 1 } })
+  state.shop.mockRejectedValue(new Error('offline'))
+  await vm.fetchOrderDetail()
+  expect(vm.failed.value).toBe(false)
+  expect(vm.orderDetail.value?.orderInfo.id).toBe('201')
+  expect(vm.shopSubdetail.value).toBeNull()
+  scope.stop()
+})
+
+it('treats an absent preview as empty', async () => {
+  const scope = effectScope()
+  const vm = scope.run(useOrderDetail)!
+  state.preview.mockResolvedValue(null)
+  await vm.fetchOrderDetail()
+  expect(vm.failed.value).toBe(false)
+  expect(vm.orderDetail.value).toBeNull()
   scope.stop()
 })

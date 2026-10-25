@@ -320,9 +320,11 @@
     "introduction": "I am {name},height:{detail.height},weight:{detail.weight}"
   },
   "service": {
+    "unavailable": "Activity content is temporarily unavailable",
+    "emptyHint": "Store activities and photos will appear here",
     "title": "Service",
     "more": "View more",
-    "empty": "No gallery images",
+    "empty": "No activities yet",
     "previous": "Previous images",
     "next": "Next images",
     "image": "Photo {index}",
@@ -348,6 +350,10 @@
     }
   },
   "pickupPreview": {
+    "notProvided": "Not provided",
+    "unavailable": "Order information is temporarily unavailable",
+    "emptyHint": "Use the scenes or demo list above to view demo orders",
+    "empty": "No order information",
     "pickupDemo": "Pickup 1 · detail demo",
     "pickupScene": "Store pickup",
     "deliveryScene": "Delivery",
@@ -390,6 +396,12 @@
     "expand": "Expand contacts"
   },
   "pickupState": {
+    "filterHint": "Switch the category above to view other orders",
+    "emptyHint": "Place an order to see preparation and pickup progress here",
+    "noDelivery": "No delivery orders",
+    "noPickup": "No pickup orders",
+    "noOrders": "No orders in progress",
+    "unavailable": "Order progress is temporarily unavailable",
     "loginHint": "Sign in to view your order progress",
     "login": "Sign in",
     "multiple": "Multiple orders",
@@ -401,6 +413,11 @@
     "refresh": "Refresh progress"
   },
   "queueFlow": {
+    "recordsUnavailable": "Your queue records are temporarily unavailable",
+    "noRecords": "You have not taken a queue ticket yet",
+    "unavailable": "Queue information is temporarily unavailable",
+    "emptyHint": "Please ask the store staff if you need a table",
+    "empty": "No queue tickets available",
     "title": "Smart queue",
     "selectType": "Choose table type",
     "enterDemo": "Try queue demo",

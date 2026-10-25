@@ -320,9 +320,11 @@
     "introduction": "Tôi là {name}, chiều cao:{detail.height}, cân nặng:{detail.weight}"
   },
   "service": {
+    "unavailable": "Tạm thời không thể hiển thị hoạt động",
+    "emptyHint": "Hoạt động và hình ảnh cửa hàng sẽ xuất hiện ở đây",
     "title": "Dịch vụ",
     "more": "Xem thêm",
-    "empty": "Chưa có ảnh",
+    "empty": "Chưa có hoạt động",
     "previous": "Ảnh trước",
     "next": "Ảnh tiếp theo",
     "image": "Ảnh {index}",
@@ -348,6 +350,10 @@
     }
   },
   "pickupPreview": {
+    "notProvided": "Chưa cung cấp",
+    "unavailable": "Tạm thời không thể tải thông tin đơn hàng",
+    "emptyHint": "Chọn tình huống hoặc danh sách minh họa phía trên để xem đơn",
+    "empty": "Chưa có thông tin đơn hàng",
     "pickupDemo": "Nhận món 1 · bản mẫu",
     "pickupScene": "Nhận tại quán",
     "deliveryScene": "Đang giao",
@@ -390,6 +396,12 @@
     "expand": "Mở rộng liên hệ"
   },
   "pickupState": {
+    "filterHint": "Chuyển mục phía trên để xem các đơn khác",
+    "emptyHint": "Sau khi đặt món, bạn có thể xem tiến độ tại đây",
+    "noDelivery": "Chưa có đơn giao hàng",
+    "noPickup": "Chưa có đơn tự đến lấy",
+    "noOrders": "Chưa có đơn hàng đang xử lý",
+    "unavailable": "Tạm thời không thể tải tiến độ nhận món",
     "loginHint": "Đăng nhập để xem tiến độ đơn hàng",
     "login": "Đăng nhập",
     "multiple": "Nhiều đơn",
@@ -401,6 +413,11 @@
     "refresh": "Cập nhật tiến độ"
   },
   "queueFlow": {
+    "recordsUnavailable": "Tạm thời không thể tải số xếp hàng của bạn",
+    "noRecords": "Bạn chưa lấy số xếp hàng",
+    "unavailable": "Tạm thời không thể tải thông tin xếp hàng",
+    "emptyHint": "Vui lòng hỏi nhân viên cửa hàng nếu cần xếp hàng",
+    "empty": "Chưa có số để lấy",
     "title": "Xếp hàng thông minh",
     "selectType": "Chọn loại bàn",
     "enterDemo": "Thử xếp hàng",
