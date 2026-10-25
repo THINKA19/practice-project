@@ -13,7 +13,7 @@
 - 禁止新增 `any`(团队约定;eslint 未单独强制)
 - 对象类型用 `interface`,联合类型用 `type`;导入类型用 `import type`
 - 不自动排序 import:条件编译注释可能包裹 import(eslint 已关 `perfectionist/sort-imports`,勿重新打开)
-- API 响应必须在 `src/api/` 定义接口类型,响应数据过边界校验后才使用
+- API 响应必须在所属业务模块的 `models/` 定义接口类型，接口调用放在模块的 `api/`,响应数据过边界校验后才使用
 
 ## 3. 样式(UnoCSS)
 
@@ -26,7 +26,7 @@
 
 ## 4. 状态管理
 
-- store 放 `src/store/`,`defineStore` 定义
+- 业务 Store 使用 `defineStore`，放在所属业务模块；共享会话归 `src/pages/auth/session/`。根级 `src/store/` 为稳定基础与历史兼容入口，保护边界见 [脚手架保护规范](../docs/ai/脚手架保护与参考代码使用规范.md) 的 Store 条款。
 - 需要持久化的状态配置 `pinia-plugin-persistedstate`,不手写 uni.setStorage 同步业务状态
 - uni.getStorageSync 读出的数据是真边界数据,使用前校验(见 architecture.md 第 3 节)
 

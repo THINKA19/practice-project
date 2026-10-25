@@ -18,8 +18,10 @@ const state = vi.hoisted(() => ({
   user: { userInfo: { userId: -1, nickname: '', username: '', avatar: '' }, fetchUserInfo: vi.fn() },
 }))
 
-vi.mock('@/store/token', () => ({ useTokenStore: () => state.token }))
-vi.mock('@/store/user', () => ({ useUserStore: () => state.user }))
+vi.mock('@/pages/auth/session', async () => ({
+  ...await import('@/pages/auth/session/routes'),
+  useSession: () => ({ ...state.token, ...state.user }),
+}))
 vi.mock('@/tabbar/store', () => ({ isPageTabbar: () => false }))
 vi.mock('@/locale', () => ({ t: (key: string) => key }))
 

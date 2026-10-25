@@ -1,4 +1,3 @@
-import { decideRouteAccess } from './roleAccess'
 import { isMp } from '@uni-helper/uni-env'
 /**
  * by 菲鸽 on 2025-08-19
@@ -61,12 +60,6 @@ export const navigateToInterceptor = {
     //   FG_LOG_ENABLE && console.log('路由拦截器 4: plugin:// 路径 ==>', url)
     //   path = url
     // }
-
-    const currentSession = useTokenStore().updateNowTime()
-    if (!decideRouteAccess(path, currentSession.identity, currentSession.hasLogin)) {
-      uni.showToast({ title: '请先退出当前身份，或使用对应身份登录', icon: 'none' })
-      return false
-    }
 
     // 小程序里面使用平台自带的登录，则不走下面的逻辑
     if (isMp && !LOGIN_PAGE_ENABLE_IN_MP) {

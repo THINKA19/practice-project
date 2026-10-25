@@ -1,5 +1,6 @@
 {
   "tabbar": {
+    "pickup1": "取餐一",
     "home": "首页",
     "ordering": "点餐",
     "service": "服务",
@@ -18,11 +19,17 @@
     "loadFailed": "加载失败",
     "retry": "点击重试",
     "navigationFailed": "暂时无法打开页面，请稍后重试",
-    "pageNotFound": "页面不存在"
+    "pageNotFound": "页面不存在",
+    "submitSuccess": "提交成功"
   },
   "coupons": {
     "title": "优惠券",
-    "tabs": ["可领", "已领", "失效", "口令"],
+    "tabs": [
+      "可领",
+      "已领",
+      "失效",
+      "口令"
+    ],
     "Vouchers": "代金券",
     "over": "满",
     "btn": "立即领取",
@@ -139,7 +146,7 @@
     },
     "logs": {
       "title": "消费记录",
-      "subtitle": "Card Consumption Record",
+      "subtitle": "礼品卡消费记录",
       "empty": "暂无消费记录",
       "emptyTips": "使用礼品卡消费后，记录会显示在这里哦～",
       "amount": "消费金额",
@@ -232,15 +239,9 @@
     "cancelSuccess": "已取消收藏"
   },
   "queue": {
-    "title": "排队取号",
-    "heroTitle": "智能取号",
-    "selectType": "选择取号类型",
-    "tapToGet": "点击立即取号",
-    "currentQueue": "当前排队",
     "myNumber": "我的号码",
-    "expectedWaiting": "预计等待",
+    "ExpectedWaiting": "预计等待",
     "minutes": "分钟",
-    "empty": "暂无排队信息",
     "success": "取号成功"
   },
   "orderDetail": {
@@ -269,7 +270,8 @@
     "paySuccess": "支付成功",
     "order": "订单",
     "payable": "应付金额",
-    "orderNo": "订单号"
+    "orderNo": "订单号",
+    "paymentUnavailable": "暂未开通在线支付，请联系门店"
   },
   "orderDoing": {
     "title": "取餐中",
@@ -299,7 +301,12 @@
     "freight": "运费",
     "realAmount": "实付金额",
     "confirmVerification": "确认核销",
-    "verified": "核销完成"
+    "verified": "核销完成",
+    "loadFailed": "订单信息加载失败，请重试",
+    "missingCode": "缺少核销码，请从订单列表进入",
+    "completed": "核销已完成",
+    "staffOnly": "请由门店工作人员核销订单",
+    "returnToList": "返回订单列表"
   },
   "demo": {
     "i18n": {
@@ -311,5 +318,172 @@
     "weight": "{heavy}公斤",
     "detail": "{0}cm, {1}公斤",
     "introduction": "我是 {name},身高:{detail.height},体重:{detail.weight}"
+  },
+  "service": {
+    "title": "服务",
+    "more": "查看更多",
+    "empty": "暂无活动实拍",
+    "previous": "上一组图片",
+    "next": "下一组图片",
+    "image": "实拍 {index}",
+    "contact": "联系我们",
+    "priority": "优先联系",
+    "wechat": "微信",
+    "copy": "复制微信号",
+    "copied": "微信号已复制",
+    "linkCopied": "链接已复制，请在浏览器打开",
+    "wechatTitle": "添加微信联系",
+    "wechatHint": "复制微信号后，在微信中搜索添加",
+    "close": "关闭",
+    "expand": "展开联系方式",
+    "collapse": "收起联系方式",
+    "demo": "演示联系方式",
+    "groups": {
+      "activities": "门店活动",
+      "environment": "用餐环境",
+      "food": "餐品展示",
+      "gatherings": "聚会活动",
+      "festivals": "节日主题",
+      "moments": "服务瞬间"
+    }
+  },
+  "pickupPreview": {
+    "pickupDemo": "取餐一 · 详情演示",
+    "pickupScene": "到店自取",
+    "deliveryScene": "配送中",
+    "unpaidScene": "待付款",
+    "finishedScene": "已完成",
+    "demoPaid": "模拟支付完成",
+    "demoPay": "演示支付，不产生真实扣款"
+  },
+  "demoFlow": {
+    "bookingEntry": "预约订座",
+    "listEntry": "进行中订单列表演示",
+    "verifyEntry": "核销此演示订单",
+    "listHint": "演示列表：点击订单核销后，返回查看列表变化",
+    "signIn": "登录后可提交预约"
+  },
+  "booking": {
+    "title": "预约订座",
+    "name": "联系人",
+    "namePlaceholder": "请输入联系人姓名",
+    "mobile": "联系电话",
+    "mobilePlaceholder": "请输入联系电话",
+    "time": "到店时间",
+    "timePlaceholder": "请选择到店时间",
+    "person": "用餐人数",
+    "tip": "预约结果以门店确认为准",
+    "subtitle": "为您预留美好时光",
+    "infoTitle": "预订信息"
+  },
+  "date": {
+    "year": "年",
+    "month": "月",
+    "day": "日",
+    "hour": "时",
+    "minutes": "分"
+  },
+  "contactDock": {
+    "close": "关闭",
+    "copy": "复制联系方式",
+    "collapse": "收起联系方式",
+    "expand": "展开联系方式"
+  },
+  "pickupState": {
+    "loginHint": "登录后查看你的取餐进度",
+    "login": "去登录",
+    "multiple": "多订单",
+    "preparing": "制作中",
+    "ready": "待取餐",
+    "empty": "无订单",
+    "failure": "加载失败",
+    "preparingHint": "餐品正在制作，请稍候；出餐后展示取餐码",
+    "refresh": "刷新进度"
+  },
+  "queueFlow": {
+    "title": "智能取号",
+    "selectType": "选择取号类型",
+    "enterDemo": "进入取号演示",
+    "exitDemo": "返回顾客取号",
+    "demoHint": "演示模式：可模拟叫下一桌，未入座继续叫号会将上一桌标记为过号。一个顾客仅保留一个有效号码。",
+    "paused": "暂停取号",
+    "hasActive": "已有有效排队号",
+    "take": "点击立即取号",
+    "current": "当前叫号",
+    "issued": "已发号",
+    "waitingTables": "等待桌数",
+    "ahead": "前方桌数",
+    "callNext": "模拟叫下一桌",
+    "cancel": "取消排队",
+    "seat": "确认入座",
+    "status0": "等待叫号",
+    "status1": "已叫号，请入座",
+    "status2": "已入座",
+    "status3": "已取消",
+    "status4": "已过号",
+    "refresh": "刷新排队"
+  },
+  "auth": {
+    "login": "登录",
+    "register": "注册",
+    "loginTitle": "欢迎登录",
+    "registerTitle": "创建账号",
+    "account": "账号",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "accountPlaceholder": "3–32 位字母、数字或下划线",
+    "passwordPlaceholder": "请输入密码",
+    "accountInvalid": "账号须为 3–32 位字母、数字或下划线",
+    "passwordRequired": "请输入密码，长度不超过 64 位",
+    "passwordLength": "密码须为 8–64 位",
+    "passwordMismatch": "两次输入的密码不一致",
+    "agreementRequired": "请先阅读并同意用户协议和隐私协议",
+    "agree": "我已阅读并同意",
+    "userAgreement": "用户协议",
+    "privacyAgreement": "隐私协议",
+    "and": "和",
+    "goRegister": "还没有账号？去注册",
+    "goLogin": "已有账号？去登录",
+    "wechatLogin": "微信登录",
+    "demoHint": "开发演示：demo / demo12345；注册账号仅在本次开发会话有效",
+    "loginFailed": "登录失败，请重试",
+    "registerFailed": "注册失败，请重试",
+    "wxTitle": "微信登录",
+    "wxPcHint": "请使用手机微信扫码，并在手机上确认登录",
+    "wxPhoneHint": "通过微信确认身份，无需填写账号密码或手机号",
+    "wxOpenWechat": "请使用微信打开原点餐链接，或用微信重新扫描门店桌码",
+    "wxAutoAccount": "首次授权后自动建立顾客账号；跨端使用同一顾客身份",
+    "wxDemoHint": "开发演示：使用模拟微信身份，不会连接真实微信或获取真实微信资料",
+    "wxDemoStart": "微信登录",
+    "wxScanLogin": "微信登录",
+    "wxDemoQr": "微信扫码登录",
+    "wxDemoQrHint": "请在手机微信中确认登录",
+    "wxDemoConfirm": "模拟手机微信确认",
+    "wxExpired": "登录码已失效，请重新获取",
+    "wxRefresh": "重新获取登录码",
+    "wxInvalidCallback": "授权状态不匹配或已过期，请重新发起微信登录",
+    "wxUnavailable": "微信授权尚未配置，请联系门店或稍后重试",
+    "wxProfile": "微信演示顾客",
+    "wxGuest": "游客",
+    "wxCustomerId": "顾客编号",
+    "wxLogout": "退出登录",
+    "wxDifferentRole": "请先退出当前身份，再使用顾客微信登录"
+  },
+  "account": {
+    "scanHx": "扫码核销",
+    "signDaily": "每日签到",
+    "youhuimaidan": "优惠买单",
+    "aboutUs": "关于我们",
+    "Contact": "联系客服",
+    "clearStorage": "清除缓存",
+    "score": "积分",
+    "uid": "用户编号",
+    "nickSet": "点击登录",
+    "userCode": "会员码",
+    "address": "收货地址",
+    "notVIP": "普通会员",
+    "orders": "我的订单",
+    "feedback": "意见反馈",
+    "balance": "余额"
   }
 }

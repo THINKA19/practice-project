@@ -1,5 +1,6 @@
 {
   "tabbar": {
+    "pickup1": "Nhận món 1",
     "home": "Trang chủ",
     "ordering": "Đặt món",
     "service": "Dịch vụ",
@@ -18,11 +19,17 @@
     "loadFailed": "Tải thất bại",
     "retry": "Nhấn để thử lại",
     "navigationFailed": "Không thể mở trang này. Vui lòng thử lại.",
-    "pageNotFound": "Không tìm thấy trang"
+    "pageNotFound": "Không tìm thấy trang",
+    "submitSuccess": "Đã gửi"
   },
   "coupons": {
     "title": "Phiếu giảm giá",
-    "tabs": ["Có thể nhận", "Đã nhận", "Hết hiệu lực", "Đổi mã"],
+    "tabs": [
+      "Có thể nhận",
+      "Đã nhận",
+      "Hết hiệu lực",
+      "Đổi mã"
+    ],
     "Vouchers": "Phiếu giảm giá",
     "over": "Đơn từ",
     "btn": "Nhận ngay",
@@ -232,16 +239,10 @@
     "cancelSuccess": "Đã bỏ yêu thích"
   },
   "queue": {
-    "title": "Lấy số",
-    "heroTitle": "Lấy số thông minh",
-    "selectType": "Chọn loại xếp hàng",
-    "tapToGet": "Nhấn để lấy số ngay",
-    "currentQueue": "Đang gọi số",
     "myNumber": "Số của tôi",
-    "expectedWaiting": "Dự kiến chờ",
-    "minutes": " phút",
-    "empty": "Chưa có thông tin xếp hàng",
-    "success": "Lấy số thành công"
+    "ExpectedWaiting": "Dự kiến chờ",
+    "minutes": "phút",
+    "success": "Đã lấy số"
   },
   "orderDetail": {
     "title": "Chi tiết đơn hàng",
@@ -269,7 +270,8 @@
     "paySuccess": "Thanh toán thành công",
     "order": "Đơn hàng",
     "payable": "Số tiền cần trả",
-    "orderNo": "Mã đơn hàng"
+    "orderNo": "Mã đơn hàng",
+    "paymentUnavailable": "Chưa hỗ trợ thanh toán trực tuyến. Vui lòng liên hệ cửa hàng."
   },
   "orderDoing": {
     "title": "Đang pha chế",
@@ -299,7 +301,12 @@
     "freight": "Phí giao hàng",
     "realAmount": "Số tiền đã trả",
     "confirmVerification": "Xác nhận",
-    "verified": "Xác nhận thành công"
+    "verified": "Xác nhận thành công",
+    "loadFailed": "Không thể tải đơn. Vui lòng thử lại.",
+    "missingCode": "Thiếu mã xác minh. Vui lòng mở từ đơn hàng.",
+    "completed": "Đã xác minh",
+    "staffOnly": "Chỉ nhân viên cửa hàng được xác nhận đơn.",
+    "returnToList": "Quay lại danh sách đơn"
   },
   "demo": {
     "i18n": {
@@ -311,5 +318,172 @@
     "weight": "{heavy}kg",
     "detail": "{0}cm, {1}kg",
     "introduction": "Tôi là {name}, chiều cao:{detail.height}, cân nặng:{detail.weight}"
+  },
+  "service": {
+    "title": "Dịch vụ",
+    "more": "Xem thêm",
+    "empty": "Chưa có ảnh",
+    "previous": "Ảnh trước",
+    "next": "Ảnh tiếp theo",
+    "image": "Ảnh {index}",
+    "contact": "Liên hệ",
+    "priority": "Ưu tiên",
+    "wechat": "WeChat",
+    "copy": "Sao chép WeChat",
+    "copied": "Đã sao chép WeChat",
+    "linkCopied": "Đã sao chép liên kết. Mở trong trình duyệt",
+    "wechatTitle": "Liên hệ qua WeChat",
+    "wechatHint": "Sao chép ID và tìm kiếm trong WeChat",
+    "close": "Đóng",
+    "expand": "Hiện liên hệ",
+    "collapse": "Ẩn liên hệ",
+    "demo": "Liên hệ mẫu",
+    "groups": {
+      "activities": "Hoạt động tại quán",
+      "environment": "Không gian quán",
+      "food": "Món ăn nổi bật",
+      "gatherings": "Tiệc gặp mặt",
+      "festivals": "Chủ đề lễ hội",
+      "moments": "Khoảnh khắc phục vụ"
+    }
+  },
+  "pickupPreview": {
+    "pickupDemo": "Nhận món 1 · bản mẫu",
+    "pickupScene": "Nhận tại quán",
+    "deliveryScene": "Đang giao",
+    "unpaidScene": "Chưa thanh toán",
+    "finishedScene": "Hoàn thành",
+    "demoPaid": "Đã thanh toán mô phỏng",
+    "demoPay": "Thanh toán mẫu, không trừ tiền thật"
+  },
+  "demoFlow": {
+    "bookingEntry": "Đặt bàn",
+    "listEntry": "Danh sách đơn mẫu",
+    "verifyEntry": "Xác nhận đơn mẫu này",
+    "listHint": "Danh sách mẫu: xác nhận đơn và quay lại xem cập nhật",
+    "signIn": "Đăng nhập để gửi đặt bàn"
+  },
+  "booking": {
+    "title": "Đặt bàn",
+    "name": "Người liên hệ",
+    "namePlaceholder": "Nhập tên người liên hệ",
+    "mobile": "Điện thoại",
+    "mobilePlaceholder": "Nhập số điện thoại",
+    "time": "Giờ đến",
+    "timePlaceholder": "Chọn giờ đến",
+    "person": "Số người",
+    "tip": "Đặt bàn cần được quán xác nhận",
+    "subtitle": "Dành bàn cho lần ghé tiếp theo",
+    "infoTitle": "Thông tin đặt bàn"
+  },
+  "date": {
+    "year": " năm",
+    "month": " tháng",
+    "day": " ngày",
+    "hour": " giờ",
+    "minutes": " phút"
+  },
+  "contactDock": {
+    "close": "Đóng",
+    "copy": "Sao chép liên hệ",
+    "collapse": "Thu gọn liên hệ",
+    "expand": "Mở rộng liên hệ"
+  },
+  "pickupState": {
+    "loginHint": "Đăng nhập để xem tiến độ đơn hàng",
+    "login": "Đăng nhập",
+    "multiple": "Nhiều đơn",
+    "preparing": "Đang chuẩn bị",
+    "ready": "Sẵn sàng nhận",
+    "empty": "Không có đơn",
+    "failure": "Lỗi tải",
+    "preparingHint": "Món ăn đang chuẩn bị. Mã nhận hàng hiển thị khi hoàn tất.",
+    "refresh": "Cập nhật tiến độ"
+  },
+  "queueFlow": {
+    "title": "Xếp hàng thông minh",
+    "selectType": "Chọn loại bàn",
+    "enterDemo": "Thử xếp hàng",
+    "exitDemo": "Về hàng đợi khách",
+    "demoHint": "Mô phỏng: gọi bàn tiếp theo. Bàn đã gọi chưa ngồi sẽ bị đánh dấu lỡ lượt. Mỗi khách chỉ có một số đang chờ.",
+    "paused": "Tạm dừng lấy số",
+    "hasActive": "Bạn đã có số đang chờ",
+    "take": "Nhấn để lấy số",
+    "current": "Đang gọi",
+    "issued": "Đã phát",
+    "waitingTables": "Số bàn đang chờ",
+    "ahead": "Số bàn phía trước",
+    "callNext": "Gọi bàn tiếp theo",
+    "cancel": "Hủy lấy số",
+    "seat": "Xác nhận đã ngồi",
+    "status0": "Đang chờ",
+    "status1": "Đã gọi, vui lòng vào bàn",
+    "status2": "Đã ngồi",
+    "status3": "Đã hủy",
+    "status4": "Lỡ lượt",
+    "refresh": "Cập nhật hàng đợi"
+  },
+  "auth": {
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "loginTitle": "Chào mừng trở lại",
+    "registerTitle": "Tạo tài khoản",
+    "account": "Tài khoản",
+    "password": "Mật khẩu",
+    "confirmPassword": "Nhập lại mật khẩu",
+    "accountPlaceholder": "3–32 chữ cái, chữ số hoặc dấu gạch dưới",
+    "passwordPlaceholder": "Nhập mật khẩu",
+    "accountInvalid": "Dùng 3–32 chữ cái, chữ số hoặc dấu gạch dưới",
+    "passwordRequired": "Nhập mật khẩu tối đa 64 ký tự",
+    "passwordLength": "Mật khẩu từ 8–64 ký tự",
+    "passwordMismatch": "Mật khẩu không khớp",
+    "agreementRequired": "Vui lòng đồng ý điều khoản và chính sách bảo mật",
+    "agree": "Tôi đã đọc và đồng ý",
+    "userAgreement": "Điều khoản sử dụng",
+    "privacyAgreement": "Chính sách bảo mật",
+    "and": "và",
+    "goRegister": "Chưa có tài khoản? Đăng ký",
+    "goLogin": "Đã có tài khoản? Đăng nhập",
+    "wechatLogin": "Đăng nhập WeChat",
+    "demoHint": "Bản thử: demo / demo12345. Tài khoản mới chỉ tồn tại trong phiên phát triển.",
+    "loginFailed": "Đăng nhập thất bại. Vui lòng thử lại.",
+    "registerFailed": "Đăng ký thất bại. Vui lòng thử lại.",
+    "wxTitle": "Đăng nhập WeChat",
+    "wxPcHint": "Quét bằng WeChat trên điện thoại, sau đó xác nhận đăng nhập trên điện thoại.",
+    "wxPhoneHint": "Xác minh qua WeChat. Không cần mật khẩu hoặc số điện thoại.",
+    "wxOpenWechat": "Mở liên kết đặt món trong WeChat hoặc quét lại mã bàn bằng WeChat",
+    "wxAutoAccount": "Lần xác thực đầu tạo tài khoản khách dùng chung giữa các kênh",
+    "wxDemoHint": "Bản thử: danh tính WeChat mô phỏng, không kết nối hoặc lấy hồ sơ WeChat thật",
+    "wxDemoStart": "Đăng nhập WeChat",
+    "wxScanLogin": "Đăng nhập WeChat",
+    "wxDemoQr": "Đăng nhập WeChat",
+    "wxDemoQrHint": "Xác nhận đăng nhập trong WeChat trên điện thoại.",
+    "wxDemoConfirm": "Mô phỏng xác nhận điện thoại",
+    "wxExpired": "Mã đăng nhập đã hết hạn",
+    "wxRefresh": "Lấy mã mới",
+    "wxInvalidCallback": "Trạng thái không hợp lệ hoặc hết hạn. Vui lòng thử lại.",
+    "wxUnavailable": "Chưa cấu hình xác thực WeChat. Vui lòng liên hệ cửa hàng.",
+    "wxProfile": "Khách WeChat mô phỏng",
+    "wxGuest": "Khách",
+    "wxCustomerId": "Mã khách hàng",
+    "wxLogout": "Đăng xuất",
+    "wxDifferentRole": "Đăng xuất danh tính hiện tại trước khi đăng nhập khách hàng"
+  },
+  "account": {
+    "scanHx": "Quét xác nhận",
+    "signDaily": "Điểm danh",
+    "youhuimaidan": "Thanh toán ưu đãi",
+    "aboutUs": "Về chúng tôi",
+    "Contact": "Liên hệ hỗ trợ",
+    "clearStorage": "Xóa bộ nhớ đệm",
+    "score": "Điểm",
+    "uid": "Mã người dùng",
+    "nickSet": "Đăng nhập",
+    "userCode": "Mã thành viên",
+    "address": "Địa chỉ",
+    "notVIP": "Thành viên thường",
+    "orders": "Đơn hàng của tôi",
+    "feedback": "Góp ý",
+    "balance": "Số dư"
   }
 }

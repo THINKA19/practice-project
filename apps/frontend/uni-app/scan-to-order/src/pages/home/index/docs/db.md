@@ -30,7 +30,7 @@ banner/list 以 type 区分首页 shouye、点餐 diancang、礼品卡 card。pi
 
 ## 关联模块资料
 
-- 用户展示复用现有 store/user 与 store/token；不依赖旧 session、settings 或门店 Store。
+- 用户展示通过 pages/auth/session/index.ts 获取最小身份资料；不直接访问会话内部 store 或门店状态。
 - 六个入口目标仅为测试页，不涉及数据库读写；门店和关于目标本次不实现。
 
 ## 后端待确认及维护

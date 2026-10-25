@@ -114,7 +114,8 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "check:mock-output": "node scripts/check-mock-output.mjs"
   },
   "dependencies": {
     "@alova/adapter-uniapp": "^2.0.14",

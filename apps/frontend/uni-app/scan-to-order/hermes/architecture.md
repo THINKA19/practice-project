@@ -43,9 +43,8 @@ src/
 ├── pages-demo/     # 分包目录(subPackages 配置,分包不能是 src/pages 的子目录)
 ├── components/     # 全局组件(fg- 前缀,easycom 自动注册)
 ├── layouts/        # 布局
-├── api/            # API 接口定义
 ├── http/           # 请求封装(uni.request 为主;alova 为可选并行链路,拦截器中默认注释)
-├── store/          # Pinia store(持久化用 pinia-plugin-persistedstate)
+├── store/          # Pinia 安装与历史会话兼容入口，普通业务禁止改动
 ├── hooks/          # 组合式函数(auto-import,免 import)
 ├── tabbar/         # 底部导航(config.ts 为唯一配置源)
 ├── static/         # 静态资源(@img 别名指向 images 子目录)
@@ -54,6 +53,7 @@ src/
 ```
 
 - 别名:`@` → `src/`;`@img` → `src/static/images`(vite 与 tsconfig 已对齐)
+- 业务状态、API 和模型归所属业务模块；共享会话归 `src/pages/auth/session/`，不重建根级 `src/api/`。根级 Store 的必要变更条件以 [脚手架保护规范](../docs/ai/脚手架保护与参考代码使用规范.md) 的 Store 条款为准。
 - 请求一律走 `src/http` 封装,业务代码不直接调 `uni.request`
 - 服务端状态以接口为事实源,store 只放需要跨页共享/持久化的状态;凡不能从 store 重建的 UI 状态都是刷新后丢失的隐患
 

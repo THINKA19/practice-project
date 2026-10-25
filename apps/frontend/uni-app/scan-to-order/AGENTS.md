@@ -6,6 +6,16 @@
 
 遵循最小改动原则：非必要不修改，只处理当前明确需求直接涉及的文件和逻辑；不顺手重构、批量格式化、搬迁目录或增加无实际调用方的能力。
 
+`src/store/**` 已收敛为 Pinia 基础设施与历史会话兼容入口，普通业务开发禁止改动或新增业务代码；业务状态归所属模块，共享会话归 `src/pages/auth/session/`。必要变更条件见下方必读规范的“Store：稳定基础与兼容入口，非必要禁止修改”条款。
+
+禁止新增、修改、删除、搬迁或格式化 `src/router/**` 中的任何文件；业务路由与权限职责见下方必读规范的“Router：禁止修改”条款。
+
+`src/service/**` is OpenAPI-generated scaffold output. Do not edit it manually or run `pnpm openapi` during ordinary business work; see “OpenAPI-generated service: do not edit manually” in the required AI specification below.
+
+业务开发禁止修改 `src/http/**`、`src/mock/**`（含代码、类型、测试、README），也禁止在目录外重写公共请求以绕过保护。具体边界与业务接入方式见下方必读规范的“HTTP 与公共 Mock”条款。
+
+根级 `src/api/` 已取消，禁止重建或新增文件（含类型和兼容转发）；接口和类型归所属业务模块的 `api/`、`models/`，不得借修复公共 HTTP 引用恢复根级 API 目录。
+
 开发、复刻、提取函数、重构和检查代码前，必须阅读并遵守 [脚手架保护与参考代码使用规范](./docs/ai/脚手架保护与参考代码使用规范.md)。其中规定原有脚手架的保护边界、shared 参考代码的使用限制，以及按实际需求提取正式实现的流程；不得把 shared 当作项目运行时公共库。
 
 ## 工程规范(Hermes)

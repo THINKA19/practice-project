@@ -41,3 +41,5 @@ uni.showToast({ title: t('common.pageNotFound'), icon: 'none' })
 测试覆盖三语键/变量一致性、语言恢复与失败边界、已挂载首页切换和原生导航更新；浏览器布局、小程序和 App 真机表现仍需平台验收。现有导航入口数量不在本次调整范围内。
 
 导航资源遵循原有 tabbar/config.ts 的键：`tabbar.ordering` 和 `tabbar.pickup`。文案调整应修改三语 JSON，不重命名导航配置键。tabbar/index.vue 原有 onShow 负责页面显示时刷新；新增的可见性受控语言监听仅补齐停留当前页切换语言时的刷新。
+
+Vue I18n 使用 Composition 模式（legacy=false）；Vue useI18n 与普通 TS t 共享同一全局 locale ref。启动按已保存语言/系统语言恢复，并同步 uni.setLocale，避免原生导航与页面正文使用不同语言。服务 Mock 通过 titleKey 映射四组演示栏目的三语标题。

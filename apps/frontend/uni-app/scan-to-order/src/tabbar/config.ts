@@ -24,40 +24,46 @@ export const selectedTabbarStrategy = TABBAR_STRATEGY_MAP.NATIVE_TABBAR
 // TODO: 2/3. 使用 NATIVE_TABBAR 时，更新下面的 tabbar 配置
 export const nativeTabbarList: NativeTabBarItem[] = [
   {
-    text: '%tabbar.home%',
-    pagePath: 'pages/home/index/index',
     iconPath: 'static/tabbar/home-off.png',
     selectedIconPath: 'static/tabbar/home-on.png',
+    pagePath: 'pages/home/index/index',
+    text: '%tabbar.home%',
   },
   {
-    text: '%tabbar.ordering%',
-    pagePath: 'pages/ordering/index/index',
     iconPath: 'static/tabbar/index-off.png',
     selectedIconPath: 'static/tabbar/index-on.png',
+    pagePath: 'pages/ordering/index/index',
+    text: '%tabbar.ordering%',
   },
   {
-    text: '%tabbar.service%',
-    pagePath: 'pages/service/index/index',
     iconPath: 'static/tabbar/qc-off.png',
     selectedIconPath: 'static/tabbar/qc-on.png',
+    pagePath: 'pages/service/index/index',
+    text: '%tabbar.service%',
   },
   {
-    text: '%tabbar.queue%',
-    pagePath: 'pages/queue/index/index',
     iconPath: 'static/tabbar/qh-off.png',
     selectedIconPath: 'static/tabbar/qh-on.png',
+    pagePath: 'pages/queue/index/index',
+    text: '%tabbar.queue%',
   },
   {
-    text: '%tabbar.pickup%',
-    pagePath: 'pages/pickup/index/index',
     iconPath: 'static/tabbar/qc-off.png',
     selectedIconPath: 'static/tabbar/qc-on.png',
+    pagePath: 'pages/pickup/index/index',
+    text: '%tabbar.pickup%',
   },
   {
-    text: '%tabbar.me%',
-    pagePath: 'pages/account/index/index',
+    iconPath: 'static/tabbar/pickup-detail-off.png',
+    selectedIconPath: 'static/tabbar/pickup-detail-on.png',
+    pagePath: 'pages/pickup1/index/index',
+    text: '%tabbar.pickup1%',
+  },
+  {
     iconPath: 'static/tabbar/my-off.png',
     selectedIconPath: 'static/tabbar/my-on.png',
+    pagePath: 'pages/account/index/index',
+    text: '%tabbar.me%',
   },
 ]
 
@@ -66,7 +72,7 @@ export const nativeTabbarList: NativeTabBarItem[] = [
 export const customTabbarList: CustomTabBarItem[] = [
   {
     text: '%tabbar.home%',
-    pagePath: 'pages/index/index',
+    pagePath: 'pages/home/index/index',
     // 注意 unocss 图标需要如下处理：（二选一）
     // 1）在fg-tabbar.vue页面上引入一下并注释掉（见tabbar/index.vue代码第2行）
     // 2）配置到 unocss.config.ts 的 safelist 中
@@ -86,15 +92,15 @@ export const customTabbarList: CustomTabBarItem[] = [
   //   isBulge: true,
   // },
   {
-    pagePath: 'pages/i18n/index',
-    text: '%tabbar.i18n%',
+    pagePath: 'pages/ordering/index/index',
+    text: '%tabbar.ordering%',
     iconType: 'unocss',
     icon: 'i-carbon-ibm-watson-language-translator',
     // badge: 10,
   },
   {
-    pagePath: 'pages/about/about',
-    text: '%tabbar.about%',
+    pagePath: 'pages/service/index/index',
+    text: '%tabbar.service%',
     // 1）在fg-tabbar.vue页面上引入一下并注释掉（见tabbar/index.vue代码第2行）
     // 2）配置到 unocss.config.ts 的 safelist 中
     iconType: 'unocss',
@@ -103,7 +109,7 @@ export const customTabbarList: CustomTabBarItem[] = [
     roles: ['admin'],
   },
   {
-    pagePath: 'pages/me/me',
+    pagePath: 'pages/account/index/index',
     text: '%tabbar.me%',
     iconType: 'unocss',
     icon: 'i-carbon-user',

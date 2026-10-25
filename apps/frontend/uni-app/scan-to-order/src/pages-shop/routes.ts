@@ -1,3 +1,4 @@
+import { AUTH_ROUTES } from '@/pages/auth/session'
 /**
  * ============================================================================
  * 商家端分包路由定义表 (Shop Subpackage Route Contracts)
@@ -30,9 +31,9 @@ export const ShopRoutes = {
   /** 访问控制与入驻认证模块 */
   Access: {
     /** 商家登录授权页（账密登录、验证码登录） */
-    login: '/pages-shop/access/auth/login',
+    login: AUTH_ROUTES.shop,
     /** 商家入驻引导与资质申请提交页 */
-    onboarding: '/pages-shop/access/onboarding/index',
+    onboarding: '/pages-shop/onboarding/index',
   },
 
   /** 经营工作台模块 */

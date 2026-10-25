@@ -10,12 +10,12 @@ vi.mock('./store', () => ({
 
 const baseItem: CustomTabBarItem = {
   text: '首页',
-  pagePath: 'pages/index/index',
+  pagePath: 'pages/home/index/index',
   iconType: 'unocss',
   icon: 'i-carbon-home',
 }
 
-describe('TabbarItem', () => {
+describe('tabbarItem', () => {
   let wrapper: ReturnType<typeof mount>
 
   afterEach(() => {

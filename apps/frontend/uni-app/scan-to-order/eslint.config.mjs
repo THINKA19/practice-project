@@ -1,3 +1,5 @@
+import authBoundaries from './scripts/eslint/auth-boundaries.mjs'
+import mockBoundaries from './scripts/eslint/mock-boundaries.mjs'
 import uniHelper from '@uni-helper/eslint-config'
 
 export default uniHelper({
@@ -22,8 +24,11 @@ export default uniHelper({
     // 忽略自动生成文件
     'src/service/**',
   ],
+  plugins: { 'project-mock': mockBoundaries, 'project-auth': authBoundaries },
   // https://eslint-config.antfu.me/rules
   rules: {
+    'project-mock/boundaries': 'error',
+    'project-auth/boundaries': 'error',
     'no-useless-return': 'off',
     'no-console': 'off',
     'no-unused-vars': 'off',

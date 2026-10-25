@@ -2,12 +2,15 @@
 
 > 事实源:`src/http/http.ts`(请求封装)+ `src/http/interceptor.ts`(拦截器)。本文规则均来自这两个文件的实际行为。
 
+> 业务开发禁止修改公共 HTTP 和 Mock，也禁止重建根级 src/api；保护边界以 [脚手架保护规范](../docs/ai/脚手架保护与参考代码使用规范.md) 为准。
+
 ## 1. 分层
 
 ```
 页面/组件
    ↓ 只调用
-src/api/*            # 接口定义 + 类型声明
+src/pages/**/api/*   # 页面业务模块接口
+src/modules/auth/   # 跨页面认证与当前用户能力（公开入口 index.ts）
    ↓ 只调用
 src/http/http.ts     # httpGet/httpPost/httpPut/httpDelete
    ↓ 自动经过
@@ -16,7 +19,7 @@ src/http/interceptor.ts  # URL 拼接、token 注入、超时
 uni.request / uni.uploadFile
 ```
 
-业务代码**禁止**直接调 `uni.request`;新接口一律在 `src/api/` 按模块建文件并声明入参/出参类型。
+业务代码**禁止**直接调 `uni.request`;新接口放在所属业务模块的 `api/`，入参/出参类型放在该模块的 `models/`。跨页面认证能力通过 `@/modules/auth` 使用；不再创建根级 `src/api/`。
 
 ## 2. 调用方式
 
@@ -64,4 +67,4 @@ await httpPost('/log/track', payload, undefined, undefined, { hideErrorToast: tr
 - 基准地址 `VITE_SERVER_BASEURL`;第二后端用 `VITE_SERVER_BASEURL_SECONDARY`
 - H5 dev 开代理时(`VITE_APP_PROXY_ENABLE=true`)自动走 `/fg-api` 前缀,nginx 需同步该前缀
 - 微信三环境(开发/体验/正式)用 `VITE_SERVER_BASEURL__WEIXIN_*` 覆写,见 platforms.md 第 4 节
-- 对接多个后端:在 `interceptor.ts` 的 URL 拼接处扩展,不在业务层散落拼 URL
+- 对接多个后端：使用已有请求配置选择服务，不修改 `interceptor.ts`；无法满足时记录缺口，不在业务任务中扩展公共实现。

@@ -1,5 +1,6 @@
 {
   "tabbar": {
+    "pickup1": "Pickup 1",
     "home": "Home",
     "ordering": "Order",
     "service": "Service",
@@ -18,11 +19,17 @@
     "loadFailed": "Failed to load",
     "retry": "Tap to retry",
     "navigationFailed": "Unable to open this page. Please try again.",
-    "pageNotFound": "Page not found"
+    "pageNotFound": "Page not found",
+    "submitSuccess": "Submitted"
   },
   "coupons": {
     "title": "Coupons",
-    "tabs": ["Can Fetch", "Available", "Invalid", "Exchange"],
+    "tabs": [
+      "Can Fetch",
+      "Available",
+      "Invalid",
+      "Exchange"
+    ],
     "Vouchers": "Vouchers",
     "over": "Over",
     "btn": "Fetch",
@@ -232,16 +239,10 @@
     "cancelSuccess": "Removed from favorites"
   },
   "queue": {
-    "title": "Queue",
-    "heroTitle": "Smart Queue",
-    "selectType": "Choose a queue",
-    "tapToGet": "Tap to take a number",
-    "currentQueue": "Now serving",
-    "myNumber": "My Number",
-    "expectedWaiting": "Est. wait",
-    "minutes": " min",
-    "empty": "No queue available",
-    "success": "Number taken"
+    "myNumber": "My number",
+    "ExpectedWaiting": "Estimated wait",
+    "minutes": "minutes",
+    "success": "Number received"
   },
   "orderDetail": {
     "title": "Order Detail",
@@ -269,7 +270,8 @@
     "paySuccess": "Payment successful",
     "order": "Order",
     "payable": "Amount Due",
-    "orderNo": "Order No."
+    "orderNo": "Order No.",
+    "paymentUnavailable": "Online payment is not available. Please contact the store."
   },
   "orderDoing": {
     "title": "Preparing",
@@ -299,7 +301,12 @@
     "freight": "Delivery Fee",
     "realAmount": "Amount Paid",
     "confirmVerification": "Confirm",
-    "verified": "Verified"
+    "verified": "Verified",
+    "loadFailed": "Unable to load order. Please retry.",
+    "missingCode": "Missing verification code. Open this page from an order.",
+    "completed": "Verification completed",
+    "staffOnly": "Only store staff can verify an order.",
+    "returnToList": "Back to orders"
   },
   "demo": {
     "i18n": {
@@ -311,5 +318,172 @@
     "weight": "{heavy}KG",
     "detail": "{0}cm, {1}KG",
     "introduction": "I am {name},height:{detail.height},weight:{detail.weight}"
+  },
+  "service": {
+    "title": "Service",
+    "more": "View more",
+    "empty": "No gallery images",
+    "previous": "Previous images",
+    "next": "Next images",
+    "image": "Photo {index}",
+    "contact": "Contact us",
+    "priority": "Preferred",
+    "wechat": "WeChat",
+    "copy": "Copy WeChat ID",
+    "copied": "WeChat ID copied",
+    "linkCopied": "Link copied. Open it in your browser",
+    "wechatTitle": "Contact us on WeChat",
+    "wechatHint": "Copy the ID and search for it in WeChat",
+    "close": "Close",
+    "expand": "Show contacts",
+    "collapse": "Hide contacts",
+    "demo": "Demo contacts",
+    "groups": {
+      "activities": "Store activities",
+      "environment": "Dining environment",
+      "food": "Food showcase",
+      "gatherings": "Gatherings",
+      "festivals": "Seasonal themes",
+      "moments": "Service moments"
+    }
+  },
+  "pickupPreview": {
+    "pickupDemo": "Pickup 1 · detail demo",
+    "pickupScene": "Store pickup",
+    "deliveryScene": "Delivery",
+    "unpaidScene": "Unpaid",
+    "finishedScene": "Completed",
+    "demoPaid": "Demo payment completed",
+    "demoPay": "Demo payment. No actual charge"
+  },
+  "demoFlow": {
+    "bookingEntry": "Reserve a table",
+    "listEntry": "Active-order list demo",
+    "verifyEntry": "Verify this demo order",
+    "listHint": "Demo list: verify an order and return to see it updated",
+    "signIn": "Sign in to submit a reservation"
+  },
+  "booking": {
+    "title": "Reserve a table",
+    "name": "Contact name",
+    "namePlaceholder": "Enter your name",
+    "mobile": "Phone",
+    "mobilePlaceholder": "Enter a phone number",
+    "time": "Arrival time",
+    "timePlaceholder": "Select arrival time",
+    "person": "Party size",
+    "tip": "Reservations are subject to store confirmation",
+    "subtitle": "A table for your next visit",
+    "infoTitle": "Reservation details"
+  },
+  "date": {
+    "year": " yr",
+    "month": " mo",
+    "day": " day",
+    "hour": " h",
+    "minutes": " min"
+  },
+  "contactDock": {
+    "close": "Close",
+    "copy": "Copy contact",
+    "collapse": "Collapse contacts",
+    "expand": "Expand contacts"
+  },
+  "pickupState": {
+    "loginHint": "Sign in to view your order progress",
+    "login": "Sign in",
+    "multiple": "Multiple orders",
+    "preparing": "Preparing",
+    "ready": "Ready for pickup",
+    "empty": "No orders",
+    "failure": "Load failure",
+    "preparingHint": "Your meal is being prepared. The pickup code appears when ready.",
+    "refresh": "Refresh progress"
+  },
+  "queueFlow": {
+    "title": "Smart queue",
+    "selectType": "Choose table type",
+    "enterDemo": "Try queue demo",
+    "exitDemo": "Return to customer queue",
+    "demoHint": "Demo: call the next table. Calling again marks the previous unseated table as missed. One active ticket per customer.",
+    "paused": "Queue paused",
+    "hasActive": "You already have an active ticket",
+    "take": "Tap to join queue",
+    "current": "Calling",
+    "issued": "Issued",
+    "waitingTables": "Waiting tables",
+    "ahead": "Tables ahead",
+    "callNext": "Demo: call next",
+    "cancel": "Cancel ticket",
+    "seat": "Confirm seated",
+    "status0": "Waiting",
+    "status1": "Called: please take your seat",
+    "status2": "Seated",
+    "status3": "Cancelled",
+    "status4": "Missed",
+    "refresh": "Refresh queue"
+  },
+  "auth": {
+    "login": "Sign in",
+    "register": "Register",
+    "loginTitle": "Welcome back",
+    "registerTitle": "Create an account",
+    "account": "Account",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "accountPlaceholder": "3–32 letters, digits or underscores",
+    "passwordPlaceholder": "Enter password",
+    "accountInvalid": "Use 3–32 letters, digits or underscores",
+    "passwordRequired": "Enter a password of at most 64 characters",
+    "passwordLength": "Use 8–64 characters",
+    "passwordMismatch": "Passwords do not match",
+    "agreementRequired": "Please accept the user agreement and privacy policy",
+    "agree": "I have read and accept",
+    "userAgreement": "User agreement",
+    "privacyAgreement": "Privacy policy",
+    "and": "and",
+    "goRegister": "New here? Register",
+    "goLogin": "Already registered? Sign in",
+    "wechatLogin": "Sign in with WeChat",
+    "demoHint": "Development demo: demo / demo12345. New accounts last for this development session.",
+    "loginFailed": "Unable to sign in. Please retry.",
+    "registerFailed": "Unable to register. Please retry.",
+    "wxTitle": "WeChat sign-in",
+    "wxPcHint": "Scan with WeChat on your phone, then confirm sign-in on your phone.",
+    "wxPhoneHint": "Verify with WeChat. No password or phone number required.",
+    "wxOpenWechat": "Open the original ordering link in WeChat or scan the table code with WeChat",
+    "wxAutoAccount": "First authorization creates a customer account shared across supported channels",
+    "wxDemoHint": "Development demo: a simulated WeChat identity, with no real WeChat connection or profile access",
+    "wxDemoStart": "Sign in with WeChat",
+    "wxScanLogin": "Sign in with WeChat",
+    "wxDemoQr": "Sign in with WeChat",
+    "wxDemoQrHint": "Confirm sign-in in WeChat on your phone.",
+    "wxDemoConfirm": "Simulate phone confirmation",
+    "wxExpired": "This sign-in code has expired",
+    "wxRefresh": "Get a new code",
+    "wxInvalidCallback": "Authorization state is invalid or expired. Please start again.",
+    "wxUnavailable": "WeChat authorization is not configured. Please contact the store.",
+    "wxProfile": "WeChat demo customer",
+    "wxGuest": "Guest",
+    "wxCustomerId": "Customer ID",
+    "wxLogout": "Sign out",
+    "wxDifferentRole": "Sign out of the current identity before signing in as a customer"
+  },
+  "account": {
+    "scanHx": "Scan to verify",
+    "signDaily": "Daily check-in",
+    "youhuimaidan": "Discount payment",
+    "aboutUs": "About us",
+    "Contact": "Contact support",
+    "clearStorage": "Clear cache",
+    "score": "Points",
+    "uid": "User ID",
+    "nickSet": "Log in",
+    "userCode": "Member code",
+    "address": "Addresses",
+    "notVIP": "Standard member",
+    "orders": "My orders",
+    "feedback": "Feedback",
+    "balance": "Balance"
   }
 }

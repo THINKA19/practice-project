@@ -10,8 +10,8 @@
 import { defineMock } from '@alova/mock'
 import { createHomeBanners } from './data'
 import { endpoints } from '../../api/endpoints'
-import { ok } from '@/mock/utils/response'
-import { withFailure } from '@/mock/utils/scenario'
+import { ok } from '@/mock/response'
+import { withFailure } from '@/mock/scenario'
 
 export default defineMock({
   [`[GET]${endpoints.banners}`]: withFailure(({ query }) => ok(createHomeBanners(String(query.type || '')))),

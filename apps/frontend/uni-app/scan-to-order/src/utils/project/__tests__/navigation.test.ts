@@ -3,10 +3,12 @@ import { beforeEach, expect, it, vi } from 'vitest'
 import { navigate } from '../navigation'
 import { toast } from '../feedback'
 
+vi.mock('@/tabbar/config', () => ({ tabbarCacheEnable: true }))
 vi.mock('@/tabbar/store', () => ({ isPageTabbar: (path: string) => path === '/pages/home/index/index' }))
 beforeEach(() => {
   vi.mocked(uni.navigateTo).mockReset()
   vi.mocked(uni.switchTab).mockReset()
+  vi.mocked(uni.reLaunch).mockReset()
 })
 
 it('encodes query values while preserving existing parameters and falsy values', async () => {

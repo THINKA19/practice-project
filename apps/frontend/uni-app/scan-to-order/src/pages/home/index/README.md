@@ -16,9 +16,9 @@
 
 遵循项目 AGENTS.md、docs/ai/脚手架保护与参考代码使用规范.md 及 .agents/skills/uniapp-business-development/SKILL.md。
 
-保留 usePage 外观层和四个子 composable。复用现有 store/user、store/token 和 http/alova，不引入 hooks/shared、utils/shared 或已删除的 shared/infrastructure 模块。首页直接渲染 components/locale/index.vue，语言菜单、状态和图标均由该组件负责，不另建选择器。
+保留 usePage 外观层和四个子 composable。通过 pages/auth/session 的公开只读状态和命令获取用户及会话，复用 http/alova，不引入 hooks/shared、utils/shared 或已删除的 shared/infrastructure 模块。首页直接渲染 components/locale/index.vue，语言菜单、状态和图标均由该组件负责，不另建选择器。
 
-轮播通过现有 Alova 调用 GET /banner/list?type=shouye，使用 ignoreAuth 元数据。开发环境 VITE_USE_MOCK=true 时，由全局清单登记的本模块 mock/banner/handlers.ts 返回 static/images/home/banner 下的 01.jpeg、02.jpeg、03.jpeg；图片不设置跳转目标。其他类型返回空数组。生产环境或关闭 Mock 后走真实服务，真实接口仍待联调；失败或空数据不展示轮播。目前仅处理应用内链接，外链提示暂不支持。
+轮播通过现有 Alova 调用 GET /banner/list?type=shouye，使用 ignoreAuth 元数据。开发环境 VITE_USE_MOCK=true 时，由全局清单登记的本模块 mock/banner/handlers.ts 返回 src/mock/assets/images/home/banner 下的 01.jpeg、02.jpeg、03.jpeg；图片不设置跳转目标。其他类型返回空数组。生产环境或关闭 Mock 后走真实服务，真实接口仍待联调；失败或空数据不展示轮播。目前仅处理应用内链接，外链提示暂不支持。
 
 分享使用当前首页 TEA WORK 品牌文字；仅有效登录用户附带 userId 邀请参数，未接入旧配置中心及分享图片。
 
@@ -49,4 +49,4 @@ banner/list 以 type 区分首页 shouye、点餐 diancang、礼品卡 card。pi
 
 ## 模块 Mock
 
-mock/index.ts 仅供全局 Mock 装配导入；banner/handlers.ts 使用 api/endpoints.ts 定义的路径，banner/data.ts 维护首页轮播样本。全局 src/mock/modules/index.ts 只登记一次，不再保留首页 handler 或数据副本。公共适配器、开关、响应信封和故障工具仍在 src/mock。页面和 API 不直接导入 mock，生产开关及未命中回退策略不变。
+mock/entry.mock.ts 仅供公共发现器收集；banner/handlers.ts 使用 api/endpoints.ts 定义的路径，banner/data.ts 维护首页轮播样本。公共发现器按约定自动收集入口，不再保留首页 handler 或数据副本。公共适配器、开关、响应信封和故障工具仍在 src/mock。页面和 API 不直接导入 mock，生产开关及未命中回退策略不变。

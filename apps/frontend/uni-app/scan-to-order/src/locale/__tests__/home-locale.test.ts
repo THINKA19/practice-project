@@ -15,8 +15,8 @@ vi.mock('@/pages/home/index/composables/usePage', () => ({
     shareTimeline: vi.fn(),
   }),
 }))
-vi.mock('@/tabbar/store', () => ({
-  tabbarList: ref([]),
+vi.mock('@/tabbar/store', async () => ({
+  tabbarList: ref((await import('@/tabbar/config')).tabbarList),
   tabbarStore: { curIdx: 0 },
   isPageTabbar: () => false,
 }))
@@ -34,7 +34,7 @@ beforeEach(() => {
   vi.stubGlobal('onHide', (fn: () => void) => lifecycle.hide.push(fn))
   vi.stubGlobal('onShareAppMessage', vi.fn())
   vi.stubGlobal('onShareTimeline', vi.fn())
-  Object.assign(uni, { getLocale: () => 'zh-Hans', setLocale: vi.fn(), setTabBarItem: vi.fn() })
+  Object.assign(uni, { getLocale: () => 'zh-Hans', setLocale: vi.fn(), setTabBarItem: vi.fn(), hideTabBar: vi.fn(), setNavigationBarTitle: vi.fn() })
 })
 afterEach(() => vi.unstubAllGlobals())
 
@@ -63,6 +63,7 @@ it('updates the mounted home, guest card, picker and native tabs without navigat
       setLocale(code)
       await nextTick()
       expect(wrapper.text()).toContain(guest)
+      expect(uni.setNavigationBarTitle).toHaveBeenLastCalledWith({ title: home })
       expect(wrapper.text()).toContain(title)
       expect(wrapper.text()).toContain(cancel)
       expect(uni.setTabBarItem).toHaveBeenCalledWith({ index: 0, text: home })
@@ -77,6 +78,7 @@ it('updates the mounted home, guest card, picker and native tabs without navigat
     await nextTick()
     expect(uni.setTabBarItem).not.toHaveBeenCalled()
     lifecycle.show.forEach(fn => fn())
+    await nextTick()
     expect(uni.setTabBarItem).toHaveBeenCalledWith({ index: 0, text: 'Home' })
   }
   finally {

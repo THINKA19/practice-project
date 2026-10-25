@@ -9,6 +9,9 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "paths": {
+      "@/api/types/login": [
+        "./src/pages/auth/session/models/session.ts"
+      ],
       "@/*": [
         "./src/*"
       ],

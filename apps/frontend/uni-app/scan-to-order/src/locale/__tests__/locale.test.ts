@@ -35,9 +35,9 @@ describe('language switching and native tabbar', () => {
   })
 
   it.each([
-    ['zh-Hans', ['首页', '点餐', '服务', '取号', '取餐', '我的']],
-    ['en', ['Home', 'Order', 'Service', 'Queue', 'Pickup', 'Me']],
-    ['vi', ['Trang chủ', 'Đặt món', 'Dịch vụ', 'Lấy số', 'Nhận món', 'Cá nhân']],
+    ['zh-Hans', ['首页', '点餐', '服务', '取号', '取餐', '取餐一', '我的']],
+    ['en', ['Home', 'Order', 'Service', 'Queue', 'Pickup', 'Pickup 1', 'Me']],
+    ['vi', ['Trang chủ', 'Đặt món', 'Dịch vụ', 'Lấy số', 'Nhận món', 'Nhận món 1', 'Cá nhân']],
   ])('updates all native labels for %s and saves the choice', async (code, labels) => {
     const { setLocale, currentLocale } = await import('../index')
     const { setTabbarItem, getI18nText } = await import('../../tabbar/i18n')
@@ -45,6 +45,8 @@ describe('language switching and native tabbar', () => {
     setTabbarItem()
     expect(currentLocale.value).toBe(code)
     expect(uni.setStorageSync).toHaveBeenCalledWith('Language', code)
+    const { tabbarList } = await import('../../tabbar/config')
+    expect(tabbarList.map(item => getI18nText(item.text))).toEqual(labels)
     labels.forEach((text, index) => expect(uni.setTabBarItem).toHaveBeenCalledWith({ index, text }))
     expect(getI18nText('中文原文')).toBe('中文原文')
   })

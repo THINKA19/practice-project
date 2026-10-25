@@ -7,12 +7,13 @@ description: 按自定义 uni-app / unibest 项目规范开展业务设计、开
 
 ## 定位
 
-本 Skill 封装本项目自己制定、长期维护的六份规范。references 中的文档是唯一正式正文；本入口只说明读取与执行方式，不另设一套替代标准。
+本 Skill 封装本项目自己制定、长期维护的配套规范。references 中的文档是唯一正式正文；本入口只说明读取与执行方式，不另设一套替代标准。
 
 ## 读取规则
 
 - 业务设计、开发或重构：读取[架构原则](references/architecture-principles.md)与[业务组织规范](references/business-architecture.md)。
 - 任何代码生成、修改、封装或重构：必须读取并执行[代码注释规范](references/code-documentation.md)，保留完整文件顶部注释、方法级注释与使用示例。
+- 新增、修改或评审 Mock：必须读取[Mock 架构与接入规范](references/mock-architecture.md)，公共机制和业务 Mock 均适用。
 - 涉及请求、上传、认证、错误或传输实现：同时读取[HTTP 规范](references/http.md)。
 - 涉及页面、路由、导航、分享或角色分包：同时读取[页面地图](references/page-map.md)。
 - 涉及构建、版本、产物检查或发布：同时读取[构建与产物检查](references/build-release.md)。

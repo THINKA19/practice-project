@@ -10,8 +10,7 @@
  * ============================================================================
  */
 import { ClientRoutes } from '@/pages/routes'
-import { useTokenStore } from '@/store/token'
-import { useUserStore } from '@/store/user'
+import { useSession } from '@/pages/auth/session'
 
 /**
  * 创建首页分享方法。无参数。
@@ -19,8 +18,8 @@ import { useUserStore } from '@/store/user'
  * @example useShare().shareTimeline() // 返回标题及可选邀请参数
  */
 export function useShare() {
-  const user = useUserStore()
-  const token = useTokenStore()
+  const user = useSession()
+  const token = useSession()
 
   /**
    * 获取有效登录用户邀请参数。无参数。

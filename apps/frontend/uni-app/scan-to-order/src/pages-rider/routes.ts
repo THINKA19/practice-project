@@ -1,3 +1,4 @@
+import { AUTH_ROUTES } from '@/pages/auth/session'
 /**
  * ============================================================================
  * 骑手端分包路由定义表 (Rider Subpackage Route Contracts)
@@ -30,7 +31,7 @@ export const RiderRoutes = {
   /** 访问控制与认证模块 */
   Access: {
     /** 骑手登录授权页（手机号/验证码/账密登录） */
-    login: '/pages-rider/access/auth/login',
+    login: AUTH_ROUTES.rider,
   },
 
   /** 工作台模块 */

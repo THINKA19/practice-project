@@ -16,6 +16,7 @@ vi.mock('./config', () => ({
 }))
 
 /** pages.json 里 type 为 home 的页面，H5 线上首页 '/' 会被还原成它 */
+vi.mock('@/pages.json', () => ({ pages: [{ type: 'home', path: 'pages/index/index' }], subPackages: [] }))
 const HOME_PATH = '/pages/index/index'
 
 function item(text: string, pagePath: string, roles?: string[]): CustomTabBarItem {
@@ -38,9 +39,9 @@ const ADMIN_TAB_IS_HOME = [
 
 async function setupStore(list: CustomTabBarItem[], userInfo?: { role?: string, roles?: string[] }) {
   configState.list = list
-  const { useUserStore } = await import('@/store/user')
+  const { seedSession } = await import('@/pages/auth/session/__tests__/fixtures')
   if (userInfo) {
-    useUserStore().setUserInfo({ userId: 1, username: 'u', nickname: 'U', ...userInfo })
+    seedSession({ userId: 1, username: 'u', nickname: 'U', ...userInfo })
   }
   return import('./store')
 }
@@ -99,8 +100,8 @@ describe('curIdx 高亮', () => {
     expect(tabbarList.value[tabbarStore.curIdx].text).toBe('我的')
 
     // 登录成为 admin：可见变成 [首页, 关于, 我的]，仍然应该高亮「我的」
-    const { useUserStore } = await import('@/store/user')
-    useUserStore().setUserInfo({ userId: 1, username: 'u', nickname: 'U', roles: ['admin'] })
+    const { seedSession } = await import('@/pages/auth/session/__tests__/fixtures')
+    seedSession({ userId: 1, username: 'u', nickname: 'U', roles: ['admin'] })
 
     expect(tabbarList.value.map(i => i.text)).toEqual(['首页', '关于', '我的'])
     expect(tabbarList.value[tabbarStore.curIdx].text).toBe('我的')

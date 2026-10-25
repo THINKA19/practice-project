@@ -3,13 +3,14 @@
  * 导出 navigate、NavigationQuery、NavigationResult。
  * @example await navigate('/pages/detail/index', { id: 12 })
  */
+import { tabbarCacheEnable } from '@/tabbar/config'
 import { isPageTabbar } from '@/tabbar/store'
 
 export type NavigationQuery = Record<string, string | number | boolean | null | undefined>
 export type NavigationResult = { ok: true } | { ok: false, error: unknown }
 
 /**
- * 打开内部页面：普通页面 navigateTo，tabbar 页面 switchTab。
+ * 打开内部页面：普通页面 navigateTo；原生 tabbar 用 switchTab，无原生注册的自定义入口用 reLaunch。
  * @param path 内部路径，可包含查询串；不接受外部链接或 hash。
  * @param query 附加参数，编码键和值，忽略 null/undefined，保留 0/false/空字符串。
  * @returns 导航结果；平台失败或同步异常均返回 ok:false，不自动弹提示。
@@ -34,8 +35,10 @@ export function navigate(path: string, query?: NavigationQuery): Promise<Navigat
         success: () => resolve({ ok: true }),
         fail: (error: unknown) => resolve({ ok: false, error }),
       }
-      if (isPageTabbar(pathname))
+      if (isPageTabbar(pathname) && tabbarCacheEnable)
         uni.switchTab({ url: pathname, ...options })
+      else if (isPageTabbar(pathname))
+        uni.reLaunch({ url: pathname, ...options })
       else
         uni.navigateTo({ url: params ? `${url}${url.includes('?') ? '&' : '?'}${params}` : url, ...options })
     }

@@ -1,3 +1,5 @@
+import { AGREEMENT_PAGES } from '@/pages/auth/agreement'
+import { AUTH_ROUTES } from '@/pages/auth/session'
 /**
  * ============================================================================
  * 客户端主包与核心业务路由定义表 (Client Subpackage Route Contracts)
@@ -29,6 +31,7 @@
  * ============================================================================
  */
 export const ClientRoutes = {
+  Auth: { login: AUTH_ROUTES.customer, register: '/pages/auth/register/index', userAgreement: AGREEMENT_PAGES.user, privacyAgreement: AGREEMENT_PAGES.privacy },
   /** 首页与公告模块 */
   Home: {
     /** 客户端主页（轮播图、热销推荐、点餐入口、营销活动位） */
@@ -81,22 +84,26 @@ export const ClientRoutes = {
   Pickup: {
     /** 正在制作/待取餐状态进度监控首页（出餐进度条、取餐码展示） */
     orderDoing: '/pages/pickup/index/index',
+    pickup1: '/pages/pickup1/index/index',
+    listDemo: '/pages/pickup1/doing/index',
     /** 履约订单详情追踪页（全链路订单节点流转记录） */
-    orderDetails: '/pages/pickup/order-details/index',
+    orderDetails: '/pages/pickup1/index/index',
     /** 线下扫码核销/扫码出餐结果反馈页 */
-    orderScanResult: '/pages/pickup/order-details/scan-result',
+    orderScanResult: '/pages/pickup1/scan-result/index',
   },
 
   /** 个人中心、资产与权益模块 */
   Account: {
     /** 个人中心首页（会员头像昵称、资产概览、各功能卡片聚合） */
     my: '/pages/account/index/index',
+    /** 未接入功能的简单跳转测试页。 */
+    test: '/pages/account/test/index',
     /** 全部历史订单列表页（全部、待付款、已完成、退款中分类检索） */
     allOrders: '/pages/account/orders/all-orders/index',
     /** 用户意见反馈与问题提交页 */
-    feedback: '/pages/account/index/feedback',
+    feedback: '/pages/account/feedback/index',
     /** 会员动态会员码/核销码展示页（用于线下收银台扫码积分） */
-    userCode: '/pages/account/index/user-code',
+    userCode: '/pages/account/code/index',
     /** 广告宣传与运营推广活动落地页 */
     ad: '/pages/account/ad/index',
     /** 会员中心首页（会员等级进阶、权益特权介绍、专属折扣） */

@@ -1,20 +1,5 @@
-# 登录页
-需要输入账号、密码/验证码的登录页。
+# 认证分类目录
 
-## 适用性
+只组织 login（顾客微信登录）、register（旧入口跳转）、agreement（协议）和 session（跨页面唯一会话）。分类层不提供 index.ts、组件、composables 或状态。
 
-本页面主要用于 `h5` 和 `APP`。
-
-小程序通常有平台的登录方式 `uni.login` 通常用不到登录页，所以不适用于 `小程序`。（即默认情况下，小程序环境是不会走登录拦截逻辑的。）
-
-但是如果您的小程序也需要现实的 `登录页` 那也是可以使用的。
-
-在 `src/router/config.ts` 中有一个变量 `LOGIN_PAGE_ENABLE_IN_MP` 来控制是否在小程序中使用 `H5的登录页`。
-
-更多信息请看 `src/router` 文件夹的内容。
-
-## 登录跳转
-
-目前登录的跳转逻辑主要在 `src/router/interceptor.ts` 和 `src/pages/login/login.vue` 里面，默认会在登录后自动重定向到来源/配置的页面。
-
-如果与您的业务不符，您可以自行修改。
+商家与骑手登录在各自普通分包的 auth/login；权限分别在 auth/permissions。会话状态不再放入公共 store。

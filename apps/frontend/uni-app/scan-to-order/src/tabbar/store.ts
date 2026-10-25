@@ -1,4 +1,4 @@
-import type { UserRole } from '@/api/types/login'
+import type { UserRole } from '@/pages/auth/session'
 import type { CustomTabBarItem, CustomTabBarItemBadge } from './types'
 import { computed, reactive, ref } from 'vue'
 import { useUserStore } from '@/store/user'

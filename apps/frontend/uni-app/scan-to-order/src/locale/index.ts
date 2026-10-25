@@ -49,14 +49,23 @@ function readInitialLocale(): SupportedLocale {
   }
 }
 
+const initialLocale = readInitialLocale()
+try {
+  uni.setLocale(initialLocale)
+}
+catch (error) {
+  console.warn('[i18n] 同步初始平台语言失败', error)
+}
+
 const i18n = createI18n({
-  locale: readInitialLocale(),
+  legacy: false,
+  locale: initialLocale,
   fallbackLocale: 'zh-Hans',
   messages,
   allowComposition: true,
 })
 
-export const currentLocale = computed(() => i18n.global.locale)
+export const currentLocale = computed(() => i18n.global.locale.value)
 
 /**
  * 切换当前会话语言；平台同步或缓存写入失败不会阻断界面切换。
@@ -67,7 +76,7 @@ export const currentLocale = computed(() => i18n.global.locale)
 export function setLocale(locale: string): void {
   if (!Object.prototype.hasOwnProperty.call(messages, locale))
     return
-  i18n.global.locale = locale as SupportedLocale
+  i18n.global.locale.value = locale as SupportedLocale
   try {
     uni.setLocale(locale)
   }

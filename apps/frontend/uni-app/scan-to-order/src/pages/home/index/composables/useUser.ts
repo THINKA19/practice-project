@@ -10,8 +10,7 @@
  * ============================================================================
  */
 import { computed } from 'vue'
-import { useTokenStore } from '@/store/token'
-import { useUserStore } from '@/store/user'
+import { useSession } from '@/pages/auth/session'
 
 /**
  * 创建首页用户展示。无参数。
@@ -19,8 +18,8 @@ import { useUserStore } from '@/store/user'
  * @example const profile = useUser() // profile.nick 为响应式昵称
  */
 export function useUser() {
-  const store = useUserStore()
-  const token = useTokenStore()
+  const store = useSession()
+  const token = useSession()
   const user = computed(() => store.userInfo)
   const nick = computed(() => user.value.nickname || user.value.username || '')
   const avatar = computed(() => user.value.avatar || '/static/images/default-avatar.png')

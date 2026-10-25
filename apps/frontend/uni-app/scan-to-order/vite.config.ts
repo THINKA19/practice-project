@@ -1,3 +1,4 @@
+import { createMockIsolationPlugin } from './vite-plugins/mock-isolation'
 import path from 'node:path'
 import process from 'node:process'
 import Uni from '@uni-helper/plugin-uni'
@@ -77,6 +78,7 @@ export default defineConfig(({ command, mode }) => {
     envDir: './env', // 自定义env目录
     base: VITE_APP_PUBLIC_BASE,
     plugins: [
+      createMockIsolationPlugin(mode === 'development' && process.env.NODE_ENV !== 'production' && env.VITE_USE_MOCK === 'true'),
       // UniXXX 需要在 Uni 之前引入
       UniLayouts(),
       UniPlatform(),
@@ -93,7 +95,7 @@ export default defineConfig(({ command, mode }) => {
         // pages 目录为 src/pages，分包目录不能配置在pages目录下！！
         // 是个数组，可以配置多个，但是不能为pages里面的目录！！
         // "src/pages-demo" 是unibest demo 预留的，方便后续插入demo示例
-        subPackages: ['src/pages-demo'],
+        subPackages: ['src/pages-demo', 'src/pages-shop', 'src/pages-rider'],
         dts: 'src/types/uni-pages.d.ts',
       }),
       // UniOptimization 插件需要 page.json 文件，故应在 UniPages 插件之后执行
