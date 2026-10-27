@@ -6,8 +6,8 @@
  * import { createOrderDetail } from '@/pages/pickup1/index/mock/data'
  * ============================================================================
  */
-import type { OrderDetailData, PickupDemoScene, ShopSubItem } from '../models/order'
-import { createPickupOrders, pickupState } from '@/pages/pickup/index/mock'
+import type { OrderDetailData, PickupDemoScene, ShopSubItem } from '../models/types'
+import { createPickupOrders, pickupState } from '@/pages/pickup/shared/mock'
 /**
  * 从取餐模块样本和状态构建详情。
  * @param id 订单标识。

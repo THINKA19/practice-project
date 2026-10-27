@@ -8,7 +8,7 @@ import { sessionState } from '@/pages/auth/session/mock'
  * ============================================================================
  */
 import type { IAuthLoginRes } from '@/pages/auth/session'
-import type { WechatChannel, WechatStatus, WechatTicket } from '../models/wechat'
+import type { WechatChannel, WechatStatus, WechatTicket } from '../models/types'
 import { AGREEMENT_VERSION } from '../../agreement'
 /**
  * 创建带票据有效期和会话隔离的认证模拟状态。

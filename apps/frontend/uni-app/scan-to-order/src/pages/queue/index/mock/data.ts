@@ -6,7 +6,7 @@
  * import { createQueueTypes } from '@/pages/queue/index/mock/data'
  * ============================================================================
  */
-import type { QueueUpType } from '../models/queue'
+import type { QueueUpType } from '../models/types'
 /**
  * 创建独立的桌型初始样本。
  * 无参数。

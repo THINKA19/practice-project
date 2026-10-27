@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { ContactItem } from './models/contact'
 import WechatContactPopup from './components/WechatContactPopup.vue'
-import { useContactDock } from './composables/useContactDock'
+import { useContactDockController } from './composables/use-controller'
 import { t } from '@/locale'
 
 defineProps<{ contacts: ContactItem[], hint?: string }>()
-const { expanded, selected, showContact, copy, activate } = useContactDock()
+const { expanded, selected, showContact, copy, activate } = useContactDockController()
 </script>
 
 <template>

@@ -4,8 +4,7 @@
 【综合使用示例】navigate(ClientRoutes.Ordering.shopSelect, { peisongType: 'zq' })
 -->
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { useShopSelectView } from './composables/use-view'
 
 definePage({
   style: {
@@ -14,13 +13,7 @@ definePage({
   },
 })
 
-const { t } = useI18n()
-const deliveryType = ref<'zq' | 'kd' | null>(null)
-
-onLoad((options) => {
-  const value = options?.peisongType
-  deliveryType.value = value === 'zq' || value === 'kd' ? value : null
-})
+const { t, deliveryType } = useShopSelectView()
 </script>
 
 <template>

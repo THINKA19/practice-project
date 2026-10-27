@@ -112,22 +112,59 @@ src/
 ### 3.2 领域目录
 
 ```
-src/pages/account/orders/order/
-├─ index.vue             页面入口
-├─ api/                  业务接口
-│  ├─ endpoints.ts       后端接口路径清单
-│  └─ ...
-├─ components/           领域专属 UI
-├─ composables/          响应式逻辑
-├─ models/               类型、枚举、转换函数
-├─ mock/                 按需：本领域模拟接口与样本（独立测试入口）
-├─ index.ts              对外公共入口
-├─ README.md             领域职责与使用说明
-├─ docs/                 后端与业务参考
-│  └─ db.md              数据表、字段含义及接口参数说明
-├─ storage/              按需：持久化
-├─ domain/               按需：复杂纯业务规则
-└─ adapters/             按需：跨领域适配
+src/pages/<module-path>/<domain>/
+├─ index.vue                          页面入口：只做组装，不写业务逻辑
+├─ index.ts                           对外公共出口（有跨模块调用时必有，外部只能从这里引用）
+├─ README.md                          职责、对外能力、依赖领域、状态归属表
+│
+├─ api/                               只管请求，不做转换和业务判断
+│  ├─ endpoints.ts                    接口路径清单（mock 也引用它）
+│  ├─ <domain>.api.ts                 请求函数
+│  └─ <domain>.dto.ts                 DTO：后端原始结构
+│
+├─ models/                            业务模型层（不依赖上层运行时代码）
+│  ├─ types.ts                        前端业务模型（纯粹）
+│  ├─ enums.ts                        枚举/常量（纯粹，有才建）
+│  └─ mappers.ts                      DTO → 模型；仅 import type 引用 DTO
+│
+├─ composables/                       领域级状态与流程（拥有业务状态）
+│  └─ use-<duty>.ts                   按职责命名，如 use-list / use-detail / use-actions
+│                                     导出函数名：use<Domain><Duty>
+│
+├─ components/                        业务 UI：一个组件一个文件夹，入口统一 index.vue
+│  │
+│  ├─ <Component>/                    第一档：简单组件（只有入口）
+│  │  └─ index.vue
+│  │
+│  ├─ <Component>/                    第二档：一般组件（有私有逻辑或配置）
+│  │  ├─ index.vue
+│  │  ├─ use-<component>.ts           按需：私有状态与逻辑（只拥有组件自己的状态）
+│  │  ├─ types.ts                     按需：Props / Emits 类型
+│  │  └─ config.ts                    按需：私有静态配置（列、选项、固定常量）
+│  │
+│  └─ <Component>/                    第三档：复合组件（有多个明显分区）
+│     ├─ index.vue
+│     ├─ use-<component>.ts           按需：复合交互逻辑
+│     ├─ types.ts                     按需：组件类型
+│     ├─ config.ts                    按需：组件配置
+│     └─ parts/                       按需：私有子组件，仅本组件可引用
+│        ├─ <PartA>.vue
+│        └─ <PartB>.vue
+│
+├─ mock/                              按需：接口模拟
+│  ├─ handlers.ts                     接口行为，路径引用 endpoints.ts
+│  ├─ fixtures/                       静态样本（正常、空列表、异常）
+│  │  └─ <domain>.ts
+│  └─ factories.ts                    按需：生成定制数据
+│
+├─ domain/                            按需：纯业务规则
+│  └─ <domain>.rules.ts
+├─ adapters/                          按需：外部系统或跨领域协议适配（不放普通 DTO 转换）
+│  └─ <domain>.adapter.ts
+├─ storage/                           按需：持久化
+│  └─ <domain>.storage.ts
+└─ docs/                              按需：业务参考
+   └─ README.md
 ```
 
 **识别规则只有一条:领域目录根下的 `.vue` 是页面,子目录是该领域的内部实现。**

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useShopLoginPage } from './composables/useShopLoginPage'
+import { useShopLoginPage } from './composables/use-page'
 
 definePage({ style: { navigationBarTitleText: '商家登录' } })
 const vm = useShopLoginPage()
@@ -32,7 +32,7 @@ const { username, password, loading, error, authenticated } = vm
     <view v-if="error" class="mt-24rpx text-red-500">
       {{ error }}
     </view>
-    <wd-button class="mt-24rpx" plain block @click="vm.apply">
+    <wd-button custom-style="color: #A67C52; border-color: #C9935B; background: #FFFAF3;" class="mt-24rpx" plain block @click="vm.apply">
       申请商家入驻
     </wd-button>
   </view>

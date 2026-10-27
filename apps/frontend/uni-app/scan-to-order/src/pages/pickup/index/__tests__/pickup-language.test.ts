@@ -3,7 +3,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 
 const state = vi.hoisted(() => ({ populated: false, failed: false }))
-vi.mock('../composables/useOrderDoingPage', () => ({ useOrderDoingPage: () => ({
+vi.mock('../composables/use-page', () => ({ usePickupPage: () => ({
   apiOk: ref(true),
   loading: ref(false),
   failed: ref(state.failed),
@@ -60,7 +60,7 @@ it('renders real translated pickup empty-state text instead of missing legacy ke
 })
 it('uses existing Chinese pickup-card labels for the number, total and date', async () => {
   const { default: i18n, setLocale } = await import('@/locale')
-  const Card = (await import('../components/DoingOrderCard.vue')).default
+  const Card = (await import('../components/DoingOrderCard/index.vue')).default
   setLocale('zh-Hans')
   const wrapper = mount(Card, { props: { showQrcode: false, item: {
     order: { id: '1', hxNumber: 'DEMO', qudanhao: 'A01', isNeedLogistics: false, amountReal: 12, dateAdd: '2026-10-24' },

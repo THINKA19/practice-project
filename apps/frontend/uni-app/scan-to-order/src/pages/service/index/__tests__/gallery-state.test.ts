@@ -1,13 +1,13 @@
 import { effectScope } from 'vue'
 import { expect, it, vi } from 'vitest'
-import { useActivityGallery } from '../composables/useActivityGallery'
+import { useServiceGallery } from '../composables/use-gallery'
 
 const gallery = vi.hoisted(() => vi.fn())
-vi.mock('../api/service', () => ({ serviceApi: { gallery } }))
+vi.mock('../api/service.api', () => ({ serviceApi: { gallery } }))
 
 it('distinguishes successful empty data from failure and recovers on the next visit', async () => {
   const scope = effectScope()
-  const vm = scope.run(useActivityGallery)!
+  const vm = scope.run(useServiceGallery)!
   gallery.mockResolvedValueOnce([{ id: 1, title: 'Empty group', images: [] }])
   await vm.loadGallery()
   expect(vm.failed.value).toBe(false)

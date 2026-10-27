@@ -1,2 +1,2 @@
-export { queueApi } from './api/queue'
-export type { MyQueueRecord, MyQueueView, QueueAction, QueueSnapshot, QueueType } from './models/queue'
+export { queueApi } from './composables/use-requests'
+export type { MyQueueRecord, MyQueueView, QueueAction, QueueSnapshot, QueueType } from './models/types'

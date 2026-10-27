@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { PageState } from '@/components/page-state'
-import { toLoginPage } from '@/utils/toLoginPage'
-import { ClientRoutes } from '@/pages/routes'
-import { navigate } from '@/utils/project/navigation'
-import { ref, watch } from 'vue'
-import DeliveryCodeCard from './components/DeliveryCodeCard.vue'
-import DoingLogisticsCard from './components/DoingLogisticsCard.vue'
-import DoingOrderCard from './components/DoingOrderCard.vue'
-import PickupCodeCard from './components/PickupCodeCard.vue'
-import { useOrderDoing } from './composables'
-import { currentLocale, t } from '@/locale'
+import DeliveryCodeCard from './components/DeliveryCodeCard/index.vue'
+import DoingLogisticsCard from './components/DoingLogisticsCard/index.vue'
+import DoingOrderCard from './components/DoingOrderCard/index.vue'
+import PickupCodeCard from './components/PickupCodeCard/index.vue'
+import { useOrderDoingView } from './composables/use-view'
 
 defineOptions({ name: 'OrderDoing' })
 definePage({
@@ -18,30 +12,8 @@ definePage({
     disableScroll: true,
   },
 })
-const { scene, scenes, selectScene, apiOk, orderList, logisticsMap, goodsMap, fetchOrderList, loading, failed, needsLogin } = useOrderDoing()
 
-/** 导航栏标题：definePage 里的是编译期静态兜底，这里按当前语言覆盖 */
-function setTitle() {
-  uni.setNavigationBarTitle({ title: t('orderDoing.title') })
-}
-
-const pageVisible = ref(false)
-watch(currentLocale, () => {
-  if (pageVisible.value)
-    setTitle()
-})
-onHide(() => {
-  pageVisible.value = false
-})
-
-onLoad(setTitle)
-
-// 用 onShow 而不是 onLoad：从详情页返回、或刚下完单切过来，都要重新取一次
-onShow(() => {
-  pageVisible.value = true
-  setTitle()
-  fetchOrderList()
-})
+const { PageState, toLoginPage, ClientRoutes, navigate, t, scene, scenes, selectScene, apiOk, orderList, logisticsMap, goodsMap, fetchOrderList, loading, failed, needsLogin, setTitle, pageVisible } = useOrderDoingView()
 </script>
 
 <template>

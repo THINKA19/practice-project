@@ -1,4 +1,5 @@
 {
+  "refund": { "title": "Yêu cầu hậu mãi", "myRefund": "Yêu cầu của tôi", "selectGoods": "Chọn sản phẩm", "notSupport": "Không hỗ trợ hậu mãi", "goodsInfo": "Thông tin sản phẩm", "refundNumber": "Số lượng", "refundType": "Loại yêu cầu", "logisticsStatus": "Trạng thái nhận hàng", "refundReason": "Lý do", "refundRemark": "Mô tả", "refundRemarkOptional": "Không bắt buộc", "refundRemarkPlaceholder": "Mô tả vấn đề", "uploadProof": "Tải ảnh minh chứng", "uploadProofOptional": "Tối đa 9 ảnh, không bắt buộc", "submitBtn": "Gửi yêu cầu", "type0": "Chỉ hoàn tiền", "type1": "Trả hàng và hoàn tiền", "type2": "Đổi hàng", "logisticsStatus0": "Chưa nhận hàng", "logisticsStatus1": "Đã nhận hàng", "reasons": ["Lỗi chất lượng", "Sản phẩm không đúng mô tả", "Thiếu hoặc sai sản phẩm", "Lý do khác"], "applyingTip": "Yêu cầu đang được xử lý", "submitFail": "Gửi thất bại. Vui lòng thử lại", "submitSuccess": "Đã gửi", "cancelSuccess": "Đã hủy yêu cầu", "fillLogistics": "Thông tin vận chuyển trả hàng", "logisticsCompany": "Đơn vị vận chuyển", "logisticsCompanyPlaceholder": "Nhập đơn vị vận chuyển", "logisticsNumber": "Mã vận đơn", "logisticsNumberPlaceholder": "Nhập mã vận đơn", "logisticsTip": "Nhập thông tin sau khi được duyệt trả hàng", "submitLogistics": "Gửi thông tin vận chuyển", "cancelApply": "Hủy yêu cầu", "contactService": "Liên hệ hỗ trợ", "detailTitle": "Chi tiết yêu cầu", "status": { "s3": "Đang xử lý", "s1": "Đã tiếp nhận", "s4": "Hoàn tất", "s2": "Bị từ chối", "s-1": "Đã hủy", "s0": "Chờ duyệt" }, "applyTime": "Thời gian yêu cầu", "proofImages": "Ảnh minh chứng", "backAddress": "Địa chỉ trả hàng", "backAddressDetail": "Địa chỉ", "backAddressName": "Người nhận", "backAddressPhone": "Điện thoại", "logisticsFilled": "Đã lưu thông tin vận chuyển", "missingOrder": "Thiếu mã đơn. Vui lòng vào từ Đơn hàng của tôi", "empty": "Không có sản phẩm hỗ trợ hậu mãi", "loading": "Đang tải thông tin", "retry": "Thử lại" },
   "tabbar": {
     "pickup1": "Nhận món 1",
     "home": "Trang chủ",
@@ -129,6 +130,7 @@
       "agreeRequired": "Vui lòng đồng ý thỏa thuận trước"
     },
     "receive": {
+      "unavailable": "Liên kết quà tặng không khả dụng hoặc đã hết hạn",
       "title": "Nhận thẻ quà tặng",
       "friend": "Bạn bè",
       "sharePlaceholder": "tặng bạn một thẻ quà tặng",
@@ -441,6 +443,31 @@
     "refresh": "Cập nhật hàng đợi"
   },
   "auth": {
+    "privacyConsent": {
+      "title": "Tóm tắt Thỏa thuận dịch vụ và Chính sách quyền riêng tư",
+      "summary": "Chào mừng bạn đến với dịch vụ đặt món. Chúng tôi coi trọng thông tin cá nhân và quyền riêng tư của bạn. Trước khi lựa chọn, vui lòng đọc kỹ Chính sách quyền riêng tư, đặc biệt là mục đích, phạm vi thu thập, cách sử dụng, lưu giữ thông tin và các quyền của bạn.",
+      "account": "Bạn có thể xem thông tin cửa hàng và thực đơn công khai mà không cần đăng nhập. Khi chủ động dùng đăng nhập WeChat hoặc tính năng tài khoản, thông tin định danh, trạng thái đăng nhập và hồ sơ nghiệp vụ được xử lý theo nhu cầu của tính năng. Đăng nhập WeChat không lấy số điện thoại hoặc mã WeChat để kết bạn. Ảnh đại diện và biệt danh không bắt buộc để xem nội dung.",
+      "usage": "Thông tin cần được dùng cho các dịch vụ bạn chọn như nhận diện tài khoản, liên kết đơn hàng, xếp hàng và đặt bàn. Việc xác nhận này không tự động cho phép tiếp thị, cung cấp dữ liệu cho bên không liên quan, đăng ký thành viên hay mọi quyền truy cập. Thông tin liên hệ giao hàng, tải ảnh và các quyền khác cần được giải thích theo từng trường hợp. Vui lòng xem chính sách đầy đủ để biết về lưu giữ dữ liệu, bên thứ ba và quyền của bạn.",
+      "choice": "Bạn có thể chọn Đồng ý hoặc Không đồng ý. Nếu không đồng ý, bạn vẫn có thể xem nội dung công khai và xác nhận lại khi chủ động dùng tính năng tài khoản. Làm mới hoặc rời trang khi chưa chọn không được coi là đồng ý hay từ chối. Chỉ khi bạn nhấn nút, lựa chọn và phiên bản chính sách mới được lưu.",
+      "read": "Đọc toàn bộ Chính sách quyền riêng tư",
+      "accept": "Đồng ý",
+      "reject": "Không đồng ý",
+      "orders": "Đơn hàng và hồ sơ dịch vụ: Khi chủ động đặt món, xếp hàng, đặt bàn hoặc yêu cầu hậu mãi, hồ sơ có thể gồm cửa hàng, món ăn, số lượng, ghi chú, thời gian, trạng thái đơn và thông tin cần thiết bạn cung cấp. Xem thực đơn không đồng nghĩa phải cung cấp mọi thông tin giao dịch hay liên hệ. Địa chỉ và thông tin giao hàng chỉ cần được giải thích và yêu cầu trong dịch vụ liên quan.",
+      "permissions": "Quyền thiết bị và ảnh: Đồng ý bản tóm tắt không cấp mọi quyền máy ảnh, thư viện ảnh hay vị trí. Tính năng cần giải thích mục đích và tuân theo quy trình cấp quyền khi bạn chủ động sử dụng. Chọn một ảnh không cho phép đọc toàn bộ thư viện, ảnh trò chuyện hay bài đăng. Từ chối quyền không cần thiết không cản trở việc xem nội dung công khai.",
+      "storage": "Lưu trên thiết bị và phạm vi: Ứng dụng lưu lựa chọn, phiên bản chính sách cùng thông tin phiên tài khoản cần thiết trên thiết bị theo nhu cầu thực tế. Khi chưa đồng ý phiên bản hiện tại, phiên khách hàng tạm dừng, hồ sơ cá nhân đã lưu không hiển thị và không làm mới hồ sơ hay thông tin đăng nhập. Tạm dừng khác với xóa tài khoản; phiên còn hiệu lực có thể tiếp tục sau khi đồng ý.",
+      "security": "Bảo vệ thông tin và dịch vụ bên ngoài: Truy cập, truyền và sử dụng thông tin cá nhân cần gắn với mục đích dịch vụ và hạn chế truy cập không liên quan. WeChat và các dịch vụ khác có thông báo riêng. Nhà cung cấp và cách dùng dữ liệu phải được nêu theo thực tế trong chính sách đầy đủ. Lựa chọn này không tự động cho phép tiếp thị, chia sẻ rộng hơn hoặc xin thêm quyền.",
+      "rights": "Lựa chọn và quyền của bạn: Bạn quyết định có đăng nhập hay cung cấp thông tin tùy chọn. Ảnh đại diện và biệt danh không bắt buộc để xem thực đơn. Theo quy định áp dụng, bạn có thể yêu cầu xem, sửa, xóa dữ liệu hoặc đóng tài khoản. Đăng xuất, rút lại sự đồng ý và đóng tài khoản có tác dụng khác nhau. Lưu hồ sơ giao dịch phụ thuộc vào mục đích và yêu cầu áp dụng. Vui lòng xem kênh liên hệ do đơn vị vận hành công bố.",
+      "updates": "Tài liệu đầy đủ và thay đổi: Bản tóm tắt nêu những nội dung chính, không thay thế Thỏa thuận dịch vụ và Chính sách quyền riêng tư. Hãy đọc toàn bộ để biết phạm vi dịch vụ, loại dữ liệu, lưu giữ, bên ngoài và quyền của bạn. Nếu thay đổi mục đích, cách thức hoặc phạm vi xử lý, cần cập nhật giải thích và xin lại sự đồng ý khi cần; sửa câu chữ không tự mở rộng quyền đã cấp.",
+      "scope": "Phạm vi và cách đọc: Bản tóm tắt đề cập đến xem cửa hàng công khai, đăng nhập và các dịch vụ đặt món bạn chủ động chọn. Vuốt trong vùng chữ để đọc mọi phần; tiêu đề và nút lựa chọn giữ nguyên vị trí. Bạn không phải cung cấp mọi thông tin cùng lúc. Tính năng và dữ liệu cần thiết phụ thuộc vào giải thích của từng dịch vụ.",
+      "optional": "Hồ sơ tùy chọn: Ảnh đại diện và biệt danh WeChat không phải điều kiện để xem cửa hàng hay thực đơn. Khi tự chọn sửa hồ sơ, hãy quyết định nội dung gửi và tránh số giấy tờ, tài khoản ngân hàng hay liên hệ riêng của người khác không liên quan. Ảnh và biệt danh không chứng minh tên thật, tuổi hoặc quyền sở hữu tài khoản.",
+      "accuracy": "Kiểm tra thông tin: Hãy kiểm tra cửa hàng, món, số lượng, ghi chú, ngày và cách phục vụ khi đặt món, đặt bàn hoặc xếp hàng. Không ghi thông tin riêng tư không liên quan vào ghi chú. Khi cần liên hệ, mục đích phải được giải thích và xác nhận. Người có tài khoản WeChat, người liên hệ và khách thực tế có thể khác nhau; ảnh hoặc biệt danh không thay việc kiểm tra đơn.",
+      "necessary": "Thông tin cần thiết và lựa chọn: Mỗi dịch vụ có yêu cầu khác nhau. Việc có thể cần liên hệ sau này không phải lý do yêu cầu mọi khách cung cấp từ lần xem đầu. Bạn có thể không cung cấp dữ liệu hay quyền không cần cho nội dung công khai và quyết định lại khi chọn dịch vụ liên quan. Một lần đồng ý không phải quyền vô hạn cho mọi tính năng tương lai.",
+      "retention": "Thời gian lưu giữ: Dữ liệu cần được lưu theo mục đích dịch vụ và yêu cầu áp dụng, không phải vô hạn cho nhu cầu chưa xác định. Hồ sơ, trạng thái đăng nhập tạm thời, giao dịch và lựa chọn quyền riêng tư có mục đích và quy tắc lưu khác nhau. Đơn vị vận hành cần công bố quy tắc và giới hạn việc dùng tiếp các hồ sơ phải giữ.",
+      "device": "Thiết bị dùng chung: Khi dùng chung điện thoại, máy tính bảng hoặc máy tính, hãy phân biệt người dùng và tài khoản để tránh người khác xem đơn, đặt bàn hay hồ sơ thành viên. Kiểm tra trạng thái và đăng xuất khi dùng thiết bị công cộng. Kết thúc phiên trên máy không phải xóa tài khoản. Lựa chọn lưu trên máy không thay người dùng thiết bị khác quyết định.",
+      "sharing": "Xử lý bên ngoài và hiển thị: Cung cấp dữ liệu cho bên khác, thuê bên xử lý và hiển thị hồ sơ là các tình huống khác nhau, cần rõ mục đích và phạm vi. Đăng nhập WeChat không cho phép công khai đơn hay hồ sơ, hoặc gửi dữ liệu cho cửa hàng không liên quan. Nhà cung cấp thực tế và biện pháp bảo vệ cần được nêu trong chính sách và từng chức năng.",
+      "requests": "Câu hỏi và yêu cầu: Dùng kênh do đơn vị vận hành công bố để hỏi về nguồn, mục đích và lưu dữ liệu. Yêu cầu xem, sửa, xóa hay đóng tài khoản cần xác minh phù hợp, không thu thêm dữ liệu không liên quan cho tư vấn đơn giản. Với đơn dùng chung, cần xét quyền người khác. Không nên đổi chủ tài khoản chỉ bằng ảnh chụp hay biệt danh."
+    },
+    "authorizeLogin": "Đăng nhập ủy quyền",
     "login": "Đăng nhập",
     "register": "Đăng ký",
     "loginTitle": "Chào mừng trở lại",
@@ -486,13 +513,26 @@
     "wxLogout": "Đăng xuất",
     "wxDifferentRole": "Đăng xuất danh tính hiện tại trước khi đăng nhập khách hàng"
   },
+  "merchantOnboarding": { "join": "Đăng ký cửa hàng", "name": "Tên liên hệ", "namePlaceholder": "Nhập tên liên hệ", "mobile": "Số điện thoại", "mobilePlaceholder": "Nhập số điện thoại", "contentPlaceholder": "Nhập thông tin cửa hàng", "nameRequired": "Vui lòng nhập tên", "mobileRequired": "Vui lòng nhập số điện thoại" },
   "account": {
+    "logout": {
+      "title": "Đăng xuất",
+      "confirm": "Đăng xuất khỏi tài khoản này?",
+      "success": "Đã đăng xuất",
+      "localOnly": "Đã đăng xuất trên thiết bị này. Chưa thể hoàn tất đăng xuất trên máy chủ."
+    },
+    "profile": {
+      "address": { "title": "Địa chỉ nhận hàng", "add": "Thêm địa chỉ", "empty": "Chưa có thông tin địa chỉ", "pleaseAdd": "Nhấn nút để thêm thông tin địa chỉ", "linkMan": "Người nhận", "linkManPlaceholder": "Nhập tên người nhận", "mobile": "Số điện thoại", "mobilePlaceholder": "Nhập số điện thoại đúng với quốc gia đã chọn", "region": "Khu vực", "regionPlaceholder": "Chọn khu vực thuộc quốc gia giao hàng", "location": "Vị trí bản đồ", "address": "Địa chỉ chi tiết", "addressPlaceholder": "Nhập đường và số nhà", "apiError": "Không thể lấy chi tiết địa chỉ", "deleteProfile": "Xóa địa chỉ này?", "save": "Lưu địa chỉ", "select": "Chọn", "retry": "Tải lại", "unavailable": "Tạm thời không thể lấy địa chỉ", "default": "Mặc định", "setDefault": "Đặt mặc định", "edit": "Sửa", "remove": "Xóa", "countryPlaceholder": "Chọn quốc gia giao hàng", "mobileInvalid": "Số điện thoại không hợp lệ. Kiểm tra số và mã quốc gia." },
+      "welcome": "Chào mừng",
+      "wechatUser": "Người dùng WeChat",
+      "wechatLogin": "Đăng nhập WeChat"
+    },
+    "sign": { "button": "Điểm danh hôm nay", "signed": "Đã điểm danh hôm nay", "success": "Điểm danh thành công" },
     "scanHx": "Quét xác nhận",
     "signDaily": "Điểm danh",
     "youhuimaidan": "Thanh toán ưu đãi",
     "aboutUs": "Về chúng tôi",
     "Contact": "Liên hệ hỗ trợ",
-    "clearStorage": "Xóa bộ nhớ đệm",
     "score": "Điểm",
     "uid": "Mã người dùng",
     "nickSet": "Đăng nhập",

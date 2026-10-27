@@ -1,11 +1,11 @@
 import { expect, it, vi } from 'vitest'
-import { requireIdentity } from '../guard'
-import { getIdentity, getToken } from '../service'
+import { requireIdentity } from '../composables/use-guard'
+import { getIdentity, getToken } from '../composables/use-actions'
 import { seedSession } from './fixtures'
 import { useTokenStore } from '@/store/token'
-import { redirectToLogin } from '../loginNavigation'
+import { redirectToLogin } from '../composables/use-login-navigation'
 
-vi.mock('../loginNavigation', () => ({ redirectToLogin: vi.fn() }))
+vi.mock('../composables/use-login-navigation', () => ({ redirectToLogin: vi.fn() }))
 vi.mock('../api/session', () => ({ sessionApi: { profile: vi.fn(), refresh: vi.fn(), logout: vi.fn() } }))
 
 it('未登录引导目标登录页，身份不符只提示退出', () => {

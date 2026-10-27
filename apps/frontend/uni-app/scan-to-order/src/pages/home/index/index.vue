@@ -1,19 +1,15 @@
 <!--
 ============================================================================
 【文件概述】首页展示层，保持轮播、用户卡、配送和服务入口布局。
-【方法与导出清单】默认 Vue 组件；生命周期调用 usePage。
+【方法与导出清单】默认 Vue 组件；生命周期调用 useHomeView。
 【综合使用示例】
 import { ClientRoutes } from '@/pages/routes'
 uni.switchTab({ url: ClientRoutes.Home.home }) // 打开首页
 ============================================================================
 -->
 <script setup lang="ts">
-/**
- * 首页（tab）：Banner、用户卡、配送方式入口、更多服务、分享
- */
-import { useI18n } from 'vue-i18n'
-import HomeUserCard from './components/HomeUserCard.vue'
-import { usePage } from './composables/usePage'
+import HomeUserCard from './components/HomeUserCard/index.vue'
+import { useHomeView } from './composables/use-view'
 
 definePage({
   type: 'home',
@@ -24,23 +20,7 @@ definePage({
   },
 })
 
-const { t } = useI18n()
-const vm = usePage()
-const { banners, nick, avatar, levelName } = vm
-/** wd-swiper 数据（value 为图片地址） */
-const swiperList = computed(() => banners.value.map(b => ({ value: b.picUrl, linkUrl: b.linkUrl })))
-
-onLoad(() => {
-  vm.init()
-})
-
-onShow(() => {
-  vm.refresh()
-})
-
-onShareAppMessage(() => vm.shareAppMessage())
-
-onShareTimeline(() => vm.shareTimeline())
+const { t, vm, banners, hasLogin, nick, avatar, levelName, swiperList } = useHomeView()
 </script>
 
 <template>
@@ -69,9 +49,11 @@ onShareTimeline(() => vm.shareTimeline())
 
       <!-- 用户信息卡片 -->
       <HomeUserCard
+        :has-login="hasLogin"
         :avatar="avatar"
         :nick="nick"
         :level-name="levelName"
+        @login="vm.login"
         @member="vm.openMemberCenter"
         @coupon="vm.openCoupons"
       />
@@ -126,7 +108,7 @@ onShareTimeline(() => vm.shareTimeline())
               <view class="i-carbon-wallet text-48rpx text-#a67c52" />
             </view>
             <view class="feature-name">
-              {{ t('home.features.memberCard') }}
+              {{ t('card.title') }}
             </view>
           </view>
           <view class="feature-item" @tap="vm.openGroupBuying">

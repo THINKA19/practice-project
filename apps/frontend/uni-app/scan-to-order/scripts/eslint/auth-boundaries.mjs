@@ -16,8 +16,8 @@ export default { rules: { boundaries: {
         return
       const target = (source.startsWith('@/') ? path.resolve(context.cwd, 'src', source.slice(2)) : path.resolve(path.dirname(file), source)).replaceAll('\\', '/').replace(/\.ts$/, '')
       const inSession = file.includes('/src/pages/auth/session/')
-      if (!inSession && /\/src\/pages\/auth\/session\/(?!mock(?:\/|$)|index$)/.test(target))
-        context.report({ node, messageId: 'boundary', data: { reason: '会话内部实现只能由本模块引用，消费者使用 session/index.ts' } })
+      if (!inSession && /\/src\/pages\/auth\/session\/(?!mock(?:\/|$)|index$|routes\/index$)/.test(target))
+        context.report({ node, messageId: 'boundary', data: { reason: '会话内部实现只能由本模块引用，消费者使用 session/index.ts；静态路径使用 routes/index.ts' } })
       const owner = /\/src\/(pages-shop|pages-rider)\//.exec(file)?.[1]
       const dependency = /\/src\/(pages-shop|pages-rider)\//.exec(target)?.[1]
       if (dependency && owner !== dependency)

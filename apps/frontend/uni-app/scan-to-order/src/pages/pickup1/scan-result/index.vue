@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import ScanCouponCard from './components/ScanCouponCard.vue'
-import ScanFeeCard from './components/ScanFeeCard.vue'
-import ScanGoodsCard from './components/ScanGoodsCard.vue'
-import ScanLogisticsCard from './components/ScanLogisticsCard.vue'
-import { useScanResult } from './composables'
-import { currentLocale, t } from '@/locale'
-import { ClientRoutes } from '@/pages/routes'
+import ScanCouponCard from './components/ScanCouponCard/index.vue'
+import ScanFeeCard from './components/ScanFeeCard/index.vue'
+import ScanGoodsCard from './components/ScanGoodsCard/index.vue'
+import ScanLogisticsCard from './components/ScanLogisticsCard/index.vue'
+import { useScanResultView } from './composables/use-view'
 
 defineOptions({ name: 'ScanResult' })
 definePage({
@@ -15,43 +12,8 @@ definePage({
     disableScroll: true,
   },
 })
-const { demo, permissionDenied, hxNumber, orderDetail, canHx, loading, failed, verified, submitting, init, fetchOrderDetail, doneHx } = useScanResult()
 
-/** 返回已有列表触发 onShow 刷新；直接打开核销链接时替换当前页。 */
-function returnToList() {
-  const pages = getCurrentPages()
-  const url = ClientRoutes.Pickup.listDemo
-  if (pages[pages.length - 2]?.route === url.slice(1))
-    uni.navigateBack({ fail: () => uni.redirectTo({ url }) })
-  else
-    uni.redirectTo({ url })
-}
-
-/** 导航栏标题：definePage 里的是编译期静态兜底，这里按当前语言覆盖 */
-function setTitle() {
-  uni.setNavigationBarTitle({ title: t('orderScan.title') })
-}
-
-const pageVisible = ref(false)
-watch(currentLocale, () => {
-  if (pageVisible.value)
-    setTitle()
-})
-onHide(() => {
-  pageVisible.value = false
-})
-
-onLoad((query) => {
-  setTitle()
-  init(query)
-})
-
-// 用 onShow 而不是 onLoad：扫码回来时核销码已经变了，要重新取对应订单
-onShow(() => {
-  pageVisible.value = true
-  setTitle()
-  fetchOrderDetail()
-})
+const { t, demo, permissionDenied, hxNumber, orderDetail, canHx, loading, failed, verified, submitting, init, fetchOrderDetail, doneHx, returnToList, setTitle, pageVisible } = useScanResultView()
 </script>
 
 <template>

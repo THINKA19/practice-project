@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "composite": true,
+    "target": "ES2020",
     "lib": [
       "esnext",
       "dom"
@@ -10,7 +11,7 @@
     "moduleResolution": "bundler",
     "paths": {
       "@/api/types/login": [
-        "./src/pages/auth/session/models/session.ts"
+        "./src/pages/auth/session/models/types.ts"
       ],
       "@/*": [
         "./src/*"
@@ -33,6 +34,7 @@
       "@wot-ui/ui/global"
     ],
     "allowJs": true,
+    "strictNullChecks": true,
     "noImplicitThis": true,
     "outDir": "dist",
     "sourceMap": true,

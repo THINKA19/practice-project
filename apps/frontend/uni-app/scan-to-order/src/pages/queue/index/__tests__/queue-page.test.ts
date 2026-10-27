@@ -1,6 +1,6 @@
-import { effectScope } from 'vue'
+import { effectScope, reactive } from 'vue'
 import { beforeEach, expect, it, vi } from 'vitest'
-import { useQueuePage } from '../composables/useQueuePage'
+import { useQueuePage } from '../composables/use-page'
 
 const state = vi.hoisted(() => ({
   session: { hasLogin: true, identity: 'customer', sessionRevision: 1, updateNowTime: vi.fn() },
@@ -9,13 +9,15 @@ const state = vi.hoisted(() => ({
   take: vi.fn(),
   toast: vi.fn(),
 }))
-vi.mock('@/pages/auth/session', () => ({ useSession: () => state.session, requireIdentity: () => true }))
-vi.mock('../api/queue', () => ({ queueApi: state }))
+vi.mock('@/pages/auth/session', () => ({ useSessionState: () => reactive(state.session), requireIdentity: () => true }))
+vi.mock('../composables/use-requests', () => ({ queueApi: state }))
 vi.mock('@/utils/project/feedback', () => ({ toast: state.toast }))
 vi.mock('@/locale', () => ({ t: (key: string) => key }))
 
 beforeEach(() => {
   vi.clearAllMocks()
+  state.session.sessionRevision = 1
+  state.take.mockReset().mockResolvedValue(null)
   state.types.mockResolvedValue([{ id: 1, name: 'A', status: 0 }])
   state.myRecords.mockResolvedValue([])
 })
@@ -60,4 +62,32 @@ it('keeps personal tickets when queue types fail', async () => {
   expect(vm.failed.value).toBe(true)
   expect(vm.mylist.value).toHaveLength(1)
   scope.stop()
+})
+
+it('换号可以重新取号，旧请求完成时不能清除新请求的提交锁', async () => {
+  let first!: () => void
+  let second!: () => void
+  state.take.mockReturnValueOnce(new Promise<void>((resolve) => {
+    first = resolve
+  }))
+    .mockReturnValueOnce(new Promise<void>((resolve) => {
+      second = resolve
+    }))
+  const scope = effectScope()
+  const vm = scope.run(useQueuePage)!
+  try {
+    await vm.refresh()
+    const old = vm.queuingGet(vm.list.value[0])
+    reactive(state.session).sessionRevision++
+    await vm.refresh()
+    const current = vm.queuingGet(vm.list.value[0])
+    expect(state.take).toHaveBeenCalledTimes(2)
+    first()
+    await old
+    expect(vm.taking.value).toBe(true)
+    second()
+    await current
+    expect(vm.taking.value).toBe(false)
+  }
+  finally { scope.stop() }
 })

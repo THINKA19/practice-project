@@ -1,6 +1,6 @@
 import { effectScope } from 'vue'
 import { expect, it } from 'vitest'
-import { useHorizontalScroll } from '../composables/useHorizontalScroll'
+import { useHorizontalScroll } from '../components/Gallery/use-gallery'
 
 it('keeps component scroll state isolated and removes active drag listeners on disposal', () => {
   const firstScope = effectScope()

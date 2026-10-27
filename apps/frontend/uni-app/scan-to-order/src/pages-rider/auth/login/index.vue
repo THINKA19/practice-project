@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRiderLoginPage } from './composables/useRiderLoginPage'
+import { useRiderLoginPage } from './composables/use-page'
 
 definePage({ style: { navigationBarTitleText: '骑手登录' } })
 const vm = useRiderLoginPage()

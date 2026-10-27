@@ -1,1 +1,1 @@
-export * from './useOrderDetail'
+export * from './use-data'

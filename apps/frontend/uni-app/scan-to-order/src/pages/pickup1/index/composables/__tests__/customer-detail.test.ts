@@ -1,16 +1,16 @@
 import { effectScope } from 'vue'
 import { beforeEach, expect, it, vi } from 'vitest'
-import { useOrderDetail } from '../useOrderDetail'
+import { useOrderDetailData } from '../use-data'
 
 const state = vi.hoisted(() => ({ preview: vi.fn(), demoPay: vi.fn(), shop: vi.fn(), list: vi.fn() }))
-vi.mock('@/pages/pickup/index', () => ({ pickupApi: { list: state.list } }))
-vi.mock('../../api/orders', () => ({ orderDetailApi: { preview: state.preview, demoPay: state.demoPay, shop: state.shop } }))
+vi.mock('@/pages/pickup/shared', () => ({ pickupApi: { list: state.list } }))
+vi.mock('../../api/orders.api', () => ({ orderDetailApi: { preview: state.preview, demoPay: state.demoPay, shop: state.shop } }))
 vi.mock('@/utils/project/feedback', () => ({ toast: vi.fn() }))
 vi.mock('@/locale', () => ({ t: (key: string) => key }))
 beforeEach(() => vi.resetAllMocks())
 it('keeps pickup one independent from customer orders and restores preview scenes', async () => {
   const scope = effectScope()
-  const vm = scope.run(useOrderDetail)!
+  const vm = scope.run(useOrderDetailData)!
   state.preview.mockImplementation(scene => Promise.resolve({ orderInfo: { id: '201', status: scene === 'unpaid' ? 0 : 1 } }))
   await vm.fetchOrderDetail()
   expect(state.preview).toHaveBeenCalledWith('pickup')
@@ -21,7 +21,7 @@ it('keeps pickup one independent from customer orders and restores preview scene
 })
 it('restores the demo payment popup and only updates after mock payment succeeds', async () => {
   const scope = effectScope()
-  const vm = scope.run(useOrderDetail)!
+  const vm = scope.run(useOrderDetailData)!
   state.preview.mockResolvedValue({ orderInfo: { id: '201', status: 0, amountReal: 52 } })
   await vm.selectScene('unpaid')
   vm.toPayTap()
@@ -40,7 +40,7 @@ it('restores the demo payment popup and only updates after mock payment succeeds
 
 it('does not invalidate payment when the page refreshes during submission', async () => {
   const scope = effectScope()
-  const vm = scope.run(useOrderDetail)!
+  const vm = scope.run(useOrderDetailData)!
   state.preview.mockResolvedValue({ orderInfo: { id: '201', status: 0 } })
   await vm.selectScene('unpaid')
   let finish!: (value: unknown) => void
@@ -59,7 +59,7 @@ it('does not invalidate payment when the page refreshes during submission', asyn
 
 it('keeps order details when only the store request fails', async () => {
   const scope = effectScope()
-  const vm = scope.run(useOrderDetail)!
+  const vm = scope.run(useOrderDetailData)!
   state.preview.mockResolvedValue({ orderInfo: { id: '201', status: 1, shopIdZt: 1 } })
   state.shop.mockRejectedValue(new Error('offline'))
   await vm.fetchOrderDetail()
@@ -71,7 +71,7 @@ it('keeps order details when only the store request fails', async () => {
 
 it('treats an absent preview as empty', async () => {
   const scope = effectScope()
-  const vm = scope.run(useOrderDetail)!
+  const vm = scope.run(useOrderDetailData)!
   state.preview.mockResolvedValue(null)
   await vm.fetchOrderDetail()
   expect(vm.failed.value).toBe(false)

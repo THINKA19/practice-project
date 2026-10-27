@@ -1,0 +1,58 @@
+import { afterEach, expect, it, vi } from 'vitest'
+
+const auth = vi.hoisted(() => ({ token: '', identity: null as string | null }))
+vi.mock('@/pages/auth/session', () => ({ getToken: () => auth.token, getIdentity: () => auth.identity }))
+vi.mock('@/utils/toLoginPage', () => ({ toLoginPage: vi.fn() }))
+afterEach(() => vi.unstubAllEnvs())
+
+it('通过现有 Alova 完成分页、领取、兑换与充值，账户隔离且不访问网络', async () => {
+  vi.stubEnv('DEV', true)
+  vi.stubEnv('VITE_USE_MOCK', 'true')
+  const { sessionState } = await import('@/pages/auth/session/mock')
+  const { couponApi } = await import('../composables/use-requests')
+  const { assetApi } = await import('../../asset/composables/use-requests')
+  const { cashLogApi } = await import('../../asset-cash-log')
+  const { rechargeLogApi } = await import('../../asset-recharge-log')
+  const { scoreApi } = await import('../../score')
+  const { assetsApi } = await import('@/pages/account/index/composables/use-assets-requests')
+  const pool = await couponApi.templates({ page: 1, pageSize: 20 })
+  expect(pool.list).toHaveLength(20)
+  expect(pool.total).toBe(56)
+  expect((await couponApi.templates({ page: 2, pageSize: 20 })).list).toHaveLength(20)
+  expect((await cashLogApi.cashLogs({ page: 2, pageSize: 20 })).list).toHaveLength(20)
+  expect((await rechargeLogApi.payLogs({ page: 2, pageSize: 20, status: 1 })).list).toHaveLength(20)
+  expect((await rechargeLogApi.payLogs({ page: 1, pageSize: 20, status: 0 })).list).toEqual([])
+  expect((await assetApi.amount()).balance).toBe(128.5)
+  await expect(assetApi.recharge(100, 'guest')).rejects.toThrow('请先登录')
+
+  const issued = sessionState.issue('customer', false, 71)
+  auth.token = 'token' in issued ? issued.token : issued.accessToken
+  auth.identity = 'customer'
+  expect((await couponApi.my({ page: 1, pageSize: 20, status: 0 })).list).toHaveLength(3)
+  await couponApi.fetch({ id: 1 })
+  expect((await couponApi.templates({ page: 1, pageSize: 5 })).list.find(item => item.id === 1)?.claimed).toBe(true)
+  await expect(couponApi.fetch({ id: 1 })).rejects.toThrow('20003')
+  await expect(couponApi.fetch({ id: 2, pwd: 'wrong' })).rejects.toThrow()
+  await couponApi.fetch({ id: 2, pwd: 'DEMO' })
+  await couponApi.exchange('DEMO2026', 'DEMO')
+  await expect(couponApi.exchange('DEMO2026', 'DEMO')).rejects.toThrow()
+  expect((await couponApi.my({ page: 1, pageSize: 20, status: 0 })).list).toHaveLength(6)
+  const before = await assetApi.amount()
+  await assetApi.recharge(100, 'one-payment')
+  await assetApi.recharge(100, 'one-payment')
+  expect((await assetApi.amount()).balance).toBe(before.balance + 115)
+  expect((await cashLogApi.cashLogs({ page: 1, pageSize: 20 })).list[0]?.amount).toBe(115)
+  expect((await rechargeLogApi.payLogs({ page: 1, pageSize: 20, status: 1 })).list[0]?.money).toBe(100)
+  expect((await scoreApi.scoreLogs({ page: 2, pageSize: 20 })).list).toHaveLength(20)
+  expect(await assetsApi.summary()).toMatchObject({ couponCount: 6, balanceCents: 24350, points: 260 })
+
+  const other = sessionState.issue('customer', false, 72)
+  auth.token = 'token' in other ? other.token : other.accessToken
+  expect((await assetApi.amount()).balance).toBe(128.5)
+  expect((await couponApi.my({ page: 1, pageSize: 20, status: 0 })).list).toHaveLength(3)
+  auth.identity = 'shop'
+  await expect(assetApi.amount()).rejects.toThrow('顾客身份')
+  vi.stubEnv('DEV', false)
+  await expect(assetApi.recharge(100, 'production')).rejects.toThrow('暂未开放')
+  expect(uni.request).not.toHaveBeenCalled()
+}, 20000)

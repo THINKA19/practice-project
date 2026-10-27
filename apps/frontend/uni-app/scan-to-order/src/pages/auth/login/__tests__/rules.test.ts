@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { resolveRedirect } from '../domain/redirect'
+import { resolveRedirect } from '../domain/redirect.rules'
 import { createWechatState } from '@/pages/auth/login/mock'
 import { AGREEMENT_VERSION } from '../../agreement'
 

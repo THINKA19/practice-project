@@ -1,3 +1,4 @@
+import { profileOrderDetail } from '@/pages/account/profile/order/mock'
 /**
  * ============================================================================
  * 【文件概述】本文件负责 pages/pickup1/index/mock/handlers.ts 的局部职责；只在明确调用点接入。
@@ -20,6 +21,9 @@ export default defineMock({
   }),
   [`[POST]${endpoints.demoPay}`]: withFailure(() => ok(createPickupPreview('pickup')), { write: true }),
   [`[GET]${endpoints.detail}`]: withFailure(({ query, headers }) => {
+    const profileDetail = profileOrderDetail(query.id, headers.Authorization)
+    if (profileDetail)
+      return ok(profileDetail)
     const detail = createOrderDetail(String(query.id ?? ''), mockCustomerOwner(headers.Authorization))
     return detail ? ok(detail) : fail('订单不存在', 404)
   }),

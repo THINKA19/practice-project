@@ -1,1 +1,1 @@
-export * from './useScanResult'
+export * from './use-detail'

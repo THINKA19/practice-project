@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { onHide, onLaunch, onShow } from '@dcloudio/uni-app'
-import { getCurrentInstance, onMounted, onUnmounted } from 'vue'
+import { getCurrentInstance, nextTick, onMounted, onUnmounted } from 'vue'
+import { enablePrivacyConsent, ensurePrivacyConsent } from '@/pages/auth/agreement'
+import { identityForPath } from '@/pages/auth/session'
 import { navigateToInterceptor } from '@/router/interceptor'
 import { tabbarStore } from '@/tabbar/store'
 import { permission } from '@/router/permission'
 
 const { proxy } = (getCurrentInstance() || {}) as any
 const router = proxy?.$router
+
+enablePrivacyConsent()
 
 router && permission.install(router)
 
@@ -23,6 +27,13 @@ onShow((options) => {
   else {
     navigateToInterceptor.invoke({ url: '/' })
   }
+  void nextTick(() => {
+    const pages = getCurrentPages()
+    const page = pages[pages.length - 1]
+    const path = page?.route || options?.path || ''
+    if (identityForPath(path) === 'customer')
+      void ensurePrivacyConsent(true)
+  })
 })
 onHide(() => {
   console.log('App Hide')

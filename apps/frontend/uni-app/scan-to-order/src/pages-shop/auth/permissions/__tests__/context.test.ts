@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest'
-import { useMerchantShopStore } from '../store'
+import { useMerchantShopStore } from '../composables/use-shop-store'
 import { seedSession } from '@/pages/auth/session/__tests__/fixtures'
-import { fetchMerchantGrant, fetchMerchantShops } from '../api/context'
-import type { MerchantShop } from '../models/context'
+import { fetchMerchantGrant, fetchMerchantShops } from '../composables/use-grants'
+import type { MerchantShop } from '../models/types'
 
-vi.mock('../api/context', () => ({ fetchMerchantShops: vi.fn(), fetchMerchantGrant: vi.fn() }))
+vi.mock('../composables/use-grants', () => ({ fetchMerchantShops: vi.fn(), fetchMerchantGrant: vi.fn() }))
 
 function shop(id: string): MerchantShop {
   return { id, merchantId: 'M1', name: id, roleTemplate: 'employee', soundNotify: true, permissions: ['order.read'], grantVersion: 1 }

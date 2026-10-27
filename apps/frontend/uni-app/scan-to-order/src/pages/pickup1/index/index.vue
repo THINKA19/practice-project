@@ -1,13 +1,8 @@
 <script setup lang="ts">
-import { PageState } from '@/components/page-state'
-import { ClientRoutes } from '@/pages/routes'
-import { navigate } from '@/utils/project/navigation'
-import { ref, watch } from 'vue'
-import OrderGoodsCard from './components/OrderGoodsCard.vue'
-import OrderStatusCard from './components/OrderStatusCard.vue'
-import OrderPaymentPopup from './components/OrderPaymentPopup.vue'
-import { useOrderDetail } from './composables'
-import { currentLocale, t } from '@/locale'
+import OrderGoodsCard from './components/OrderGoodsCard/index.vue'
+import OrderStatusCard from './components/OrderStatusCard/index.vue'
+import OrderPaymentPopup from './components/OrderPaymentPopup/index.vue'
+import { useOrderDetailView } from './composables/use-view'
 
 defineOptions({ name: 'OrderDetailPage' })
 definePage({
@@ -16,30 +11,8 @@ definePage({
     disableScroll: true,
   },
 })
-const { scene, scenes, selectScene, loading, failed, orderId, money, paymentShow, paymentConfirm, orderDetail, shopSubdetail, fetchOrderDetail, toPayTap, callShop } = useOrderDetail()
 
-/** 导航栏标题：definePage 里的是编译期静态兜底，这里按当前语言覆盖 */
-function setTitle() {
-  uni.setNavigationBarTitle({ title: t('tabbar.pickup1') })
-}
-
-const pageVisible = ref(false)
-watch(currentLocale, () => {
-  if (pageVisible.value)
-    setTitle()
-})
-onHide(() => {
-  pageVisible.value = false
-})
-
-onLoad(setTitle)
-
-// 用 onShow 而不是 onLoad：从支付页回来时订单状态已经变了，必须重新取一次
-onShow(() => {
-  pageVisible.value = true
-  setTitle()
-  fetchOrderDetail()
-})
+const { PageState, ClientRoutes, navigate, t, scene, scenes, selectScene, loading, failed, orderId, money, paymentShow, paymentConfirm, orderDetail, shopSubdetail, fetchOrderDetail, toPayTap, callShop, setTitle, pageVisible } = useOrderDetailView()
 </script>
 
 <template>

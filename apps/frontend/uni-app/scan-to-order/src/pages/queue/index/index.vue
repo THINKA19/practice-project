@@ -4,7 +4,7 @@ import { PageState } from '@/components/page-state'
  * 排队取号（tab）：取号类型列表 + 我的号
  */
 import { useI18n } from 'vue-i18n'
-import { useQueuePage } from './composables/useQueuePage'
+import { useQueuePage } from './composables/use-page'
 
 definePage({
   style: {

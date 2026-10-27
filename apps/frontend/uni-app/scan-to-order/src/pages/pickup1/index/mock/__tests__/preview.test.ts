@@ -10,7 +10,7 @@ it('uses an independent detail demo and supports all preview states and simulate
   vi.stubEnv('DEV', true)
   vi.stubEnv('VITE_USE_MOCK', 'true')
   const { orderDetailApi } = await import('../../index')
-  const { pickupApi } = await import('@/pages/pickup/index')
+  const { pickupApi } = await import('@/pages/pickup/shared')
   const preview = await orderDetailApi.preview('pickup')
   expect(preview.orderInfo.id).toBe('201')
   expect((await pickupApi.list()).orderList.some(order => order.id === preview.orderInfo.id)).toBe(false)

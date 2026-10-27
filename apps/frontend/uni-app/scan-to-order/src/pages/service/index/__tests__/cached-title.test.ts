@@ -3,7 +3,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 
 const lifecycle = vi.hoisted(() => ({ show: [] as (() => void)[], hide: [] as (() => void)[] }))
-vi.mock('../composables/useActivityGallery', () => ({ useActivityGallery: () => ({ groups: ref([]), loading: ref(false), loadGallery: vi.fn() }) }))
+vi.mock('../composables/use-gallery', () => ({ useServiceGallery: () => ({ groups: ref([]), loading: ref(false), loadGallery: vi.fn() }) }))
 vi.mock('@/components/contact-dock', () => ({ ContactDock: defineComponent({ render: () => h('div') }) }))
 beforeEach(() => {
   lifecycle.show = []

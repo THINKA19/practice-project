@@ -41,9 +41,9 @@ export const FEEDBACK_COMMENT_TYPE = 1
 - [pages/account/asset](../../asset/docs/db.md)
 - [pages/account/benefits/coupons](../../benefits/coupons/docs/db.md)
 - [pages/ordering/shop](../../../ordering/shop/docs/db.md)
-- [shared/media](../../../../shared/media/docs/db.md)
-- [shared/session](../../../../shared/session/docs/db.md)
-- [shared/settings](../../../../shared/settings/docs/db.md)
+- [shared/media](../../../../asset/media/docs/db.md)
+- [shared/session](../../../../asset/session/docs/db.md)
+- [shared/settings](../../../../asset/settings/docs/db.md)
 
 ## 后端待确认及维护
 
@@ -56,3 +56,18 @@ export const FEEDBACK_COMMENT_TYPE = 1
 ## 资产摘要演示契约（2026-10-24）
 GET /__mock/account/assets 仅在开发 Mock 开启时请求，不是正式后端接口或数据库契约。返回 couponCount（券数）、balanceCents（分）、points（积分）、demo=true；数字必须是非负安全整数。固定样本为 3、12850、260。每次显示账户页重新请求，cacheFor=0。演示 Mock 通过现有 mockCustomerOwner 处理开发凭证归属，兼容刷新后的开发凭证；只返回统一样本，不代表真实服务授权。真实金额单位、优惠券统计规则、正式接口与权限仍需后端确认。
 
+
+
+# 附件上传契约
+
+前端契约参考，未获取数据库或文件服务的权威资料。
+
+- POST `/upload`，secondary 网关，字段 `file`，通过既有 Alova upload 模式发送临时文件路径。
+- 仅允许当前有效顾客会话，Bearer 参数由共享会话模块生成。
+- HTTP 200 且业务 code 为 0/200，`data.url` 为 HTTP(S) 字符串才确认上传成功。
+- 开发 Mock 只返回示例地址，不保存个人资料或真实文件。
+- 真实文件表名、存储供应商、大小/格式限制、鉴权、保留期和服务端权限待后端确认。
+
+## 微信资料契约调整
+
+个人资料写入仅包含 gender、birthday，不写昵称、头像和手机号；后端按字段更新，不能清空其他账号字段。GET /user/info 返回账号头像、昵称，登录提交共享会话后所有身份卡同步展示。Mock 会话和选填资料单独持久化为测试数据源，模拟服务重启后继续识别已签发凭证，不替代生产服务认证。真实微信头像不能仅凭小程序登录 code 自动获取。

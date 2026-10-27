@@ -1,13 +1,17 @@
 import { mount } from '@vue/test-utils'
-import { ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { afterEach, expect, it, vi } from 'vitest'
 import i18n, { setLocale } from '@/locale'
 
 const actions = vi.hoisted(() => ({ init: vi.fn(), refresh: vi.fn(), navTo: vi.fn(), goCoupons: vi.fn(), goBalance: vi.fn(), goScorelog: vi.fn() }))
-vi.mock('../composables/usePage', () => ({
-  usePage: () => ({
+const PagingStub = defineComponent({
+  props: ['fixed', 'usePageScroll', 'auto', 'hideEmptyView', 'refresherEnabled', 'loadingMoreEnabled'],
+  template: '<div class="paging"><slot /></div>',
+})
+vi.mock('../composables/use-page', () => ({
+  useAccountPage: () => ({
     ...actions,
-    user: ref({ userId: 7 }),
+    user: ref({ userId: 7, userLevel: { name: '普通会员' } }),
     nick: ref('测试顾客'),
     avatar: ref('/static/images/default-avatar.png'),
     uid: ref(7),
@@ -31,10 +35,10 @@ it('整页渲染资产与菜单，不显示版本和演示说明，点击保留�
   const Page = (await import('../index.vue')).default
   const wrapper = mount(Page, { global: {
     plugins: [i18n],
-    stubs: { 'z-paging': { props: ['fixed', 'usePageScroll', 'auto', 'hideEmptyView', 'refresherEnabled', 'loadingMoreEnabled'], template: '<div class="paging"><slot /></div>' }, 'wd-icon': true },
+    stubs: { 'z-paging': PagingStub, 'wd-icon': true },
   } })
   try {
-    const paging = wrapper.findComponent('.paging')
+    const paging = wrapper.getComponent(PagingStub)
     expect(paging.props('usePageScroll')).toBe(false)
     expect(paging.props('auto')).toBe(false)
     expect(paging.props('refresherEnabled')).toBe(false)
@@ -43,6 +47,7 @@ it('整页渲染资产与菜单，不显示版本和演示说明，点击保留�
     show.forEach(fn => fn())
     expect(actions.init).toHaveBeenCalled()
     expect(actions.refresh).toHaveBeenCalled()
+    expect(wrapper.text()).not.toContain('礼品卡')
     for (const text of ['优惠券', '余额', '积分', '128.50', '260', '普通会员', '常用功能', '我的服务', '其他设置', '商家服务', '骑手管理'])
       expect(wrapper.text()).toContain(text)
     for (const text of ['测试版', '演示数据', '非真实资产', '暂无数据', '加载失败', 'account.'])

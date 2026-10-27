@@ -124,7 +124,7 @@ export function getCurrentPageI18nKey() {
     }
   }
   console.log(currPage)
-  console.log(currPage.style.navigationBarTitleText)
+  console.log(currPage.style?.navigationBarTitleText)
   return currPage.style?.navigationBarTitleText || ''
 }
 

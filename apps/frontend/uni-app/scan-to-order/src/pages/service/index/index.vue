@@ -1,32 +1,11 @@
 <script setup lang="ts">
-import { PageState } from '@/components/page-state'
-import ServiceGalleryGroup from './components/ServiceGalleryGroup.vue'
-import { ContactDock } from '@/components/contact-dock'
-import { useServiceContacts } from './composables/useServiceContacts'
-import { currentLocale, t } from '@/locale'
-import { ref, watch } from 'vue'
-import { useActivityGallery } from './composables/useActivityGallery'
+import ServiceGalleryGroup from './components/Gallery/index.vue'
+import { useServiceView } from './composables/use-view'
 
 defineOptions({ name: 'Service' })
 definePage({ style: { navigationBarTitleText: '服务', disableScroll: true } })
-const contacts = useServiceContacts()
-const { groups, loading, failed, loadGallery } = useActivityGallery()
-function setTitle() {
-  uni.setNavigationBarTitle({ title: t('service.title') })
-}
-const pageVisible = ref(false)
-onShow(() => {
-  pageVisible.value = true
-  setTitle()
-  loadGallery()
-})
-onHide(() => {
-  pageVisible.value = false
-})
-watch(currentLocale, () => {
-  if (pageVisible.value)
-    setTitle()
-})
+
+const { PageState, ContactDock, t, galleryActions, contacts, groups, loading, failed, loadGallery, setTitle, pageVisible } = useServiceView()
 </script>
 
 <template>
@@ -35,7 +14,7 @@ watch(currentLocale, () => {
     <view class="pb-120rpx">
       <!-- 分组图文：标题 + 查看更多 + 横向滚动图 -->
       <view v-if="!loading && !failed" class="w-full">
-        <ServiceGalleryGroup v-for="(group, groupIndex) in groups" :key="group.id" :group="group" :group-index="groupIndex" />
+        <ServiceGalleryGroup v-for="(group, groupIndex) in groups" :key="group.id" :group="group" :group-index="groupIndex" @preview="galleryActions.preview" @more="galleryActions.more" />
       </view>
       <PageState v-if="loading || failed || !groups.length" :status="loading ? 'loading' : failed ? 'error' : 'empty'" :title="t(loading ? 'common.loading' : failed ? 'service.unavailable' : 'service.empty')" :description="!loading && !failed ? t('service.emptyHint') : undefined" />
     </view>

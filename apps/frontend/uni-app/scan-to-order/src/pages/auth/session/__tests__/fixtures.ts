@@ -1,5 +1,5 @@
 import type { IUserInfoRes, SessionIdentity } from '../index'
-import { useSessionStore } from '../store'
+import { useSessionStore } from '../composables/use-store'
 /** 测试专用，模拟已通过服务端校验的会话快照。 */
 export function seedSession(user: Partial<IUserInfoRes> = {}, identity: SessionIdentity = 'customer', double = false) {
   const state = useSessionStore()

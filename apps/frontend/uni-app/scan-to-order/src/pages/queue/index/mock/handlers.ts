@@ -9,7 +9,7 @@
 import { mockCustomerOwner } from '@/pages/auth/session/mock'
 import { defineMock } from '@alova/mock'
 import { endpoints } from '../api/endpoints'
-import type { QueueAction } from '../models/queue'
+import type { QueueAction } from '../models/types'
 import { queueState as backend, demoQueueState as demo } from './state'
 import { fail, ok } from '@/mock/response'
 import { withFailure } from '@/mock/scenario'

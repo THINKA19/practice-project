@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { queueWaitMinutes, toMyQueueView } from '../models/queue'
+import { queueWaitMinutes } from '../domain/queue.rules'
+import { toMyQueueView } from '../models/mappers'
 
 describe('queue', () => {
   it('computes wait minutes = (number - curNumber - 1) * minitus', () => {

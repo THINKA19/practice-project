@@ -15,7 +15,7 @@ it('encodes query values while preserving existing parameters and falsy values',
   const pending = navigate('pages/detail/index?from=home', { name: '中 & 文', zero: 0, enabled: false, empty: '', ignored: null })
   const options = vi.mocked(uni.navigateTo).mock.calls[0][0]
   expect(options.url).toBe('/pages/detail/index?from=home&name=%E4%B8%AD%20%26%20%E6%96%87&zero=0&enabled=false&empty=')
-  options.success?.({ errMsg: 'ok' })
+  options.success?.({ errMsg: 'ok', eventChannel: { emit: vi.fn(), on: vi.fn(), once: vi.fn(), off: vi.fn() } })
   await expect(pending).resolves.toEqual({ ok: true })
 })
 

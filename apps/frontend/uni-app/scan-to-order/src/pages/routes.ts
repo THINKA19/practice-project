@@ -1,5 +1,5 @@
 import { AGREEMENT_PAGES } from '@/pages/auth/agreement'
-import { AUTH_ROUTES } from '@/pages/auth/session'
+import { AUTH_ROUTES } from '@/pages/auth/session/routes/index'
 /**
  * ============================================================================
  * 客户端主包与核心业务路由定义表 (Client Subpackage Route Contracts)
@@ -36,16 +36,25 @@ export const ClientRoutes = {
   Home: {
     /** 客户端主页（轮播图、热销推荐、点餐入口、营销活动位） */
     home: '/pages/home/index/index',
+    /** 实体礼品卡/电子储值卡卡包列表页 */
+    card: '/pages/home/service/gift-card/index',
+    /** 卡券消费与划扣明细流水日志页 */
+    cardLogs: '/pages/home/service/gift-card/logs',
+    /** 礼品卡兑换/卡密激活输入页 */
+    cardExchange: '/pages/home/service/gift-card/exchange',
+    /** 礼品卡转赠与赠送发起页 */
+    cardSend: '/pages/home/service/gift-send/index',
+    /** 接收好友礼品卡转赠的领取落地页 */
+    cardReceive: '/pages/home/service/gift-receive/index',
     /** 首页用户入口：最简测试页。 */
     memberCenter: '/pages/home/user/member-center/index',
     coupons: '/pages/home/user/coupons/index',
     /** 首页服务入口：最简测试页。 */
     favorites: '/pages/home/service/favorites/index',
-    card: '/pages/home/service/card/index',
     groupBuying: '/pages/home/service/group-buying/index',
     welfare: '/pages/home/service/welfare/index',
     /** 关于页面的保留目标，尚未实现。 */
-    about: '/pages/me/setting/about/index',
+    about: '/pages/account/profile/about/index',
     /** 官方公告与资讯详情页（系统公告、门店节假日通知等） */
     noticeDetail: '/pages/home/notice/detail',
   },
@@ -61,7 +70,7 @@ export const ClientRoutes = {
     /** 门店详情与资质介绍页（门店地址导航、营业时间、设施信息） */
     shopDetail: '/pages/ordering/shop/detail',
     /** 优惠买单/到店直接快捷买单页（快速输入消费金额并核销优惠） */
-    youhuiPay: '/pages/ordering/youhui-pay/index',
+    youhuiPay: '/pages/account/services/bill-pay/index',
     /** 购物车明细弹框/独立结算清单页（商品数量调整、清空、总价计算） */
     cart: '/pages/ordering/cart/index',
     /** 订单确认与提交结算页（就餐方式选择、备注说明、优惠券勾选） */
@@ -77,7 +86,7 @@ export const ClientRoutes = {
     /** 现场排队取号首页（当前等待桌数展示、取号状态管理） */
     queue: '/pages/queue/index/index',
     /** 预订订座页面（预约到店就餐时间、人数及包厢需求） */
-    booking: '/pages/queue/booking/index',
+    booking: '/pages/account/services/booking/index',
   },
 
   /** 取餐履约与叫号进度模块 */
@@ -96,44 +105,37 @@ export const ClientRoutes = {
   Account: {
     /** 个人中心首页（会员头像昵称、资产概览、各功能卡片聚合） */
     my: '/pages/account/index/index',
-    /** 未接入功能的简单跳转测试页。 */
-    test: '/pages/account/test/index',
-    /** 全部历史订单列表页（全部、待付款、已完成、退款中分类检索） */
-    allOrders: '/pages/account/orders/all-orders/index',
+    /** 订单列表页（全部、自取、外卖、预约、堂食分类） */
+    allOrders: '/pages/account/profile/order/index',
+    contact: '/pages/account/profile/contact/index',
+    orderDetail: '/pages/account/profile/order/detail',
     /** 用户意见反馈与问题提交页 */
-    feedback: '/pages/account/feedback/index',
+    feedback: '/pages/account/profile/feedback/index',
     /** 会员动态会员码/核销码展示页（用于线下收银台扫码积分） */
-    userCode: '/pages/account/code/index',
-    /** 广告宣传与运营推广活动落地页 */
-    ad: '/pages/account/ad/index',
+    userCode: '/pages/account/users/user-code/index',
+    /** 收货地址管理与新增、编辑页面 */
+    address: '/pages/account/profile/address/index',
     /** 会员中心首页（会员等级进阶、权益特权介绍、专属折扣） */
-    memberCenter: '/pages/account/benefits/member-center/index',
+    memberCenter: '/pages/account/users/member-center/index',
     /** 订单售后与退款申请页（选择退款原因、上传凭据） */
-    refundApply: '/pages/account/orders/refund-apply/index',
+    refundApply: '/pages/account/profile/order-refund-apply/index',
     /** 关于品牌与系统信息页（版本更新说明、品牌故事、用户协议） */
-    about: '/pages/account/services/about/index',
+    about: '/pages/account/profile/about/index',
     /** 我的优惠券与卡券包列表页（可用、已使用、已过期分类） */
-    coupons: '/pages/account/benefits/coupons/index',
+    coupons: '/pages/account/assets/coupons/index',
     /** 账户钱包与资产管理首页（储值余额、累计积分总览） */
-    asset: '/pages/account/asset/index',
+    asset: '/pages/account/assets/asset/index',
     /** 储值与充值明细流水记录页 */
-    rechargeLog: '/pages/account/asset/recharge-log',
+    rechargeLog: '/pages/account/assets/asset-recharge-log/index',
     /** 提现与资金收支流水记录页 */
-    cashLog: '/pages/account/asset/cash-log',
+    cashLog: '/pages/account/assets/asset-cash-log/index',
     /** 每日签到领积分/福利互动页 */
-    sign: '/pages/account/benefits/sign/index',
+    sign: '/pages/account/services/sign-in/index',
+    scanResult: '/pages/account/services/scan-result/index',
+    billPay: '/pages/account/services/bill-pay/index',
+    booking: '/pages/account/services/booking/index',
     /** 积分收支明细流水日志页 */
-    scoreLogs: '/pages/account/benefits/score/logs',
-    /** 实体礼品卡/电子储值卡卡包列表页 */
-    card: '/pages/account/benefits/card/index',
-    /** 卡券消费与划扣明细流水日志页 */
-    cardLogs: '/pages/account/benefits/card/logs',
-    /** 礼品卡兑换/卡密激活输入页 */
-    cardExchange: '/pages/account/benefits/card/exchange',
-    /** 礼品卡转赠与赠送发起页 */
-    cardSend: '/pages/account/benefits/card/send',
-    /** 接收好友礼品卡转赠的领取落地页 */
-    cardReceive: '/pages/account/benefits/card/receive',
+    scoreLogs: '/pages/account/assets/score/index',
   },
 
   /** 客服与售后服务模块 */

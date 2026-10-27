@@ -1,13 +1,13 @@
 import { effectScope } from 'vue'
 import { beforeEach, expect, it, vi } from 'vitest'
-import { usePickupOrders } from '../composables/usePickupOrders'
+import { usePickupOrders } from '../../shared/composables/use-orders'
 
 const state = vi.hoisted(() => ({ session: { hasLogin: true, identity: 'customer', sessionRevision: 1, updateNowTime: vi.fn() }, list: vi.fn() }))
 vi.mock('@/pages/auth/session', async () => ({
   ...await import('@/pages/auth/session/routes'),
-  useSession: () => state.session,
+  useSessionState: () => state.session,
 }))
-vi.mock('../api/orders', () => ({ pickupApi: { list: state.list } }))
+vi.mock('../../shared/api/orders.api', () => ({ pickupApi: { list: state.list } }))
 vi.mock('@/utils/project/navigation', () => ({ navigate: vi.fn() }))
 beforeEach(() => {
   state.list.mockReset()

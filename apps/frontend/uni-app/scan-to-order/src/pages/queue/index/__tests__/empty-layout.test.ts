@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 
 const state = vi.hoisted(() => ({ populated: false }))
-vi.mock('../composables/useQueuePage', () => ({ useQueuePage: () => ({
+vi.mock('../composables/use-page', () => ({ useQueuePage: () => ({
   list: ref(state.populated ? [{ id: 1, name: 'A' }] : []),
   mylist: ref([]),
   loading: ref(false),
@@ -13,7 +13,7 @@ vi.mock('../composables/useQueuePage', () => ({ useQueuePage: () => ({
   active: ref(false),
   taking: ref(false),
 }) }))
-vi.mock('@/pages/pickup1/index/composables', () => ({ useOrderDetail: () => ({
+vi.mock('@/pages/pickup1/index/composables', () => ({ useOrderDetailData: () => ({
   scenes: [],
   loading: ref(false),
   failed: ref(false),
@@ -22,7 +22,7 @@ vi.mock('@/pages/pickup1/index/composables', () => ({ useOrderDetail: () => ({
   money: ref(0),
   orderId: ref(null),
 }) }))
-vi.mock('@/pages/pickup1/doing/composables', () => ({ useOrderDoing: () => ({
+vi.mock('@/pages/pickup1/doing/composables', () => ({ useOrderDoingList: () => ({
   scenes: [],
   loading: ref(false),
   failed: ref(false),

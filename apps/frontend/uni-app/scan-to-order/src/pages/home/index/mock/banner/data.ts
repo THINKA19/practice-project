@@ -7,7 +7,7 @@
  * const banners = createHomeBanners('shouye') // 三张本地轮播图
  * ============================================================================
  */
-import type { Banner } from '../../models/banner'
+import type { Banner } from '../../models/types'
 import banner01 from '@/mock/assets/images/home/banner/01.jpeg'
 import banner02 from '@/mock/assets/images/home/banner/02.jpeg'
 import banner03 from '@/mock/assets/images/home/banner/03.jpeg'

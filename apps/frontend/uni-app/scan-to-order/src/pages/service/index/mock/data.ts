@@ -6,7 +6,7 @@
  * import { createServiceGallery } from '@/pages/service/index/mock/data'
  * ============================================================================
  */
-import type { ActivityGalleryGroup } from '../models/service'
+import type { ActivityGalleryGroup } from '../models/types'
 import gallery1 from '@/mock/assets/images/lunbo/01.jpg'
 import gallery2 from '@/mock/assets/images/lunbo/02.jpg'
 import gallery3 from '@/mock/assets/images/lunbo/03.jpg'

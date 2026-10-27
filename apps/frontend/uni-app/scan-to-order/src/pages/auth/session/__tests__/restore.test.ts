@@ -2,8 +2,8 @@ import { createPinia, setActivePinia } from 'pinia'
 import { createPersistedState } from 'pinia-plugin-persistedstate'
 import { afterEach, expect, it, vi } from 'vitest'
 import { createApp } from 'vue'
-import { getIdentity, getToken, restoreSession } from '../service'
-import { useSessionStore } from '../store'
+import { getIdentity, getToken, restoreSession } from '../composables/use-actions'
+import { useSessionStore } from '../composables/use-store'
 
 vi.mock('../api/session', () => ({ sessionApi: {} }))
 

@@ -6,7 +6,7 @@
  * import { createDemoOrders } from '@/pages/pickup1/doing/mock/state'
  * ============================================================================
  */
-import { createPickupOrders } from '@/pages/pickup/index/mock'
+import { createPickupOrders } from '@/pages/pickup/shared/mock'
 
 /**
  * 创建独立演示订单，保留准备中与配送场景。

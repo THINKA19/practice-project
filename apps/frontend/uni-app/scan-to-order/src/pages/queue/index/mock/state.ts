@@ -6,8 +6,8 @@
  * import { createQueueState } from '@/pages/queue/index/mock/state'
  * ============================================================================
  */
-import type { MyQueue, MyQueueRecord, QueueAction } from '../models/queue'
-import { queueStatus } from '../models/queue'
+import type { MyQueue, MyQueueRecord, QueueAction } from '../models/types'
+import { queueStatus } from '../models/enums'
 import { createQueueTypes } from './data'
 /**
  * 创建可重置的排队发号与状态操作。

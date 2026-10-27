@@ -88,9 +88,9 @@ describe('language switching and native tabbar', () => {
   })
 
   it('keeps picker visibility local while sharing the language', async () => {
-    const { useLanguage } = await import('../../components/locale/composables/useLanguage')
-    const first = useLanguage()
-    const second = useLanguage()
+    const { useLanguageSwitcherPicker } = await import('../../components/language-switcher/composables/use-picker')
+    const first = useLanguageSwitcherPicker()
+    const second = useLanguageSwitcherPicker()
     first.openLanguagePicker()
     expect(first.showLangSheet.value).toBe(true)
     expect(second.showLangSheet.value).toBe(false)
@@ -120,8 +120,8 @@ describe('locale boundaries', () => {
   })
 
   it('closes the picker and keeps the session language when platform and storage fail', async () => {
-    const { useLanguage } = await import('../../components/locale/composables/useLanguage')
-    const picker = useLanguage()
+    const { useLanguageSwitcherPicker } = await import('../../components/language-switcher/composables/use-picker')
+    const picker = useLanguageSwitcherPicker()
     vi.mocked(uni.setLocale).mockImplementation(() => {
       throw new Error('platform')
     })

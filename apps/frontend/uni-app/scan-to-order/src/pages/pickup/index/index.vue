@@ -1,14 +1,6 @@
 <script setup lang="ts">
-import { PageState } from '@/components/page-state'
-/**
- * 取餐（tab 页，View：只做装配与渲染）
- * 来源：bee-master/pages/order-details/doing
- */
-import { toLoginPage } from '@/utils/toLoginPage'
-import { useI18n } from 'vue-i18n'
-import { computed, ref } from 'vue'
-import DoingOrderCard from './components/DoingOrderCard.vue'
-import { useOrderDoingPage } from './composables/useOrderDoingPage'
+import DoingOrderCard from './components/DoingOrderCard/index.vue'
+import { usePickupView } from './composables/use-view'
 
 definePage({
   style: {
@@ -17,16 +9,7 @@ definePage({
   },
 })
 
-const { t } = useI18n()
-const vm = useOrderDoingPage()
-const { apiOk, orderList, items, loading, failed, needsLogin } = vm
-const fulfillment = ref<'pickup' | 'delivery'>('pickup')
-const visibleItems = computed(() => items.value.filter(item => !!item.order.isNeedLogistics === (fulfillment.value === 'delivery')))
-
-onShow(() => {
-  uni.setNavigationBarTitle({ title: t('tabbar.pickup') })
-  vm.refresh()
-})
+const { PageState, toLoginPage, t, vm, apiOk, orderList, items, loading, failed, needsLogin, fulfillment, visibleItems } = usePickupView()
 </script>
 
 <template>

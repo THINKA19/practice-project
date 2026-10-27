@@ -25,9 +25,9 @@ it('confirms WeChat before exchanging credentials and commits the existing custo
 
   vi.mocked(uni.getStorageSync).mockImplementation(key => storage.get(key))
 
-  const { loginApi } = await import('../../api/login')
+  const { loginApi } = await import('../../api/login.api')
 
-  const { useSession } = await import('@/pages/auth/session')
+  const { useSessionState } = await import('@/pages/auth/session')
 
   const ticket = await loginApi.start('web', AGREEMENT_VERSION)
 
@@ -39,7 +39,7 @@ it('confirms WeChat before exchanging credentials and commits the existing custo
 
   await loginApi.confirmDemo(ticket)
 
-  const session = useSession()
+  const session = useSessionState()
 
   await session.authenticate('customer', () => loginApi.exchange(payload))
 
@@ -47,9 +47,9 @@ it('confirms WeChat before exchanging credentials and commits the existing custo
 
   expect(session.identity).toBe('customer')
 
-  expect(useSession().userInfo.userId).toBe(10001)
+  expect(useSessionState().userInfo.userId).toBe(10001)
 
-  expect(useSession().userInfo.nickname).toBe('微信顾客')
+  expect(useSessionState().userInfo.nickname).toBe('微信顾客')
 
   await expect(loginApi.exchange(payload)).rejects.toThrow()
 
@@ -63,7 +63,7 @@ it('never enables simulated confirmation in production', async () => {
 
   vi.stubEnv('VITE_USE_MOCK', 'true')
 
-  const { loginApi } = await import('../../api/login')
+  const { loginApi } = await import('../../api/login.api')
 
   await expect(loginApi.confirmDemo({ id: 'x', pollToken: 'p', expiresAt: Date.now() + 1000 })).rejects.toThrow('仅开发环境')
 

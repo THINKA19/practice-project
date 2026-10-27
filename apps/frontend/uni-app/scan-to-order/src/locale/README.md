@@ -4,7 +4,7 @@
 
 - `zh-Hans.json`、`en.json`、`vi.json`：语言包唯一编辑源，保留嵌套业务对象，供 Vue 和 uni-app 编译器读取。
 - `index.ts`：语言实例、响应式状态、启动恢复、切换及普通 TS 字符串插值。
-- `../components/locale/`：语言选择入口、图标、选中状态和实例独立的弹层。
+- `../components/language-switcher/`：语言选择入口、图标、选中状态和实例独立的弹层。
 - `../tabbar/index.vue`：当前页面可见时监听语言变化刷新原生导航，并在页面显示时补刷。
 - `../tabbar/i18n.ts`：解析导航键并执行原生导航更新；语言模块不依赖导航。
 

@@ -1,10 +1,10 @@
 import { effectScope, ref } from 'vue'
 import { beforeEach, expect, it, vi } from 'vitest'
-import { useAssets } from '../composables/useAssets'
-import { parseAssets } from '../models/assets'
+import { useAccountAssets } from '../composables/use-assets'
+import { parseAssets } from '../models/mappers'
 
 const api = vi.hoisted(() => ({ available: true, summary: vi.fn() }))
-vi.mock('../api/assets', () => ({ assetsApi: api }))
+vi.mock('../composables/use-assets-requests', () => ({ assetsApi: api }))
 const sample = { couponCount: 3, balanceCents: 12850, points: 260, demo: true as const }
 beforeEach(() => {
   api.available = true
@@ -21,7 +21,7 @@ it('请求合并、金额格式、失败重试与真实零值', async () => {
   api.summary.mockResolvedValueOnce(sample).mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce({ ...sample, couponCount: 0, balanceCents: 0, points: 0 })
   const key = ref<string | null>('7:1')
   const scope = effectScope()
-  const vm = scope.run(() => useAssets(key))!
+  const vm = scope.run(() => useAccountAssets(key))!
   try {
     expect(vm.status.value).toBe('loading')
     await vm.refresh()
@@ -47,7 +47,7 @@ it('账户变化与销毁后丢弃迟到响应', async () => {
     .mockImplementationOnce(() => new Promise((resolve) => { resolveNew = resolve }))
   const key = ref<string | null>('7:1')
   const scope = effectScope()
-  const vm = scope.run(() => useAssets(key))!
+  const vm = scope.run(() => useAccountAssets(key))!
   const old = vm.refresh()
   key.value = '8:2'
   const next = vm.refresh()
@@ -66,7 +66,7 @@ it('账户变化与销毁后丢弃迟到响应', async () => {
 it('关闭开发接口时不发送请求', async () => {
   api.available = false
   const scope = effectScope()
-  const vm = scope.run(() => useAssets(ref('7:1')))!
+  const vm = scope.run(() => useAccountAssets(ref('7:1')))!
   await vm.refresh()
   expect(vm.status.value).toBe('unavailable')
   expect(api.summary).not.toHaveBeenCalled()
@@ -78,7 +78,7 @@ it('页面销毁后不提交迟到资产响应', async () => {
     resolveRequest = resolve
   }))
   const scope = effectScope()
-  const vm = scope.run(() => useAssets(ref('7:1')))!
+  const vm = scope.run(() => useAccountAssets(ref('7:1')))!
   const pending = vm.refresh()
   scope.stop()
   resolveRequest(sample)

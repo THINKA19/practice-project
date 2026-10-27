@@ -1,7 +1,7 @@
 import { expect, it, vi } from 'vitest'
 import { computed } from 'vue'
-import { clearSession, createSession, getIdentity, getToken, refreshSession, restoreSession, useSession } from '../index'
-import { useSessionStore } from '../store'
+import { clearSession, createSession, getIdentity, getToken, refreshSession, restoreSession, useSessionState } from '../index'
+import { useSessionStore } from '../composables/use-store'
 import { sessionApi } from '../api/session'
 import { seedSession } from './fixtures'
 import { useTokenStore } from '@/store/token'
@@ -141,7 +141,7 @@ it('并发刷新合并，退出后的旧刷新不得恢复状态', async () => {
 it('读取状态不能修改内部用户资料', () => {
   seedSession()
 
-  const session = useSession()
+  const session = useSessionState()
 
   const warn = vi.spyOn(console, 'warn').mockImplementation(() => {
 
@@ -182,7 +182,7 @@ it('兼容旧顾客持久化数据，拒绝未知身份及过期数据', () => {
 
 it('会话与旧 Token 入口在时间推进后同步失效，无需手动更新时间', () => {
   seedSession()
-  const session = useSession()
+  const session = useSessionState()
   const token = useTokenStore()
   const visibleLogin = computed(() => session.hasLogin)
   const visibleToken = computed(() => session.validToken)

@@ -1,2 +1,1 @@
-export * from './useActivityGallery'
-export * from './useHorizontalScroll'
+export * from './use-gallery'

@@ -3,7 +3,7 @@
  * 商家入驻申请：姓名、电话、店铺照片（最多 9 个）、申请说明
  */
 import { useI18n } from 'vue-i18n'
-import { JOIN_APPLY_MAX_PICS, useJoinApplyPage } from './composables/useJoinApplyPage'
+import { JOIN_APPLY_MAX_PICS, useOnboardingPage } from './composables/use-page'
 
 definePage({
   style: {
@@ -12,7 +12,7 @@ definePage({
 })
 
 const { t } = useI18n()
-const vm = useJoinApplyPage()
+const vm = useOnboardingPage()
 const { name, mobile, content, picsList, submitting } = vm
 
 onLoad(() => {
@@ -55,13 +55,13 @@ onLoad(() => {
               👤
             </text>
             <text class="label-text">
-              {{ t('shop.name') }}
+              {{ t('merchantOnboarding.name') }}
             </text>
             <text class="required-mark">
               *
             </text>
           </view>
-          <wd-input v-model="name" :placeholder="t('shop.namePlaceholder')" clearable custom-class="field-input" />
+          <wd-input v-model="name" :placeholder="t('merchantOnboarding.namePlaceholder')" clearable custom-class="field-input" />
         </view>
         <view class="field-item">
           <view class="field-label">
@@ -69,13 +69,13 @@ onLoad(() => {
               📱
             </text>
             <text class="label-text">
-              {{ t('shop.mobile') }}
+              {{ t('merchantOnboarding.mobile') }}
             </text>
             <text class="required-mark">
               *
             </text>
           </view>
-          <wd-input v-model="mobile" type="number" :placeholder="t('shop.mobilePlaceholder')" clearable custom-class="field-input" />
+          <wd-input v-model="mobile" type="number" :placeholder="t('merchantOnboarding.mobilePlaceholder')" clearable custom-class="field-input" />
         </view>
       </view>
 
@@ -122,7 +122,7 @@ onLoad(() => {
               *
             </text>
           </view>
-          <wd-textarea v-model="content" :placeholder="t('shop.contentPlaceholder')" auto-height custom-class="field-textarea" custom-textarea-class="min-h-200rpx" />
+          <wd-textarea v-model="content" :placeholder="t('merchantOnboarding.contentPlaceholder')" auto-height custom-class="field-textarea" custom-textarea-class="min-h-200rpx" />
         </view>
       </view>
 
@@ -144,7 +144,7 @@ onLoad(() => {
 
     <view class="submit-section">
       <view class="submit-button" :class="{ 'opacity-60': submitting }" @tap="vm.bindSave()">
-        {{ t('shop.joinBtn') }}
+        提交入驻申请
       </view>
     </view>
 

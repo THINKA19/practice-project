@@ -11,7 +11,7 @@ describe('首页 Mock 接入契约', () => {
     vi.resetModules()
     vi.stubEnv('DEV', true)
     vi.stubEnv('VITE_USE_MOCK', 'true')
-    const { bannerApi } = await import('@/pages/home/index/api/banner')
+    const { bannerApi } = await import('@/pages/home/index/composables/use-requests')
     const banners = await bannerApi.banners('shouye')
     expect(banners.map(item => item.picUrl)).toEqual([
       '/src/mock/assets/images/home/banner/01.jpeg',

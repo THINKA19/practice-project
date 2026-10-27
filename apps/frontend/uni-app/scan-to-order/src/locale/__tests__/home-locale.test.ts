@@ -3,9 +3,10 @@ import { computed, defineComponent, h, nextTick, onMounted, ref } from 'vue'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 
 const lifecycle = vi.hoisted(() => ({ show: [] as (() => void)[], hide: [] as (() => void)[] }))
-vi.mock('@/pages/home/index/composables/usePage', () => ({
-  usePage: () => ({
+vi.mock('@/pages/home/index/composables/use-page', () => ({
+  useHomePage: () => ({
     banners: ref([]),
+    hasLogin: ref(false),
     nick: ref(''),
     avatar: ref(''),
     levelName: ref(''),
@@ -21,7 +22,7 @@ vi.mock('@/tabbar/store', async () => ({
   isPageTabbar: () => false,
 }))
 vi.mock('@/utils', () => ({ isCurrentPageTabbar: () => true }))
-vi.mock('@/pages/home/index/api/banner', () => ({ bannerApi: { banners: vi.fn() } }))
+vi.mock('@/pages/home/index/composables/use-requests', () => ({ bannerApi: { banners: vi.fn() } }))
 
 beforeEach(() => {
   lifecycle.show = []
@@ -38,7 +39,7 @@ beforeEach(() => {
 })
 afterEach(() => vi.unstubAllGlobals())
 
-it('updates the mounted home, guest card, picker and native tabs without navigating', async () => {
+it('updates the mounted home, login entry, picker and native tabs without navigating', async () => {
   const { default: i18n, setLocale } = await import('../index')
   const Home = (await import('@/pages/home/index/index.vue')).default
   const Tabbar = (await import('@/tabbar/index.vue')).default
@@ -55,15 +56,14 @@ it('updates the mounted home, guest card, picker and native tabs without navigat
   const tabs = mount(Tabbar)
   try {
     lifecycle.show.forEach(fn => fn())
-    for (const [code, guest, title, cancel, home] of [
-      ['en', 'Guest', 'Delivery Method', 'Cancel', 'Home'],
-      ['vi', 'Khách', 'Phương thức giao hàng', 'Hủy', 'Trang chủ'],
-      ['zh-Hans', '游客', '配送方式', '取消', '首页'],
+    for (const [code, login, title, cancel, home] of [
+      ['en', 'Authorize login', 'Delivery Method', 'Cancel', 'Home'],
+      ['vi', 'Đăng nhập ủy quyền', 'Phương thức giao hàng', 'Hủy', 'Trang chủ'],
+      ['zh-Hans', '授权登录', '配送方式', '取消', '首页'],
     ]) {
       setLocale(code)
       await nextTick()
-      expect(wrapper.text()).toContain(guest)
-      expect(uni.setNavigationBarTitle).toHaveBeenLastCalledWith({ title: home })
+      expect(wrapper.find('.wechat-login').text()).toBe(login)
       expect(wrapper.text()).toContain(title)
       expect(wrapper.text()).toContain(cancel)
       expect(uni.setTabBarItem).toHaveBeenCalledWith({ index: 0, text: home })
@@ -89,8 +89,8 @@ it('updates the mounted home, guest card, picker and native tabs without navigat
 
 it('translates banner feedback at click time after switching language', async () => {
   const { setLocale, t } = await import('../index')
-  const { useBanners } = await import('@/pages/home/index/composables/useBanners')
-  const banner = useBanners()
+  const { useHomeBanners } = await import('@/pages/home/index/composables/use-banners')
+  const banner = useHomeBanners()
   for (const code of ['zh-Hans', 'en', 'vi']) {
     setLocale(code)
     await banner.tapBanner('https://example.com')

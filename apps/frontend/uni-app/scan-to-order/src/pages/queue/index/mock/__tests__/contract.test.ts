@@ -9,7 +9,7 @@ it('taking a number refreshes records and rejects duplicates or invalid types', 
   vi.resetModules()
   vi.stubEnv('DEV', true)
   vi.stubEnv('VITE_USE_MOCK', 'true')
-  const { queueApi } = await import('../../api/queue')
+  const { queueApi } = await import('../../composables/use-requests')
   const types = await queueApi.types()
   expect(types).toHaveLength(4)
   expect(await queueApi.myRecords()).toEqual([])
@@ -24,7 +24,7 @@ it('runs the explicit guest demo through call, seated, and cancellation without 
   vi.resetModules()
   vi.stubEnv('DEV', true)
   vi.stubEnv('VITE_USE_MOCK', 'true')
-  const { queueApi } = await import('../../api/queue')
+  const { queueApi } = await import('../../composables/use-requests')
   await queueApi.demoAction('take', 3)
   let snapshot = await queueApi.demo()
   const record = snapshot.records[0].queuingLog
@@ -44,7 +44,7 @@ it('cancels the current customer ticket through the normal endpoint and allows t
   vi.resetModules()
   vi.stubEnv('DEV', true)
   vi.stubEnv('VITE_USE_MOCK', 'true')
-  const { queueApi } = await import('../../api/queue')
+  const { queueApi } = await import('../../composables/use-requests')
   await queueApi.take(3)
   const record = (await queueApi.myRecords())[0].queuingLog
   await queueApi.cancel(record.id)

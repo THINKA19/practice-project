@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import FgTabbar from '@/tabbar/index.vue'
+import { ConsentHost } from '@/pages/auth/agreement/ui'
 import { isPageTabbar } from './tabbar/store'
 import { currRoute } from './utils'
 
@@ -36,5 +37,6 @@ defineExpose({
     <KuRootView />
 
     <FgTabbar v-if="isCurrentPageTabbar" />
+    <ConsentHost />
   </view>
 </template>

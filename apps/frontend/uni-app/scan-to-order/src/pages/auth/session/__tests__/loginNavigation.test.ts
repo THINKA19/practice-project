@@ -1,13 +1,19 @@
-import { afterEach, expect, it, vi } from 'vitest'
-import { redirectToLogin } from '../loginNavigation'
+import { afterEach, beforeEach, expect, it, vi } from 'vitest'
+import { redirectToLogin } from '../composables/use-login-navigation'
 import { toLoginPage } from '@/utils/toLoginPage'
 
 const { getLastPage } = vi.hoisted(() => ({ getLastPage: vi.fn() }))
-vi.mock('@/utils', () => ({ getLastPage }))
+beforeEach(() => {
+  vi.stubGlobal('getCurrentPages', () => {
+    const page = getLastPage()
+    return page ? [page] : []
+  })
+})
 
 afterEach(() => {
   redirectToLogin.cancel()
   vi.useRealTimers()
+  vi.unstubAllGlobals()
 })
 
 it.each([

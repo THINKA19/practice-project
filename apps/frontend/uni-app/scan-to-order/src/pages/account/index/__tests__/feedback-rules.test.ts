@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildFeedbackExt } from '@/pages/account/index'
+import { buildFeedbackExt } from '@/pages/account/profile/feedback'
 
 describe('system.buildFeedbackExt', () => {
   it('保留姓名/电话并跳过上传失败的附件下标', () => {

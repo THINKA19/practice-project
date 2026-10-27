@@ -4,10 +4,11 @@
  */
 import { useI18n } from 'vue-i18n'
 
-import MyAssetCards from './components/MyAssetCards.vue'
-import MyMenuItem from './components/MyMenuItem.vue'
-import MyUserCard from './components/MyUserCard.vue'
-import { usePage } from './composables/usePage'
+import MyAssetCards from './components/MyAssetCards/index.vue'
+import MyBanner from './components/MyBanner/index.vue'
+import MyMenuItem from './components/MyMenuItem/index.vue'
+import MyUserCard from './components/MyUserCard/index.vue'
+import { useAccountPage } from './composables/use-page'
 
 definePage({
   style: {
@@ -17,8 +18,8 @@ definePage({
 })
 
 const { t } = useI18n()
-const vm = usePage()
-const { user, nick, avatar, uid, canHX, couponCount, balance, score, assetStatus, myBg, customerServiceType } = vm
+const vm = useAccountPage()
+const { user, nick, avatar, couponCount, balance, score, assetStatus, myBg, customerServiceType } = vm
 
 onLoad(() => {
   vm.init()
@@ -36,20 +37,19 @@ onShow(() => {
         :my-bg="myBg"
         :avatar="avatar"
         :nick="nick"
-        :uid="uid"
+        :has-login="!!user"
         :level-name="user?.userLevel?.name"
         @choose-avatar="vm.onChooseAvatar"
         @edit-nick="vm.editNick"
-        @copy-uid="vm.copyuid"
+        @login="vm.login"
         @vip="vm.govip"
         @user-code="vm.goUserCode"
       />
 
-      <view v-if="!user" class="h-96rpx" />
+      <MyBanner @select="vm.navTo" />
 
       <!-- 资产 -->
       <MyAssetCards
-        v-if="user"
         :coupon-count="couponCount"
         :balance="balance"
         :score="score"
@@ -67,7 +67,7 @@ onShow(() => {
             <text>常用功能</text>
           </view>
           <view class="mb-16rpx flex gap-20rpx">
-            <view v-if="canHX" class="menu-item" @tap="vm.scanOrderCode">
+            <view class="menu-item" @tap="vm.scanOrderCode">
               <view class="menu-icon-wrapper from-#E3F2FD to-#BBDEFB bg-gradient-to-br">
                 <wd-icon name="scan" size="22px" color="#2196F3" />
               </view>
@@ -109,7 +109,6 @@ onShow(() => {
             <text>我的服务</text>
           </view>
           <view class="menu-list">
-            <MyMenuItem icon="trophy" :text="t('vip.title')" from="#FFF8E1" to="#FFECB3" color="#FFA000" @select="vm.navTo('会员中心')" />
             <MyMenuItem icon="list" :text="t('account.orders')" from="#E8F5E9" to="#C8E6C9" color="#4CAF50" @select="vm.navTo('我的订单')" />
             <MyMenuItem icon="location" :text="t('account.address')" from="#E3F2FD" to="#BBDEFB" color="#2196F3" @select="vm.navTo('收货地址')" />
           </view>
@@ -125,7 +124,6 @@ onShow(() => {
             <MyMenuItem icon="info-circle" :text="t('account.aboutUs')" from="#F3E5F5" to="#E1BEE7" color="#9C27B0" @select="vm.navTo('关于我们')" />
             <MyMenuItem v-if="customerServiceType === 'QW'" icon="headset" :text="t('account.Contact')" from="#E0F2F1" to="#B2DFDB" color="#009688" @select="vm.customerService" />
             <MyMenuItem icon="message" :text="t('account.feedback')" from="#FFF3E0" to="#FFE0B2" color="#FF9800" @select="vm.navTo('意见反馈')" />
-            <MyMenuItem icon="delete" :text="t('account.clearStorage')" from="#FFEBEE" to="#FFCDD2" color="#F44336" @select="vm.clearStorage" />
           </view>
         </view>
 

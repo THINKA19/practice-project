@@ -1,4 +1,5 @@
 {
+  "refund": { "title": "After-sales request", "myRefund": "My requests", "selectGoods": "Select an item", "notSupport": "After-sales unavailable", "goodsInfo": "Item information", "refundNumber": "Quantity", "refundType": "Request type", "logisticsStatus": "Delivery status", "refundReason": "Reason", "refundRemark": "Description", "refundRemarkOptional": "Optional", "refundRemarkPlaceholder": "Describe the problem", "uploadProof": "Upload evidence", "uploadProofOptional": "Up to 9 images, optional", "submitBtn": "Submit request", "type0": "Refund only", "type1": "Return and refund", "type2": "Exchange", "logisticsStatus0": "Not received", "logisticsStatus1": "Received", "reasons": ["Quality issue", "Item not as described", "Missing or incorrect items", "Other"], "applyingTip": "A request is already being processed", "submitFail": "Submission failed. Please retry", "submitSuccess": "Submitted", "cancelSuccess": "Request cancelled", "fillLogistics": "Return shipping", "logisticsCompany": "Shipping company", "logisticsCompanyPlaceholder": "Enter shipping company", "logisticsNumber": "Tracking number", "logisticsNumberPlaceholder": "Enter tracking number", "logisticsTip": "Enter shipping information after the return is approved", "submitLogistics": "Submit shipping information", "cancelApply": "Cancel request", "contactService": "Contact support", "detailTitle": "Request details", "status": { "s3": "Processing", "s1": "Accepted", "s4": "Completed", "s2": "Rejected", "s-1": "Cancelled", "s0": "Pending review" }, "applyTime": "Request time", "proofImages": "Evidence", "backAddress": "Return address", "backAddressDetail": "Address", "backAddressName": "Recipient", "backAddressPhone": "Phone", "logisticsFilled": "Shipping information saved", "missingOrder": "Missing order number. Open this page from My orders", "empty": "No items available for after-sales", "loading": "Loading request details", "retry": "Retry" },
   "tabbar": {
     "pickup1": "Pickup 1",
     "home": "Home",
@@ -129,6 +130,7 @@
       "agreeRequired": "Please agree to the agreement first"
     },
     "receive": {
+      "unavailable": "This gift link is unavailable or has expired",
       "title": "Receive Gift Card",
       "friend": "Friend",
       "sharePlaceholder": "sent you a gift card",
@@ -441,6 +443,31 @@
     "refresh": "Refresh queue"
   },
   "auth": {
+    "privacyConsent": {
+      "title": "Service Agreement and Privacy Policy Summary",
+      "summary": "Welcome to our ordering service. We value your personal information and privacy. Before making your choice, please read the Privacy Policy carefully, including the purposes and scope of data collection, how information is used and retained, and your rights.",
+      "account": "You can browse public store information and menus without signing in. When you choose WeChat login or account features, the relevant account identifiers, login status and business records are processed as needed for those features. We do not obtain your phone number or contact WeChat ID through WeChat login. An avatar and nickname are not required for browsing.",
+      "usage": "Information should be used for the account identification, order ownership, queueing or reservation services you choose. This confirmation does not automatically authorize marketing, disclosure to unrelated parties, membership enrollment or every permission. Delivery contact details, image uploads and other permissions require explanations in the relevant context. Read the full policy for details about retention, third-party services and your rights.",
+      "choice": "Choose Agree or Disagree freely. If you disagree, you may continue browsing public content and reconsider when you request an account feature. Refreshing or leaving without choosing does not count as agreement or refusal. We save your choice and the policy version only after you explicitly select a button.",
+      "read": "Read the full Privacy Policy",
+      "accept": "Agree",
+      "reject": "Disagree",
+      "orders": "Orders and service records: When you choose ordering, queueing, reservations or after-sales services, relevant records may include the store, items, quantities, notes, service time, order status and necessary details you provide. Browsing a menu does not itself require all transaction or contact details. Delivery addresses and contact information should be explained and requested only in the relevant service.",
+      "permissions": "Device permissions and images: Accepting this summary does not grant every camera, photo or location permission. A relevant feature should explain its purpose and follow platform authorization rules when you choose to use it. Selecting one image does not authorize access to your full photo library, chats or social posts. Optional permissions are not required for public browsing.",
+      "storage": "Local storage and scope: The app saves the policy choice and version, and necessary account session information, on your device as needed. Until the current privacy version is accepted, customer sessions are suspended, cached personal profiles are hidden, and profile and credential refreshes are stopped. Suspension is different from account deletion; a valid session can resume after acceptance.",
+      "security": "Information protection and external services: Access, transmission and use of personal information should follow the purposes of the service and restrict unrelated access. External services such as WeChat have their own notices. The full policy and feature explanations should identify actual providers and data uses. This choice does not automatically authorize unrelated marketing, wider sharing or extra permissions.",
+      "rights": "Your choices and rights: You decide whether to sign in or provide optional information. An avatar or nickname is not required to view menus. Depending on applicable rules, you may request access, correction, deletion or account closure. Signing out, withdrawing consent and closing an account have different effects. Retention of transaction records depends on their purpose and applicable requirements. Refer to the operator’s published contact channels.",
+      "updates": "Full documents and changes: This summary highlights key matters and does not replace the Service Agreement and Privacy Policy. Read the complete documents for service scope, data categories, retention, external providers and your rights. Changes in data-processing purposes, methods or scope require updated explanations and renewed consent where applicable; display wording alone does not expand your authorization.",
+      "scope": "Scope and reading: This summary covers public store browsing, account login and ordering-related services you actively choose. Swipe within this text area to read all sections; the heading and choice buttons stay in place. You are not required to provide every personal detail at once. Availability and information requirements depend on the specific service explanation.",
+      "optional": "Optional profile details: A WeChat avatar or nickname is not a prerequisite for viewing stores and menus. If you choose to edit your profile, decide what to submit and avoid unrelated identity numbers, bank details or another person’s private contacts. Display names and avatars do not establish a real name, age or account ownership.",
+      "accuracy": "Checking service details: Review the store, items, quantities, notes, dates and service method when using orders, reservations or queueing. Avoid placing unrelated private details in notes. Contact information should be explained and confirmed when needed. A WeChat identity, delivery contact and actual customer may differ; a nickname or avatar does not replace checking an order and its recipient.",
+      "necessary": "Necessary information and choice: Each service has different requirements. A possible future need for contact details does not justify requesting them from every visitor. You may withhold information or permissions unnecessary for public browsing and decide again when choosing a relevant service. One acceptance should not be treated as permanent or unlimited authorization for every future feature.",
+      "retention": "Retention and completion: Retain information for actual service purposes and applicable requirements rather than indefinitely for unspecified future use. Profile data, temporary login state, transaction records and privacy choices have different purposes and may have different retention rules. The operator should publish those rules and limit further use of records that must be retained.",
+      "device": "Shared devices and sessions: When sharing a phone, tablet or computer, distinguish users and accounts so others do not see your orders, bookings or membership information. Check your login state after using a public device and sign out as appropriate. Ending a local session is not account deletion. A locally stored privacy choice does not make a decision for people using other devices.",
+      "sharing": "External processing and display: Sharing information with another provider, engaging a processor and showing profile details are different uses that require clear purposes and scope. WeChat login does not authorize publishing orders or profiles publicly or providing them to unrelated stores. Actual providers, data uses and protections should be explained in the published policy and feature notices.",
+      "requests": "Questions and requests: Use the operator’s published channels for questions about information sources, purposes and retention. Access, correction, deletion or closure requests should use verification proportionate to the request, without unrelated collection for a simple inquiry. Consider other users’ rights in shared orders. Screenshots or display names alone should not change account ownership."
+    },
+    "authorizeLogin": "Authorize login",
     "login": "Sign in",
     "register": "Register",
     "loginTitle": "Welcome back",
@@ -486,13 +513,26 @@
     "wxLogout": "Sign out",
     "wxDifferentRole": "Sign out of the current identity before signing in as a customer"
   },
+  "merchantOnboarding": { "join": "Merchant application", "name": "Contact name", "namePlaceholder": "Enter contact name", "mobile": "Phone number", "mobilePlaceholder": "Enter phone number", "contentPlaceholder": "Describe your shop and application", "nameRequired": "Enter contact name", "mobileRequired": "Enter phone number" },
   "account": {
+    "logout": {
+      "title": "Sign out",
+      "confirm": "Sign out of this account?",
+      "success": "Signed out",
+      "localOnly": "Signed out on this device. Server sign-out could not be completed."
+    },
+    "profile": {
+      "address": { "title": "Delivery addresses", "add": "Add address", "empty": "No address information", "pleaseAdd": "Tap the button to add an address", "linkMan": "Contact", "linkManPlaceholder": "Enter recipient name", "mobile": "Phone", "mobilePlaceholder": "Enter a phone number matching the selected country", "region": "Region", "regionPlaceholder": "Select a region for the delivery country", "location": "Map location", "address": "Address", "addressPlaceholder": "Enter street and unit details", "apiError": "Address details are unavailable", "deleteProfile": "Delete this address?", "save": "Save address", "select": "Select", "retry": "Refresh", "unavailable": "Addresses are temporarily unavailable", "default": "Default", "setDefault": "Set default", "edit": "Edit", "remove": "Delete", "countryPlaceholder": "Select a delivery country", "mobileInvalid": "Invalid phone number. Check the number and country code." },
+      "welcome": "Welcome",
+      "wechatUser": "WeChat user",
+      "wechatLogin": "WeChat login"
+    },
+    "sign": { "button": "Check in today", "signed": "Checked in today", "success": "Check-in successful" },
     "scanHx": "Scan to verify",
     "signDaily": "Daily check-in",
     "youhuimaidan": "Discount payment",
     "aboutUs": "About us",
     "Contact": "Contact support",
-    "clearStorage": "Clear cache",
     "score": "Points",
     "uid": "User ID",
     "nickSet": "Log in",

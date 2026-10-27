@@ -1,9 +1,12 @@
-import { afterEach, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { toLoginPage } from '../toLoginPage'
 
-vi.mock('@/utils', () => ({ getLastPage: () => ({ route: 'pages/pickup/index/index', $page: { fullPath: '/pages/pickup/index/index?order=1' } }) }))
+beforeEach(() => {
+  vi.stubGlobal('getCurrentPages', () => [{ route: 'pages/pickup/index/index', $page: { fullPath: '/pages/pickup/index/index?order=1' } }])
+})
 afterEach(() => {
   toLoginPage.cancel()
+  vi.unstubAllGlobals()
 })
 it('preserves the current destination when opening login manually', () => {
   toLoginPage()

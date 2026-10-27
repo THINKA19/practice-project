@@ -5,10 +5,8 @@
  * 【综合使用示例】import { sessionApi } from '@/pages/auth/session/api/session'
  * ============================================================================
  */
-import type { SessionIdentity } from '../models/identity'
-import type { IAuthLoginRes } from '../models/session'
-import type { IUserInfoRes } from '../models/user'
-import { http as alova } from '@/http/alova'
+import type { IAuthLoginRes, IUserInfoRes, SessionIdentity } from '../models/types'
+
 import { USE_MOCK } from '@/mock/config'
 import { endpoints } from './endpoints'
 
@@ -29,13 +27,22 @@ function pathFor(identity: SessionIdentity, action: 'Profile' | 'Refresh' | 'Log
 }
 /** 获取候选凭证身份。@param identity 预期端。@param token 候选凭证。@returns 服务端资料。@example await sessionApi.profile('customer', token) */
 export const sessionApi = {
-  profile: (identity: SessionIdentity, token: string): Promise<IUserInfoRes> => USE_MOCK && token.startsWith('wx-demo-session-')
-    ? alova.Get<IUserInfoRes>(endpoints.demoProfile, { ...flags, headers: { Authorization: `Bearer ${token}` } }).send()
-    : alova.Get<IUserInfoRes>(pathFor(identity, 'Profile'), { ...flags, headers: { Authorization: `Bearer ${token}` } }).send(),
-  refresh: (identity: SessionIdentity, refreshToken: string): Promise<IAuthLoginRes> => USE_MOCK && refreshToken.startsWith('refresh-wx-demo-session-')
-    ? alova.Post<IAuthLoginRes>(endpoints.demoRefresh, { refreshToken }, flags).send()
-    : alova.Post<IAuthLoginRes>(pathFor(identity, 'Refresh'), { refreshToken }, flags).send(),
-  logout: (identity: SessionIdentity, token: string): Promise<unknown> => USE_MOCK && token.startsWith('wx-demo-session-')
-    ? alova.Post(endpoints.demoLogout, {}, { ...flags, headers: { Authorization: `Bearer ${token}` } }).send()
-    : alova.Get(pathFor(identity, 'Logout'), { ...flags, headers: { Authorization: `Bearer ${token}` } }).send(),
+  profile: async (identity: SessionIdentity, token: string): Promise<IUserInfoRes> => {
+    const { http: alova } = await import('@/http/alova')
+    return USE_MOCK && token.startsWith('wx-demo-session-')
+      ? alova.Get<IUserInfoRes>(endpoints.demoProfile, { ...flags, headers: { Authorization: `Bearer ${token}` } }).send()
+      : alova.Get<IUserInfoRes>(pathFor(identity, 'Profile'), { ...flags, headers: { Authorization: `Bearer ${token}` } }).send()
+  },
+  refresh: async (identity: SessionIdentity, refreshToken: string): Promise<IAuthLoginRes> => {
+    const { http: alova } = await import('@/http/alova')
+    return USE_MOCK && refreshToken.startsWith('refresh-wx-demo-session-')
+      ? alova.Post<IAuthLoginRes>(endpoints.demoRefresh, { refreshToken }, flags).send()
+      : alova.Post<IAuthLoginRes>(pathFor(identity, 'Refresh'), { refreshToken }, flags).send()
+  },
+  logout: async (identity: SessionIdentity, token: string): Promise<unknown> => {
+    const { http: alova } = await import('@/http/alova')
+    return USE_MOCK && token.startsWith('wx-demo-session-')
+      ? alova.Post(endpoints.demoLogout, {}, { ...flags, headers: { Authorization: `Bearer ${token}` } }).send()
+      : alova.Get(pathFor(identity, 'Logout'), { ...flags, headers: { Authorization: `Bearer ${token}` } }).send()
+  },
 }

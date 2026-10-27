@@ -5,7 +5,7 @@ import type { RemoveLeadingSlashFromUnion } from '@/typings'
 /**
  * 原生 tabbar 的单个选项配置
  */
-export type NativeTabBarItem = TabBar['list'][number] & {
+export type NativeTabBarItem = NonNullable<TabBar['list']>[number] & {
   pagePath: RemoveLeadingSlashFromUnion<_LocationUrl>
 }
 
