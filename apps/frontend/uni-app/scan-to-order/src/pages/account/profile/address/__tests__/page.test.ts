@@ -4,7 +4,7 @@ import { beforeEach, expect, it, vi } from 'vitest'
 import { navigate } from '@/utils/project/navigation'
 import { useAddressPage } from '../composables/use-page'
 import { addressApi } from '../composables/use-requests'
-import { confirm, showError, toast } from '@/utils/project/interaction'
+import { chooseLocation, confirm, showError, toast } from '@/utils/project/interaction'
 import { requireIdentity } from '@/pages/auth/session'
 
 const session = reactive({ sessionRevision: 0, hasLogin: true, identity: 'customer' })
@@ -16,7 +16,7 @@ vi.mock('@/pages/auth/session', () => ({
   requireIdentity: vi.fn(() => true),
 }))
 vi.mock('../composables/use-requests', () => ({ addressApi: { add: vi.fn(), update: vi.fn(), remove: vi.fn(), list: vi.fn(), detail: vi.fn(), setDefault: vi.fn(), provinces: vi.fn(), children: vi.fn() } }))
-vi.mock('@/utils/project/interaction', () => ({ back: vi.fn(), showError: vi.fn(), toast: vi.fn(), alert: vi.fn(), setTitle: vi.fn(), confirm: vi.fn(), withLoading: (action: () => Promise<unknown>) => action() }))
+vi.mock('@/utils/project/interaction', () => ({ chooseLocation: vi.fn(), back: vi.fn(), showError: vi.fn(), toast: vi.fn(), alert: vi.fn(), setTitle: vi.fn(), confirm: vi.fn(), withLoading: (action: () => Promise<unknown>) => action() }))
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -25,6 +25,42 @@ beforeEach(() => {
   vi.mocked(navigate).mockResolvedValue({ ok: true })
   vi.mocked(addressApi.list).mockResolvedValue([])
   session.sessionRevision++
+})
+
+it('地图确认回填地址与坐标，改变文字地址后清除旧坐标', async () => {
+  const scope = effectScope()
+  const page = scope.run(useAddressPage)!
+  page.addAddress()
+  vi.mocked(chooseLocation).mockResolvedValue({ name: '收货位置', address: '一号街', latitude: 10.7, longitude: 106.6 })
+  await page.locateAddress()
+  expect(page.addressData.value).toMatchObject({ address: '一号街', latitude: 10.7, longitude: 106.6 })
+  page.setField('address', '二号街')
+  expect(page.addressData.value.latitude).toBeUndefined()
+  expect(page.addressData.value.longitude).toBeUndefined()
+  scope.stop()
+})
+
+it('取消定位保留草稿；退出编辑或换号后忽略迟到定位', async () => {
+  const scope = effectScope()
+  const page = scope.run(useAddressPage)!
+  page.addAddress()
+  page.setField('address', '原地址')
+  vi.mocked(chooseLocation).mockRejectedValueOnce({ errMsg: 'chooseLocation:fail cancel' })
+  await page.locateAddress()
+  expect(page.addressData.value.address).toBe('原地址')
+  expect(toast).not.toHaveBeenCalled()
+  let resolve!: (place: UniApp.ChooseLocationSuccess) => void
+  vi.mocked(chooseLocation).mockReturnValueOnce(new Promise((done) => {
+    resolve = done
+  }))
+  const pending = page.locateAddress()
+  expect(page.locating.value).toBe(true)
+  page.editCancel()
+  resolve({ name: '旧位置', address: '旧位置', latitude: 10, longitude: 106 })
+  await pending
+  expect(page.addressData.value.address).toBe('原地址')
+  expect(page.locating.value).toBe(false)
+  scope.stop()
 })
 
 it('未登录点击新增先引导登录，不打开地址表单；登录后才能填写', () => {
@@ -98,11 +134,15 @@ it('管理模式设置默认地址后更新标签并留在当前页面', async (
   scope.stop()
 })
 
-it('结算选择模式设置默认地址成功后返回', async () => {
+it('结算选择模式返回本次地址，不修改默认地址', async () => {
   const scope = effectScope()
-  const page = scope.run(useAddressPage)!
-  vi.mocked(addressApi.setDefault).mockResolvedValue(undefined)
-  await page.selectTap(2, true)
+  const selected = vi.fn()
+  const page = scope.run(() => useAddressPage(selected))!
+  page.init({ select: '1' })
+  page.addressList.value = [{ id: 2, linkMan: '顾客', mobile: '+84912345678', address: '二号' }]
+  await page.chooseAddress(2)
+  expect(selected).toHaveBeenCalledWith(expect.objectContaining({ id: 2 }))
+  expect(addressApi.setDefault).not.toHaveBeenCalled()
   expect(navigate).toHaveBeenCalledWith('/pages/home/index/index')
   scope.stop()
 })
@@ -151,10 +191,11 @@ it('当前默认地址不重复提交，结算选择当前默认地址直接返�
   const scope = effectScope()
   const page = scope.run(useAddressPage)!
   page.addressList.value = [{ id: 7, linkMan: '顾客', mobile: '+84912345678', address: '测试地址', isDefault: true }]
-  await page.selectTap(7, false)
+  await page.selectTap(7)
   expect(addressApi.setDefault).not.toHaveBeenCalled()
   expect(navigate).not.toHaveBeenCalled()
-  await page.selectTap(7, true)
+  page.init({ select: '1' })
+  await page.chooseAddress(7)
   expect(addressApi.setDefault).not.toHaveBeenCalled()
   expect(navigate).toHaveBeenCalledOnce()
   scope.stop()
@@ -174,6 +215,29 @@ it('完整表单保存国际手机号及国家地区，第二条地址不抢占�
   expect(toast).not.toHaveBeenCalled()
   expect(addressApi.add).toHaveBeenCalledWith(expect.objectContaining({ countryCode: 'VN', regionText: '胡志明市', mobile: '+84912345678', isDefault: false }))
   expect(page.addressEdit.value).toBe(false)
+  scope.stop()
+})
+
+it('结算模式新增保存后使用新地址并返回，不修改已有默认地址', async () => {
+  const scope = effectScope()
+  const selected = vi.fn()
+  const page = scope.run(() => useAddressPage(selected))!
+  page.init({ select: '1' })
+  const original = { id: 1, linkMan: '原地址', mobile: '+84912345678', address: '旧地址', isDefault: true }
+  const added = { id: 2, linkMan: '新顾客', mobile: '+84912345678', phoneCountry: 'VN', countryCode: 'VN', regionText: '胡志明市', address: '新街道', isDefault: false }
+  page.addressList.value = [original]
+  page.addAddress()
+  for (const [field, value] of Object.entries(added)) {
+    if (['linkMan', 'mobile', 'phoneCountry', 'countryCode', 'regionText', 'address'].includes(field))
+      page.setField(field as 'linkMan' | 'mobile' | 'phoneCountry' | 'countryCode' | 'regionText' | 'address', String(value))
+  }
+  vi.mocked(addressApi.add).mockResolvedValueOnce(added)
+  vi.mocked(addressApi.list).mockResolvedValueOnce([original, added])
+  await page.bindSave()
+  expect(selected).toHaveBeenCalledWith(added)
+  expect(addressApi.setDefault).not.toHaveBeenCalled()
+  expect(page.addressList.value.find(item => item.id === 1)?.isDefault).toBe(true)
+  expect(navigate).toHaveBeenCalledWith('/pages/home/index/index')
   scope.stop()
 })
 

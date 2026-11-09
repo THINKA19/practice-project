@@ -5,12 +5,14 @@ import { withFailure } from '@/mock/scenario'
 import { canCancel, canDeleteInList } from '../domain/order.rules'
 import { endpoints } from '../api/endpoints'
 
+import { checkout } from './checkout'
 import { goodsFor, rows } from './state'
 import { applyRefund, cancelRefund, refundRecords } from './refunds'
 
 export { reset } from './state'
 
 export default defineMock({
+  [`[POST]${endpoints.create}`]: withFailure(({ headers, data }) => checkout(headers.Authorization, data as Record<string, unknown>), { write: true }),
   [`[GET]${endpoints.refundApplyDetail}`]: withFailure(({ headers, query }) => {
     const { list } = refundRecords(headers.Authorization, query.orderId)
     return ok(list.filter(item => !query.orderGoodsId || item.baseInfo.orderGoodsId === Number(query.orderGoodsId)))

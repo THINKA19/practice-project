@@ -3,8 +3,8 @@ import { effectScope } from 'vue'
 import { useLoginFlow } from '../composables/use-flow'
 import { enablePrivacyConsent, finishPrivacyConsent } from '../../agreement/composables/use-privacy-consent'
 
-const mocks = vi.hoisted(() => ({ start: vi.fn(), wxCode: vi.fn() }))
-vi.mock('../api/login.api', () => ({ loginApi: { start: mocks.start } }))
+const mocks = vi.hoisted(() => ({ start: vi.fn(), wxCode: vi.fn(), confirmDemo: vi.fn(), exchange: vi.fn() }))
+vi.mock('../api/login.api', () => ({ loginApi: { demo: true, start: mocks.start, confirmDemo: mocks.confirmDemo, exchange: mocks.exchange } }))
 vi.mock('../../session/api/session', () => ({ sessionApi: {} }))
 vi.mock('../composables/use-wechat-credential', () => ({ getWxCode: mocks.wxCode }))
 vi.mock('../composables/use-wechat-environment', () => ({ getWechatEnvironment: () => ({ channel: 'mini', mobileBrowser: false }) }))
@@ -32,6 +32,8 @@ it('完整登录页拒绝隐私时不申请票据，重新接受后继续原登�
   await accepted
   expect(mocks.start).toHaveBeenCalledOnce()
   expect(login.ticket.value?.id).toBe('ticket')
+  expect(mocks.confirmDemo).not.toHaveBeenCalled()
+  expect(mocks.exchange).not.toHaveBeenCalled()
   scope.stop()
 })
 

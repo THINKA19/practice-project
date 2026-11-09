@@ -1,6 +1,8 @@
 /** 真实微信接口为前端契约，需服务端配置微信应用后实现。 */
 export const endpoints = {
   start: '/auth/wechat/start',
+  smsSend: '/auth/sms/send',
+  smsExchange: '/auth/sms/exchange',
   status: '/auth/wechat/status',
   exchange: '/auth/wechat/exchange',
   demoStart: '/demo/auth/wechat/start',

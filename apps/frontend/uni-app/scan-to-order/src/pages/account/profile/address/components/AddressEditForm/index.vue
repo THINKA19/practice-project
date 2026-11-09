@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { PhoneInput } from '@/components/phone-input'
+import type { PhoneInputHandle } from '@/components/phone-input'
 import { useI18n } from 'vue-i18n'
 import { useForm } from './use-address-edit-form'
 import type { FormProps } from './types'
@@ -10,9 +13,15 @@ const emit = defineEmits<{
   input: [field: 'linkMan' | 'mobile' | 'address' | 'phoneCountry' | 'countryCode' | 'regionText', value: string]
   save: []
   cancel: []
+  locate: []
 }>()
 const { t } = useI18n()
-const { sheet, phoneValue, phoneEditing, phoneError, inputPhone, blurPhone, save, phoneCountry, countryName, options, choose } = useForm(props, emit)
+const { sheet, countryName, options, choose } = useForm(props, emit)
+const phoneField = ref<PhoneInputHandle>()
+function save() {
+  if (phoneField.value?.validate())
+    emit('save')
+}
 </script>
 
 <template>
@@ -26,20 +35,9 @@ const { sheet, phoneValue, phoneEditing, phoneError, inputPhone, blurPhone, save
         <input class="field" :disabled="saving" :value="draft.linkMan" :placeholder="t('account.profile.address.linkManPlaceholder')" @input="emit('input', 'linkMan', $event.detail.value)">
       </view>
       <view class="row-wrap">
-        <text class="label"><text class="required">*</text>{{ t('account.profile.address.mobile') }}</text>
-        <view class="phone-input-group min-w-0 flex-1">
-          <view class="phone-fields">
-            <view class="country-picker phone-prefix" role="button" aria-label="选择手机国家区号" @tap="!saving && (sheet = 'phone')">
-              <view class="phone-country-value">
-                {{ phoneCountry.name }} +{{ phoneCountry.dial }}
-              </view>
-              <text class="phone-switch">切换</text>
-            </view>
-            <input class="field" type="text" :disabled="saving" :value="phoneValue" :maxlength="22" placeholder="请输入手机号" :aria-invalid="phoneError" @focus="phoneEditing = true" @blur="blurPhone" @input="inputPhone($event.detail.value)">
-          </view>
-          <view v-if="phoneError" class="phone-error" role="alert">
-            {{ t(phoneValue.trim() ? 'account.profile.address.mobileInvalid' : 'account.profile.address.mobilePlaceholder') }}
-          </view>
+        <text class="label phone-label"><text class="required">*</text>{{ t('account.profile.address.mobile') }}</text>
+        <view class="min-w-0 flex-1">
+          <phone-input ref="phoneField" :model-value="draft.mobile" :country="draft.phoneCountry" :disabled="saving" required @update:model-value="emit('input', 'mobile', $event)" @update:country="emit('input', 'phoneCountry', $event)" />
         </view>
       </view>
       <view class="row-wrap">
@@ -59,7 +57,13 @@ const { sheet, phoneValue, phoneEditing, phoneError, inputPhone, blurPhone, save
         <textarea class="field detail-input" :disabled="saving" :value="draft.address" :placeholder="t('account.profile.address.addressPlaceholder')" auto-height :maxlength="300" @input="emit('input', 'address', $event.detail.value)" />
       </view>
     </view>
-    <button class="save-btn" :loading="saving" :disabled="saving" @tap="save">
+    <button class="location-btn" :loading="locating" :disabled="saving || locating" @tap="emit('locate')">
+      {{ draft.latitude != null && draft.longitude != null ? '重新选择地图位置' : '补充地图定位（选填）' }}
+    </button>
+    <view v-if="draft.latitude != null && draft.longitude != null" class="text-24rpx text-#666">
+      已保存地址定位
+    </view>
+    <button class="save-btn" :loading="saving" :disabled="saving || locating" @tap="save">
       {{ t('account.profile.address.save') }}
     </button>
     <button class="cancel-btn" :disabled="saving" @tap="emit('cancel')">
@@ -68,11 +72,11 @@ const { sheet, phoneValue, phoneEditing, phoneError, inputPhone, blurPhone, save
     <wd-popup :model-value="!!sheet" position="bottom" round closable safe-area-inset-bottom custom-style="background-color: #FFFFFF;" @close="sheet = ''">
       <view class="country-sheet">
         <view class="mb-24rpx text-center text-32rpx font-600">
-          {{ sheet === 'phone' ? '选择手机区号' : sheet === 'area' ? '选择所在地区' : '选择配送国家' }}
+          {{ sheet === 'area' ? '选择所在地区' : '选择配送国家' }}
         </view>
         <view v-for="country in options" :key="country.code" class="sheet-option" @tap="choose(country.code)">
           <text>{{ country.name }}</text>
-          <wd-icon v-if="country.code === (sheet === 'phone' ? draft.phoneCountry : sheet === 'area' ? draft.regionText : draft.countryCode)" name="check" color="#ea8d79" />
+          <wd-icon v-if="country.code === (sheet === 'area' ? draft.regionText : draft.countryCode)" name="check" color="#ea8d79" />
         </view>
       </view>
     </wd-popup>
@@ -105,25 +109,6 @@ const { sheet, phoneValue, phoneEditing, phoneError, inputPhone, blurPhone, save
 .form-panel .row-wrap:last-child {
   border-bottom: 0;
 }
-.phone-fields {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
-}
-.phone-error {
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  line-height: 36rpx;
-  color: #d84a45;
-}
-.phone-prefix {
-  flex-shrink: 0;
-  gap: 6rpx;
-  border-right: 1px solid #c9c9c9;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 8rpx 16rpx 8rpx 0;
-}
 .field.field-disabled {
   color: #bbb;
 }
@@ -136,15 +121,6 @@ const { sheet, phoneValue, phoneEditing, phoneError, inputPhone, blurPhone, save
   font-size: 24rpx;
   line-height: 36rpx;
   color: #777;
-}
-.phone-country-value {
-  font-size: 24rpx;
-  line-height: 34rpx;
-}
-.phone-switch {
-  font-size: 22rpx;
-  line-height: 30rpx;
-  color: #c96f60;
 }
 .label {
   display: flex;
@@ -166,6 +142,9 @@ const { sheet, phoneValue, phoneEditing, phoneError, inputPhone, blurPhone, save
   margin-right: 8rpx;
   line-height: inherit;
   color: #d84a45;
+}
+.label.phone-label {
+  width: 112rpx;
 }
 .field {
   box-sizing: border-box;
@@ -204,6 +183,7 @@ const { sheet, phoneValue, phoneEditing, phoneError, inputPhone, blurPhone, save
   min-height: 100rpx;
   padding-top: 0;
 }
+.location-btn,
 .save-btn,
 .cancel-btn {
   height: 96rpx;
@@ -215,6 +195,11 @@ const { sheet, phoneValue, phoneEditing, phoneError, inputPhone, blurPhone, save
   margin-top: 24rpx;
   font-size: 30rpx;
   border-radius: 48rpx;
+}
+.location-btn {
+  font-size: 26rpx;
+  color: #8b4513;
+  background: #fff;
 }
 .save-btn {
   color: #ffffff;

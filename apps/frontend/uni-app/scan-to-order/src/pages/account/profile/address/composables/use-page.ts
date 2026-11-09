@@ -1,20 +1,21 @@
+import { internationalPhone, phoneCountryOf } from '@/utils/project/phone'
 import { ClientRoutes } from '@/pages/routes'
 import { navigate } from '@/utils/project/navigation'
-/** 收货地址管理：多国电话、东南亚配送国家与文字地址；不依赖地图。 */
+/** 收货地址管理：多国电话、东南亚配送国家、文字地址与可选地图位置。 */
 import { ref } from 'vue'
 import type { Address, AddressDraft, AddressForm } from '../models/types'
 import { useI18n } from 'vue-i18n'
 import { requireIdentity, useSessionAccountScope, useSessionState } from '@/pages/auth/session'
 import { addressApi } from './use-requests'
-import { checkAddressDraft, defaultAddressFirst, internationalPhone, phoneCountryOf, validateAddress } from '../domain/address.rules'
+import { checkAddressDraft, defaultAddressFirst, validateAddress } from '../domain/address.rules'
 
-import { alert, confirm, setTitle, showError, toast, withLoading } from '@/utils/project/interaction'
+import { alert, chooseLocation, confirm, setTitle, showError, toast, withLoading } from '@/utils/project/interaction'
 
 function emptyDraft(): AddressDraft {
   return { linkMan: '', mobile: '', address: '', phoneCountry: 'VN', countryCode: '', regionText: '' }
 }
 /** 拥有地址列表、编辑草稿与保存流程；列表和编辑请求分别编号，换号或销毁后不回写旧数据。 */
-export function useAddressPage() {
+export function useAddressPage(onSelect?: (address: Address) => void) {
   const { t } = useI18n()
   const session = useSessionState()
 
@@ -24,6 +25,8 @@ export function useAddressPage() {
   const loading = ref(false)
   const editingLoading = ref(false)
   const selectionMode = ref(false)
+  const selectedId = ref('')
+  const choosing = ref(false)
 
   const addressEdit = ref(false)
 
@@ -32,6 +35,7 @@ export function useAddressPage() {
   const addressData = ref<AddressDraft>(emptyDraft())
 
   const saving = ref(false)
+  const locating = ref(false)
 
   const failed = ref(false)
 
@@ -40,6 +44,9 @@ export function useAddressPage() {
   let editRequest = 0
 
   function resetAddresses() {
+    locating.value = false
+    selectedId.value = ''
+    choosing.value = false
     request++
 
     editRequest++
@@ -62,8 +69,10 @@ export function useAddressPage() {
   function init(query: {
     id?: string
     select?: string
+    selectedId?: string
   } = {}) {
     selectionMode.value = query.select === '1'
+    selectedId.value = query.selectedId || ''
     setTitle(t('account.profile.address.title'))
 
     if (query.id && requireIdentity('customer')) {
@@ -133,9 +142,10 @@ export function useAddressPage() {
   }
 
   function addAddress() {
-    if (saving.value || !requireIdentity('customer'))
+    if (saving.value || loading.value || !requireIdentity('customer'))
       return
     editingLoading.value = false
+    locating.value = false
     editRequest++
 
     addressEdit.value = true
@@ -149,6 +159,7 @@ export function useAddressPage() {
     if (saving.value)
       return
     editingLoading.value = false
+    locating.value = false
     editRequest++
 
     addressEdit.value = false
@@ -158,6 +169,7 @@ export function useAddressPage() {
     if (saving.value || !requireIdentity('customer'))
       return
     const ticket = scope.ticket()
+    locating.value = false
 
     const generation = ++editRequest
 
@@ -200,16 +212,26 @@ export function useAddressPage() {
         editingLoading.value = false
     }
   }
-  /** 选中地址：设为默认后返回（作为结算页地址选择器） */
+  /** 本次使用地址通过页面事件返回，不修改账户默认地址。 */
+  async function chooseAddress(addressId: number | string) {
+    if (!selectionMode.value || choosing.value || saving.value || loading.value || failed.value || !requireIdentity('customer'))
+      return
+    const address = addressList.value.find(item => String(item.id) === String(addressId))
+    if (!address)
+      return
+    choosing.value = true
+    onSelect?.(address)
+    await goBack()
+  }
 
-  async function selectTap(addressId: number | string, returnAfter = selectionMode.value) {
+  /** 仅显式“设为默认”操作修改账户默认地址。 */
+
+  async function selectTap(addressId: number | string) {
     if (saving.value || !requireIdentity('customer'))
       return
 
     const current = addressList.value.find(item => String(item.id) === String(addressId))
     if (current?.isDefault) {
-      if (returnAfter)
-        await goBack()
       return
     }
     const ticket = scope.ticket()
@@ -231,15 +253,10 @@ export function useAddressPage() {
     }
 
     if (scope.current(ticket)) {
-      if (returnAfter) {
-        await goBack()
-      }
-      else {
-        request++
-        loading.value = false
-        addressList.value = defaultAddressFirst(addressList.value.map(item => ({ ...item, isDefault: String(item.id) === String(addressId) })))
-        toast('已设为默认地址')
-      }
+      request++
+      loading.value = false
+      addressList.value = defaultAddressFirst(addressList.value.map(item => ({ ...item, isDefault: String(item.id) === String(addressId) })))
+      toast('已设为默认地址')
     }
   }
 
@@ -271,11 +288,40 @@ export function useAddressPage() {
   }
 
   function setField(field: 'linkMan' | 'mobile' | 'address' | 'phoneCountry' | 'countryCode' | 'regionText', value: string) {
-    addressData.value = { ...addressData.value, [field]: value, ...(field === 'countryCode' && value !== addressData.value.countryCode ? { regionText: '' } : {}) }
+    const changedPlace = ['countryCode', 'regionText', 'address'].includes(field) && value !== addressData.value[field]
+    addressData.value = { ...addressData.value, [field]: value, ...(changedPlace ? { latitude: undefined, longitude: undefined } : {}), ...(field === 'countryCode' && value !== addressData.value.countryCode ? { regionText: '' } : {}) }
+  }
+
+  /** 用户主动确认地图位置后回填坐标；取消、换号或编辑切换不覆盖当前草稿。 */
+  async function locateAddress() {
+    if (saving.value || locating.value || !addressEdit.value || !requireIdentity('customer'))
+      return
+    const ticket = scope.ticket()
+    const generation = editRequest
+    const draft = addressData.value
+    locating.value = true
+    try {
+      const place = await chooseLocation()
+      if (!scope.current(ticket) || generation !== editRequest || draft !== addressData.value || !addressEdit.value)
+        return
+      if (!Number.isFinite(place.latitude) || !Number.isFinite(place.longitude) || Math.abs(place.latitude) > 90 || Math.abs(place.longitude) > 180 || !(place.address || place.name)?.trim()) {
+        toast('请选择具体收货位置')
+        return
+      }
+      addressData.value = { ...draft, address: (place.address || place.name).trim(), latitude: place.latitude, longitude: place.longitude }
+    }
+    catch (error) {
+      if (scope.current(ticket) && generation === editRequest && !String((error as { errMsg?: string })?.errMsg || '').toLowerCase().includes('cancel'))
+        toast('定位暂不可用，可重试或继续填写文字地址')
+    }
+    finally {
+      if (scope.current(ticket) && generation === editRequest)
+        locating.value = false
+    }
   }
 
   async function bindSave(): Promise<void> {
-    if (saving.value || editingLoading.value || !requireIdentity('customer')) {
+    if (saving.value || locating.value || editingLoading.value || !requireIdentity('customer')) {
       return
     }
 
@@ -306,11 +352,13 @@ export function useAddressPage() {
     saving.value = true
 
     try {
+      let savedId = id.value
       if (id.value) {
         await withLoading(() => addressApi.update({ ...form, id: Number(id.value) }))
       }
       else {
-        await withLoading(() => addressApi.add(form))
+        const saved = await withLoading(() => addressApi.add(form))
+        savedId = saved?.id ?? null
       }
 
       if (!scope.current(ticket))
@@ -319,6 +367,10 @@ export function useAddressPage() {
       addressEdit.value = false
 
       await initShippingAddress()
+      if (scope.current(ticket) && selectionMode.value && savedId !== null) {
+        saving.value = false
+        await chooseAddress(savedId)
+      }
     }
     catch (e) {
       if (scope.current(ticket))
@@ -335,7 +387,12 @@ export function useAddressPage() {
     loading,
     editingLoading,
     selectionMode,
+    selectedId,
+    chooseAddress,
+    choosing,
     saving,
+    locating,
+    locateAddress,
     addressList,
     loaded,
     addressEdit,

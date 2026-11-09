@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+import { getWechatEnvironment } from './use-wechat-environment'
 import { getWxCode } from './use-wechat-credential'
 import { loginApi } from '../api/login.api'
 import { AGREEMENT_VERSION, ensurePrivacyConsent } from '../../agreement'
@@ -10,8 +11,8 @@ export function useLoginWechatAuthorization() {
   const error = ref('')
   const session = useSessionState()
 
-  async function authorize(demo = false) {
-    if (loading.value)
+  async function authorize() {
+    if (loading.value || loginApi.demo || getWechatEnvironment().channel !== 'mini')
       return false
     loading.value = true
     error.value = ''
@@ -24,21 +25,12 @@ export function useLoginWechatAuthorization() {
       if (session.identity === 'customer')
         session.clearSession()
       const revision = session.sessionRevision
-      if (demo && loginApi.demo) {
-        const ticket = await loginApi.start('mini', AGREEMENT_VERSION)
-        await loginApi.confirmDemo(ticket)
-        if (revision !== session.sessionRevision)
-          throw new Error('会话已变化，请重新登录')
-        await session.authenticate('customer', () => loginApi.exchange({ ticket: ticket.id, pollToken: ticket.pollToken, channel: 'mini', agreementVersion: AGREEMENT_VERSION }))
-      }
-      else {
-        const { code } = await getWxCode()
-        if (revision !== session.sessionRevision)
-          throw new Error('会话已变化，请重新登录')
-        if (!code)
-          throw new Error('微信登录凭证获取失败')
-        await session.authenticate('customer', () => loginApi.exchange({ code, channel: 'mini', agreementVersion: AGREEMENT_VERSION }))
-      }
+      const { code } = await getWxCode()
+      if (revision !== session.sessionRevision)
+        throw new Error('会话已变化，请重新登录')
+      if (!code)
+        throw new Error('微信登录凭证获取失败')
+      await session.authenticate('customer', () => loginApi.exchange({ code, channel: 'mini', agreementVersion: AGREEMENT_VERSION }))
       return true
     }
     catch (e) {

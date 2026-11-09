@@ -8,6 +8,7 @@
  * // useHomeNavigation().openCoupons() 应进入 Home/user 下的优惠券测试页。
  * ============================================================================
  */
+import { openShopList } from '@/pages/ordering/index'
 import { reactive } from 'vue'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useHomeNavigation } from '../use-navigation'
@@ -32,6 +33,7 @@ vi.mock('@/pages/auth/session', async () => ({
     updateNowTime: state.token.updateNowTime,
   }),
 }))
+vi.mock('@/pages/ordering/index', () => ({ openShopList: vi.fn().mockResolvedValue({ ok: true }) }))
 vi.mock('@/tabbar/store', () => ({ isPageTabbar: () => false }))
 vi.mock('@/locale', () => ({ t: (key: string) => key }))
 
@@ -57,12 +59,12 @@ describe('首页接入', () => {
     expect(uni.request).not.toHaveBeenCalled()
   })
 
-  it('选店进入点餐模块测试页，区分自取和配送且不写入门店状态', () => {
+  it('自取与配送调用统一商家列表业务入口', () => {
     const home = useHomeNavigation()
     home.openShopSelection('zq')
     home.openShopSelection('kd')
-    expect(uni.navigateTo).toHaveBeenNthCalledWith(1, expect.objectContaining({ url: '/pages/ordering/shop/select?peisongType=zq' }))
-    expect(uni.navigateTo).toHaveBeenNthCalledWith(2, expect.objectContaining({ url: '/pages/ordering/shop/select?peisongType=kd' }))
+    expect(openShopList).toHaveBeenNthCalledWith(1, { deliveryType: 'zq' })
+    expect(openShopList).toHaveBeenNthCalledWith(2, { deliveryType: 'kd' })
     expect(uni.setStorageSync).not.toHaveBeenCalled()
   })
 

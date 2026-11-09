@@ -11,11 +11,16 @@
 
 :root,
 page {
-  // 修改按主题色
-  // --wot-color-theme: #37c2bc;
+  // 品牌色负责主要操作和选中态；价格、错误与成功保留各自的语义色。
+  --app-brand-primary: #8b4513;
+  --app-brand-soft: #f8f1e8;
+  --app-text-primary: #2c2416;
+  --app-text-muted: #6f6258;
+  --wot-color-theme: var(--app-brand-primary);
 
-  // 修改按钮背景色
-  // --wot-button-primary-bg-color: green;
+  // 当前 Wot 主按钮使用独立变量，不读取 --wot-color-theme。
+  --wot-button-primary-bg: var(--app-brand-primary);
+  --wot-button-primary-bg-active: #71370f;
 }
 
 /*

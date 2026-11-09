@@ -66,11 +66,24 @@ const { t } = useI18n()
   flex-wrap: wrap;
   gap: 24rpx;
   justify-content: space-between;
-  padding: 32rpx;
-  margin: 32rpx 32rpx 0;
+  padding: 20rpx 32rpx;
+  margin: 20rpx 32rpx 0;
   background: linear-gradient(135deg, #fff 0%, #fff9f6 100%);
   border-radius: 28rpx;
   box-shadow: 0 8rpx 32rpx rgb(255 107 157 / 12%);
+}
+
+.user-card :deep(.profile-avatar) {
+  width: 88rpx;
+  height: 88rpx;
+}
+
+.user-card :deep(.customer-profile) {
+  gap: 16rpx;
+}
+
+.user-card :deep(.profile-name) {
+  font-size: 30rpx;
 }
 
 .coupon-btn {

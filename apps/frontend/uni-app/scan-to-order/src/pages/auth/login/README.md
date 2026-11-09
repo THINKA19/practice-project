@@ -2,7 +2,7 @@
 
 首次顾客隐私确认独立于登录协议，由 agreement/privacyConsent.ts 管理状态，agreement/ui.ts 公开的 ConsentHost 在 App.ku.vue 中统一挂载底部弹窗，不跳转确认页。ConsentHost 负责业务接入，ConsentDialog 只接收内容并发出用户操作事件。仅明确点击同意/不同意才保存选择；未选择便刷新、隐藏或卸载不会被记录为拒绝，下次进入仍提示。拒绝可继续公开浏览；主动登录时允许重新确认。完整登录页与快捷微信授权均在申请 code/票据前检查隐私选择；同意后若原顾客会话仍有效，继续使用原会话。隐私同意不代替服务协议确认，不自动提交业务订单。
 
-页面 /pages/auth/login/index：微信登录或 PC 扫码入口，不包含顾客账号密码。协议默认关闭。无真实微信权限时，开发 Mock 使用二维码状态与手动模拟手机确认，最终提交同一个顾客会话并回到原页面。
+页面 /pages/auth/login/index：微信登录或 PC 扫码入口，不包含顾客账号密码。协议默认关闭。顾客页面始终发起真实授权。模拟微信票据只用于自动化测试。
 
 目录：models/ 类型；api/ 后端接口；storage/ 浏览器 OAuth 临时状态；domain/ 跳转规则；composables/ 请求、轮询与生命周期；components/ 演示二维码；mock/ 独立样本状态机。
 
@@ -59,3 +59,9 @@
 ### Composable 命名
 
 本模块 Domain 为 `Login`。文件使用 `composables/use-<duty>.ts`，实际组合函数导出为 `useLogin<Duty>`；文件名省略领域前缀。请求对象、普通命令和类型保留业务语义，不伪装成组合函数。组件私有 Hook 继续放在组件目录。
+
+## 普通浏览器的短信登录
+
+完整登录页提供含国家区号的手机号和六位短信验证码。POST /auth/sms/send 接收 phone，POST /auth/sms/exchange 接收 phone、code、agreementVersion 并返回与微信相同的顾客会话。正式服务负责短信发送、验证限流、有效期、一次性使用和身份绑定。自动化测试可模拟微信票据，不模拟正式短信服务。
+
+正式 H5 从首页或「我的」直接打开完整登录页，通过 Session 保留原业务页面。普通手机浏览器提供短信入口和微信打开指引。网页授权回跳必须进入当前部署的登录路由，Hash 路由部署需在回跳时保留授权参数并落到 #/pages/auth/login/index。

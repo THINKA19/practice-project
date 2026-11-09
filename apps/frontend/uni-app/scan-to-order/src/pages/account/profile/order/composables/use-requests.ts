@@ -1,10 +1,31 @@
 import { orderRequests } from '../api/order.api'
+import { orderPresentation } from '../models/presentation'
 
 /**
  * 订单上下文 - 业务接口（下单、列表、详情、操作、核销、售后、扫码桌台下单）
  */
-import type { OrderListResult } from '../models/types'
+import type { Order, OrderListResult } from '../models/types'
 import { uploadAttachment } from '@/pages/account/index'
+
+/** 每次读取内按订单所属门店合并缺失资料，不使用当前门店或跨账号缓存。 */
+async function enrichOrders(orders: Order[]) {
+  const lookups = new Map<number, Promise<{ info?: { id?: number, countryCode?: string, name?: string, pic?: string, photos?: string[] } } | null>>()
+  return Promise.all(orders.map(async (order) => {
+    const snapshot = orderPresentation(order)
+    const id = Number(order.shopIdZt || order.shopId)
+    if ((!snapshot.countryCode || !snapshot.shopImage || !snapshot.shopNameZt) && Number.isSafeInteger(id) && id > 0) {
+      if (!lookups.has(id))
+        lookups.set(id, Promise.resolve().then(() => orderRequests.shopPhone(id)).catch(() => null))
+      const shop = (await lookups.get(id))?.info
+      if (shop && (shop.id == null || Number(shop.id) === id)) {
+        snapshot.countryCode ||= shop.countryCode || ''
+        snapshot.shopImage ||= shop.photos?.[0] || shop.pic || ''
+        snapshot.shopNameZt ||= shop.name || ''
+      }
+    }
+    return { ...order, ...snapshot }
+  }))
+}
 
 /**
  * 上传售后凭证等订单附件（原 WXAPI.uploadFileV2），返回文件地址
@@ -34,10 +55,15 @@ export const orderApi = {
     })
   },
   async list(data: Record<string, unknown>): Promise<OrderListResult> {
-    return (await orderRequests.list(data)) || { orderList: [], goodsMap: {} }
+    const result = (await orderRequests.list(data)) || { orderList: [], goodsMap: {} }
+    return { ...result, orderList: await enrichOrders(result.orderList || []) }
   },
-  detail(id: string | number, hxNumber = '', peisongOrderId = '') {
-    return orderRequests.detail(id, hxNumber, peisongOrderId)
+  async detail(id: string | number, hxNumber = '', peisongOrderId = '') {
+    const detail = await orderRequests.detail(id, hxNumber, peisongOrderId)
+    if (!detail?.orderInfo)
+      return detail
+    const [orderInfo] = await enrichOrders([{ ...detail.orderInfo, extJson: detail.extJson || detail.orderInfo.extJson }])
+    return { ...detail, orderInfo }
   },
   close(orderId: number | string) {
     return orderRequests.close(orderId)

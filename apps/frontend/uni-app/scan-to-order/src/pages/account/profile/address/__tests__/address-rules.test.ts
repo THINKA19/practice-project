@@ -1,5 +1,6 @@
+import { internationalPhone } from '@/utils/project/phone'
 import { describe, expect, it } from 'vitest'
-import { fullAddress, internationalPhone, validateAddress } from '../domain/address.rules'
+import { fullAddress, validateAddress } from '../domain/address.rules'
 import { DELIVERY_COUNTRIES } from '../models/enums'
 
 describe('东南亚收货地址', () => {

@@ -13,7 +13,6 @@ import { getWechatEnvironment } from './use-wechat-environment'
 import { browserCallback, clearPending, readPending, savePending } from '../storage/oauth-pending.storage'
 import { loginApi } from '../api/login.api'
 import { useSessionState } from '@/pages/auth/session'
-import { USE_MOCK } from '@/mock/config'
 import { getAllPages } from '@/utils'
 import { ClientRoutes } from '@/pages/routes'
 import { t } from '@/locale'
@@ -25,6 +24,8 @@ export function useLoginFlow() {
   const agreed = ref(false)
 
   const loading = ref(false)
+  const sendingSms = ref(false)
+  const smsRetryAt = ref(0)
 
   const error = ref('')
 
@@ -37,6 +38,7 @@ export function useLoginFlow() {
   const { channel, mobileBrowser } = getWechatEnvironment()
 
   let visible = false
+  let returnPending = false
 
   let disposed = false
   let confirmingPrivacy = false
@@ -64,7 +66,11 @@ export function useLoginFlow() {
 
     return returnAfterLogin(redirect.value)
   }
-  async function authenticate(payload: WechatExchange) {
+  function authenticate(payload: WechatExchange) {
+    return authenticateCustomer(() => loginApi.exchange(payload))
+  }
+
+  async function authenticateCustomer(exchange: () => ReturnType<typeof loginApi.exchange>) {
     if (loading.value || disposed)
       return
 
@@ -77,16 +83,23 @@ export function useLoginFlow() {
     try {
       if (!await ensurePrivacyConsent() || disposed)
         return
+      session.updateNowTime()
+      if (session.hasLogin && session.identity !== 'customer')
+        throw new Error(t('auth.wxDifferentRole'))
       if (session.hasLogin && session.identity === 'customer') {
         await finish()
         return
       }
       if (!session.hasLogin && session.identity === 'customer')
         session.clearSession()
-      await session.authenticate('customer', () => loginApi.exchange(payload))
+      await session.authenticate('customer', exchange)
 
-      if (!disposed && visible)
-        await finish()
+      if (!disposed) {
+        if (visible)
+          await finish()
+        else
+          returnPending = true
+      }
     }
     catch (e) {
       if (!disposed)
@@ -130,6 +143,13 @@ export function useLoginFlow() {
   }
   function resume() {
     visible = true
+    if (returnPending) {
+      returnPending = false
+      void finish().catch(() => {
+        error.value = t('common.navigationFailed')
+      })
+      return
+    }
 
     void poll()
   }
@@ -178,7 +198,7 @@ export function useLoginFlow() {
     }
   }
   async function start() {
-    if (loading.value || confirmingPrivacy)
+    if (loading.value || confirmingPrivacy || sendingSms.value)
       return
 
     error.value = ''
@@ -214,6 +234,10 @@ export function useLoginFlow() {
     }
     if (!session.updateNowTime().hasLogin && session.identity === 'customer')
       session.clearSession()
+    if (session.hasLogin && session.identity !== 'customer') {
+      error.value = t('auth.wxDifferentRole')
+      return
+    }
     if (session.hasLogin) {
       try {
         await finish()
@@ -223,7 +247,7 @@ export function useLoginFlow() {
       }
       return
     }
-    if (mobileBrowser && !USE_MOCK) {
+    if (mobileBrowser && !loginApi.demo) {
       error.value = t('auth.wxOpenWechat')
 
       return
@@ -239,7 +263,7 @@ export function useLoginFlow() {
     loading.value = true
 
     try {
-      if (channel === 'mini' && !USE_MOCK) {
+      if (channel === 'mini' && !loginApi.demo) {
         const result = await getWxCode()
 
         const code = result.code
@@ -258,7 +282,7 @@ export function useLoginFlow() {
       if (disposed)
         return
 
-      if (USE_MOCK) {
+      if (loginApi.demo) {
         ticket.value = current
       }
       else {
@@ -273,14 +297,14 @@ export function useLoginFlow() {
 
         savePending(current, redirect.value, channel)
 
-        window.location.assign(current.authorizationUrl)
+        window.location.assign(url.href)
 
         // #endif
       }
     }
-    catch (e) {
+    catch {
       if (!disposed)
-        error.value = e instanceof Error ? e.message : t('auth.loginFailed')
+        error.value = t(channel === 'mini' ? 'auth.loginFailed' : 'auth.wxStartFailed')
     }
     finally {
       if (!disposed) {
@@ -291,7 +315,7 @@ export function useLoginFlow() {
     }
   }
   async function confirmDemo() {
-    if (!USE_MOCK || !ticket.value || loading.value)
+    if (!loginApi.demo || !ticket.value || loading.value)
       return
 
     if (!agreed.value) {
@@ -319,5 +343,43 @@ export function useLoginFlow() {
       loading.value = false
     }
   }
-  return { agreed, loading, error, ticket, expired, channel, mobileBrowser, demo: USE_MOCK, init, start, confirmDemo, resume, pause }
+  async function sendSms(phone: string) {
+    if (disposed || loginApi.demo || sendingSms.value || loading.value || Date.now() < smsRetryAt.value)
+      return
+    error.value = ''
+    if (!agreed.value || !/^\+[1-9]\d{7,14}$/.test(phone)) {
+      error.value = !agreed.value ? t('auth.agreementRequired') : '请输入包含国家区号的手机号'
+      return
+    }
+    sendingSms.value = true
+    try {
+      if (!await ensurePrivacyConsent() || disposed || !agreed.value)
+        return
+      await loginApi.sendSms(phone)
+      smsRetryAt.value = Date.now() + 60_000
+    }
+    catch {
+      if (!disposed)
+        error.value = '验证码发送失败，请稍后重试'
+    }
+    finally {
+      sendingSms.value = false
+    }
+  }
+
+  async function signInWithSms(phone: string, code: string) {
+    if (loginApi.demo || loading.value || sendingSms.value || disposed)
+      return
+    if (!agreed.value || !/^\+[1-9]\d{7,14}$/.test(phone) || !/^\d{6}$/.test(code)) {
+      error.value = !agreed.value ? t('auth.agreementRequired') : '请输入含国家区号的手机号和六位验证码'
+      return
+    }
+    if (session.updateNowTime().hasLogin && session.identity !== 'customer') {
+      error.value = t('auth.wxDifferentRole')
+      return
+    }
+    await authenticateCustomer(() => loginApi.exchangeSms(phone, code, AGREEMENT_VERSION))
+  }
+
+  return { sendSms, signInWithSms, sendingSms, agreed, loading, error, ticket, expired, channel, mobileBrowser, demo: loginApi.demo, init, start, confirmDemo, resume, pause }
 }

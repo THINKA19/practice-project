@@ -45,6 +45,9 @@ export interface RefundApplyDto {
 }
 
 export interface OrderDto {
+  /** 服务端回传的订单扩展信息，保留现金结算标记。 */
+  extJsonStr?: string
+  extJson?: Record<string, unknown>
   /** 开发 Mock 样本标记，真实订单不设置。 */
   demo?: boolean
   id: number
@@ -65,6 +68,8 @@ export interface OrderDto {
   qudanhao?: string
   shopId?: number
   shopIdZt?: number
+  /** 订单自身计价国家，不使用当前选中门店。 */
+  countryCode?: string
   /** 订单所属门店照片 URL，缺失或失败时显示占位。 */
   shopImage?: string
   shopNameZt?: string

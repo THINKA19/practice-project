@@ -37,13 +37,12 @@ src/pages/
 │  └─ notice/
 ├─ ordering/
 │  ├─ index/
-│  ├─ goods/
-│  ├─ goods-details/
+│  ├─ menu-search/
+│  ├─ menu-goods-details/
 │  ├─ shop/
-│  ├─ cart/
-│  ├─ pay/
+│  ├─ menu-cart/
+│  ├─ menu-pay/
 │  ├─ payment/
-│  └─ youhui-pay/
 ├─ queue/
 │  ├─ index/
 │  └─ booking/

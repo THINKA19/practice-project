@@ -24,13 +24,12 @@ src/pages/
 │  └─ notice/
 ├─ ordering/
 │  ├─ index/
-│  ├─ goods/
-│  ├─ goods-details/
+│  ├─ menu-search/
+│  ├─ menu-goods-details/
 │  ├─ shop/
-│  ├─ cart/
-│  ├─ pay/
+│  ├─ menu-cart/
+│  ├─ menu-pay/
 │  ├─ payment/
-│  └─ youhui-pay/
 ├─ queue/
 │  ├─ index/
 │  └─ booking/
@@ -154,15 +153,15 @@ src/pages/
 
 页面跳转：
 
-- 商品详情入口 → **商品详情** `/pages/ordering/goods-details/index`；方式：`go → navigateTo`；参数：id=商品 ID；条件：无额外前置条件。
+- 商品详情入口 → **商品详情** `/pages/ordering/menu-goods-details/index`；方式：`go → navigateTo`；参数：id=商品 ID；条件：无额外前置条件。
 - 公告条入口 → **公告详情** `/pages/home/notice/detail`；方式：`go → navigateTo`；参数：id=公告 ID；条件：已加载公告。
 - 优惠券福袋入口 → **优惠券** `/pages/account/benefits/coupons/index`；方式：`go → navigateTo`；参数：无；条件：无额外前置条件。
 - 选择门店 → **门店选择** `/pages/ordering/shop/select`；方式：`go → navigateTo`；参数：type=index；条件：无额外前置条件。
 - 门店详情入口 → **门店详情** `/pages/ordering/shop/detail`；方式：`go → navigateTo`；参数：id=当前门店 ID；条件：当前门店存在。
-- 扫码购物车入口或扫码模式结算 → **桌台购物车** `/pages/ordering/cart/index`；方式：`go → navigateTo`；参数：无；条件：扫码模式。
-- 扫码已点入口 → **桌台已点菜品** `/pages/ordering/cart/order`；方式：`go → navigateTo`；参数：无；条件：扫码模式。
-- 普通模式结算 → **下单结算** `/pages/ordering/pay/index`；方式：`go → navigateTo`；参数：无；条件：普通模式，底部结算按钮在 opened 为真时显示；goPay 本身未额外检查购物车是否为空。
-- 拼团购买 → **下单结算** `/pages/ordering/pay/index`；方式：`go → navigateTo`；参数：orderType=buyNow；pingtuanOpenId=当前拼团 ID；商品通过存储传递；条件：完成商品/规格与拼团流程。
+- 扫码购物车入口或扫码模式结算 → **桌台购物车** `/pages/ordering/menu-cart/index`；方式：`go → navigateTo`；参数：无；条件：扫码模式。
+- 扫码已点入口 → **桌台已点菜品** `/pages/ordering/menu-cart/order`；方式：`go → navigateTo`；参数：无；条件：扫码模式。
+- 普通模式结算 → **下单结算** `/pages/ordering/menu-pay/index`；方式：`go → navigateTo`；参数：无；条件：普通模式，底部结算按钮在 opened 为真时显示；goPay 本身未额外检查购物车是否为空。
+- 拼团购买 → **下单结算** `/pages/ordering/menu-pay/index`；方式：`go → navigateTo`；参数：orderType=buyNow；pingtuanOpenId=当前拼团 ID；商品通过存储传递；条件：完成商品/规格与拼团流程。
 - 退出扫码模式 → **点餐菜单** `/pages/ordering/index/index`；方式：`relaunch → reLaunch`；参数：无；清理扫码会话和门店状态；条件：用户选择退出扫码模式。
 - 隐私权限提示后的重启 → **点餐菜单** `/pages/ordering/index/index`；方式：`relaunch → reLaunch`；参数：无；条件：定位错误为隐私权限未授权，提示完成。
 
@@ -180,28 +179,28 @@ src/pages/
 
 #### 商品列表与搜索 · `Routes.goodsList`
 
-- 文件：src/pages/ordering/goods/list.vue（项目根目录：`src/pages/ordering/goods/list.vue`）。
-- 路由：`/pages/ordering/goods/list`。类型：普通页面。
+- 文件：src/pages/ordering/menu-search/index.vue（项目根目录：`src/pages/ordering/menu-search/index.vue`）。
+- 路由：`/pages/ordering/menu-search/index`。类型：普通页面。
 - 职责：搜索、分类筛选、排序、分页和快速加购。
-- 已确认入口：优惠券。
+- 当前未发现固定按钮调用；保留独立搜索页面，外部动态入口待核实。
 - 接收参数与上下文：name：可选搜索词，进行安全解码；categoryId：可选分类 ID。
 - 登录/权限：浏览没有本页门禁；加购前检查登录，未登录时当前调用不继续加购。
 - 跳转状态：已确认有固定业务页面跳转。
 
 页面跳转：
 
-- 点击商品 → **商品详情** `/pages/ordering/goods-details/index`；方式：`go → navigateTo`；参数：id=商品 ID；条件：无额外前置条件。
+- 点击商品 → **商品详情** `/pages/ordering/menu-goods-details/index`；方式：`go → navigateTo`；参数：id=商品 ID；条件：无额外前置条件。
 
 返回行为：无自定义返回动作。
 
 其他交互：列表/宫格切换；快速规格面板；普通加购成功留在本页。
 
-逻辑依据：useGoodsListPage.ts（项目根目录：`src/pages/ordering/goods/composables/useGoodsListPage.ts`）。
+逻辑依据：use-page.ts（项目根目录：`src/pages/ordering/menu-search/composables/use-page.ts`）。
 
 #### 商品详情 · `Routes.goodsDetails`
 
-- 文件：src/pages/ordering/goods-details/index.vue（项目根目录：`src/pages/ordering/goods-details/index.vue`）。
-- 路由：`/pages/ordering/goods-details/index`。类型：普通页面。
+- 文件：src/pages/ordering/menu-goods-details/index.vue（项目根目录：`src/pages/ordering/menu-goods-details/index.vue`）。
+- 路由：`/pages/ordering/menu-goods-details/index`。类型：普通页面。
 - 职责：展示商品、规格、加料、时段、视频、砍价和分享海报。
 - 已确认入口：点餐菜单、商品列表与搜索、优惠券。 点餐页、商品列表、优惠券使用；好友分享、海报小程序码。
 - 接收参数与上下文：id：商品查询所需；scene：可选，解码为商品 ID 与邀请人，可覆盖 id；inviter_id：可选邀请人；kjJoinUid：可选砍价发起人。缺少有效商品 ID 时不读取详情。
@@ -210,7 +209,7 @@ src/pages/
 
 页面跳转：
 
-- 砍价发起人的商品加购成功 → **下单结算** `/pages/ordering/pay/index`；方式：`go → navigateTo`；参数：kjId=当前砍价 ID；条件：满足砍价购买、规格、数量和登录检查。
+- 砍价发起人的商品加购成功 → **下单结算** `/pages/ordering/menu-pay/index`；方式：`go → navigateTo`；参数：kjId=当前砍价 ID；条件：满足砍价购买、规格、数量和登录检查。
 
 返回行为：无自定义返回动作。
 
@@ -218,10 +217,10 @@ src/pages/
 
 分享/码入口：
 
-- 好友分享 → 商品详情 `/pages/ordering/goods-details/index`；携带 id、inviter_id；砍价分享可附 kjJoinUid。
-- 海报小程序码 → 商品详情 `/pages/ordering/goods-details/index`；携带 scene=商品 ID,邀请人 ID。
+- 好友分享 → 商品详情 `/pages/ordering/menu-goods-details/index`；携带 id、inviter_id；砍价分享可附 kjJoinUid。
+- 海报小程序码 → 商品详情 `/pages/ordering/menu-goods-details/index`；携带 scene=商品 ID,邀请人 ID。
 
-逻辑依据：useGoodsDetailPage.ts（项目根目录：`src/pages/ordering/goods-details/composables/useGoodsDetailPage.ts`）、useSkuSelector.ts（项目根目录：`src/pages/ordering/goods-details/composables/useSkuSelector.ts`）、usePoster.ts（项目根目录：`src/pages/ordering/goods-details/composables/usePoster.ts`）。
+逻辑依据：useGoodsDetailPage.ts（项目根目录：`src/pages/ordering/menu-goods-details/composables/useGoodsDetailPage.ts`）、useSkuSelector.ts（项目根目录：`src/pages/ordering/menu-goods-details/composables/useSkuSelector.ts`）、usePoster.ts（项目根目录：`src/pages/ordering/menu-goods-details/composables/usePoster.ts`）。
 
 #### 门店选择 · `Routes.shopSelect`
 
@@ -278,8 +277,8 @@ src/pages/
 
 #### 桌台购物车 · `Routes.cart`
 
-- 文件：src/pages/ordering/cart/index.vue（项目根目录：`src/pages/ordering/cart/index.vue`）。
-- 路由：`/pages/ordering/cart/index`。类型：普通页面。
+- 文件：src/pages/ordering/menu-cart/index.vue（项目根目录：`src/pages/ordering/menu-cart/index.vue`）。
+- 路由：`/pages/ordering/menu-cart/index`。类型：普通页面。
 - 职责：展示扫码点餐购物车，调整数量、清空并提交桌台加菜。
 - 已确认入口：点餐菜单。
 - 接收参数与上下文：无本页读取的路由参数；依赖已有桌台、门店及购物车状态。
@@ -288,18 +287,18 @@ src/pages/
 
 页面跳转：
 
-- 提交桌台加菜成功 → **桌台已点菜品** `/pages/ordering/cart/order`；方式：`redirect → redirectTo`；参数：无；条件：桌台加菜接口成功后调用清空购物车；清空失败返回 false 时当前代码仍执行跳转。
+- 提交桌台加菜成功 → **桌台已点菜品** `/pages/ordering/menu-cart/order`；方式：`redirect → redirectTo`；参数：无；条件：桌台加菜接口成功后调用清空购物车；清空失败返回 false 时当前代码仍执行跳转。
 
 返回行为：无自定义返回动作；成功提交后替换到已点菜品页面。
 
 其他交互：数量更新、清空、下拉刷新。
 
-逻辑依据：useCartPage.ts（项目根目录：`src/pages/ordering/cart/composables/useCartPage.ts`）。清空操作的返回值没有被提交后流程用于阻止跳转，本条记录现状，不表示清空一定成功。
+逻辑依据：useCartPage.ts（项目根目录：`src/pages/ordering/menu-cart/composables/useCartPage.ts`）。清空操作的返回值没有被提交后流程用于阻止跳转，本条记录现状，不表示清空一定成功。
 
 #### 桌台已点菜品 · `Routes.cartOrder`
 
-- 文件：src/pages/ordering/cart/order.vue（项目根目录：`src/pages/ordering/cart/order.vue`）。
-- 路由：`/pages/ordering/cart/order`。类型：普通页面。
+- 文件：src/pages/ordering/menu-cart/order.vue（项目根目录：`src/pages/ordering/menu-cart/order.vue`）。
+- 路由：`/pages/ordering/menu-cart/order`。类型：普通页面。
 - 职责：展示当前桌台待支付订单和菜品状态，提供买单。
 - 已确认入口：点餐菜单、桌台购物车。
 - 接收参数与上下文：无本页读取的路由参数；从 list({status:0}) 第一条订单取得 ID 和商品。
@@ -314,8 +313,8 @@ src/pages/
 
 #### 下单结算 · `Routes.pay`
 
-- 文件：src/pages/ordering/pay/index.vue（项目根目录：`src/pages/ordering/pay/index.vue`）。
-- 路由：`/pages/ordering/pay/index`。类型：普通页面。
+- 文件：src/pages/ordering/menu-pay/index.vue（项目根目录：`src/pages/ordering/menu-pay/index.vue`）。
+- 路由：`/pages/ordering/menu-pay/index`。类型：普通页面。
 - 职责：处理收货/自提、门店、联系电话、用餐时间、优惠券/卡、试算、下单和支付。
 - 已确认入口：点餐菜单、商品详情。
 - 接收参数与上下文：orderType：可选，buyNow 从公共存储读取拼团商品，否则读取购物车；pingtuanOpenId：可选拼团 ID；kjId：可选砍价 ID。配送方式与门店通过共享状态传递。
@@ -334,30 +333,9 @@ src/pages/
 
 其他交互：用餐时间、优惠券和卡选择面板；手机号授权；订阅消息；支付面板。
 
-逻辑依据：usePayPage.ts（项目根目录：`src/pages/ordering/pay/composables/usePayPage.ts`）、useDelivery.ts（项目根目录：`src/pages/ordering/pay/composables/useDelivery.ts`）、useSubmitOrder.ts（项目根目录：`src/pages/ordering/pay/composables/useSubmitOrder.ts`）。
+逻辑依据：usePayPage.ts（项目根目录：`src/pages/ordering/menu-pay/composables/usePayPage.ts`）、useDelivery.ts（项目根目录：`src/pages/ordering/menu-pay/composables/useDelivery.ts`）、useSubmitOrder.ts（项目根目录：`src/pages/ordering/menu-pay/composables/useSubmitOrder.ts`）。
 
-#### 优惠买单 · `Routes.youhuiPay`
-
-- 文件：src/pages/ordering/youhui-pay/index.vue（项目根目录：`src/pages/ordering/youhui-pay/index.vue`）。
-- 路由：`/pages/ordering/youhui-pay/index`。类型：普通页面。
-- 职责：输入门店消费金额，计算优惠、余额抵扣并发起买单。
-- 已确认入口：我的。
-- 接收参数与上下文：无本页读取的路由参数；门店来自共享状态。
-- 登录/权限：读取资产或提交遇到认证错误时重登重试；没有单独的登录路由。
-- 跳转状态：已确认有固定业务页面跳转。
-
-页面跳转：
-
-- 选择门店 → **门店选择** `/pages/ordering/shop/select`；方式：`go → navigateTo`；参数：type=pay；条件：无额外前置条件。
-- 在线支付成功回调 → **我的钱包** `/pages/account/asset/index`；方式：`redirect → redirectTo`；参数：无；条件：支付面板发出 ok。
-
-返回行为：无自定义返回动作。
-
-其他交互：金额校验、余额支付确认、支付面板；直接余额支付后提示并留在本页，在线支付取消只关闭面板。
-
-逻辑依据：useYouhuiPayPage.ts（项目根目录：`src/pages/ordering/youhui-pay/composables/useYouhuiPayPage.ts`）。
-
-### 取号（2 个页面）
+## 取号（2 个页面）
 
 #### 排队取号 · `Routes.queue`
 
@@ -466,7 +444,7 @@ src/pages/
 
 - 签到入口 → **每日签到** `/pages/account/benefits/sign/index`；方式：`go → navigateTo`；参数：无；条件：无额外前置条件。
 - 在线订座入口 → **在线订座** `/pages/queue/booking/index`；方式：`go → navigateTo`；参数：无；条件：无额外前置条件。
-- 优惠买单入口 → **优惠买单** `/pages/ordering/youhui-pay/index`；方式：`go → navigateTo`；参数：无；条件：无额外前置条件。
+- 优惠买单入口 → **优惠买单** `/pages/account/services/bill-pay/index`；方式：`go → navigateTo`；参数：无；条件：无额外前置条件。
 - 会员信息或会员中心入口 → **会员中心** `/pages/account/benefits/member-center/index`；方式：`go → navigateTo`；参数：无；条件：无额外前置条件。
 - 全部订单入口 → **全部订单** `/pages/account/orders/all-orders/index`；方式：`go → navigateTo`；参数：无；条件：无额外前置条件。
 - 地址管理入口 → **收货地址** `/pages/account/ad/index`；方式：`go → navigateTo`；参数：无；条件：无额外前置条件。
@@ -656,8 +634,7 @@ src/pages/
 页面跳转：
 
 - 优惠券去使用 → **点餐菜单** `/pages/ordering/index/index`；方式：`go → switchTab`；参数：无；条件：券使用范围解析为菜单。
-- 优惠券去使用 → **商品列表与搜索** `/pages/ordering/goods/list`；方式：`go → navigateTo`；参数：categoryId=券限定分类 ID；条件：券使用范围解析为分类。
-- 优惠券去使用 → **商品详情** `/pages/ordering/goods-details/index`；方式：`go → navigateTo`；参数：id=券限定商品 ID；条件：券使用范围解析为商品。
+- 优惠券去使用 → **商品详情** `/pages/ordering/menu-goods-details/index`；方式：`go → navigateTo`；参数：id=券限定商品 ID；条件：券使用范围解析为商品。
 
 返回行为：无自定义返回动作。
 
@@ -821,6 +798,13 @@ src/pages/
 
 逻辑依据：useAboutPage.ts（项目根目录：`src/pages/account/services/about/composables/useAboutPage.ts`）。
 
+#### 优惠买单 · `ClientRoutes.Ordering.youhuiPay`
+
+- 页面：src/pages/account/services/bill-pay/index.vue。
+- 路由：/pages/account/services/bill-pay/index。
+- 流程：本领域 useBillPayPage 装配优惠加载、金额校验及模拟买单；真实支付尚未开放。点餐重复买单页面及其专属流程已移除。
+- 入口：使用正式买单路由；外部历史链接需同步，未验证生产配置。
+
 ## 5. 关键跨页流程
 
 ### 5.1 普通点餐与结算
@@ -855,7 +839,7 @@ src/pages/
 
 首页 → 礼品卡 → 兑换 → 协议 CMS / 兑换成功返回并刷新我的卡；礼品卡 → 赠送（卡写入存储）→ 好友分享 → 接收者领取页（id、shareToken）→ 成功或失败提示后 reLaunch 首页。赠卡分享不是发送者本人跳转领取页。
 
-“我的” → 钱包 → 充值支付面板 → 成功刷新钱包；钱包 → 充值记录/资金明细。优惠买单在线支付成功替换到钱包，直接余额支付成功留在买单页。
+“我的” → 钱包 → 充值支付面板 → 成功刷新钱包；钱包 → 充值记录/资金明细。优惠买单统一进入 /pages/account/services/bill-pay/index；当前保留模拟买单与真实支付未开放限制，不使用已移除的旧余额/在线支付流程。
 
 ## 6. 动态目标与核实事项
 

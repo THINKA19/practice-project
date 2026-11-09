@@ -1,7 +1,7 @@
 import type { Order, OrderFilter, OrderGoods } from '../models/types'
 import { computed, ref } from 'vue'
 import { getIdentity, getToken, requireIdentity, useSessionAccountScope } from '@/pages/auth/session'
-import { canApplyRefund, canCallShop, canCancel, canDeleteInList, canPay, filterOrders } from '../domain/order.rules'
+import { canApplyRefund, canCallShop, canCancel, canDeleteInList, canPay, filterOrders, isCashOrder } from '../domain/order.rules'
 import { orderApi } from './use-requests'
 import { navigate } from '@/utils/project/navigation'
 import { ClientRoutes } from '@/pages/routes'
@@ -49,7 +49,7 @@ export function useOrderListPage() {
     order,
     goods: goodsMap.value[String(order.id)] || [],
     typeText: ORDER_TABS.find(tab => tab.key === order.orderType)?.label || '',
-    statusText: order.statusStr || ({ '-1': '已取消', '0': '待付款', '1': '待取餐/配送', '2': '配送中', '3': '待评价', '4': '已完成' }[order.status] || ''),
+    statusText: order.status === 0 && isCashOrder(order) ? '待现金结算' : order.statusStr || ({ '-1': '已取消', '0': '待付款', '1': '待取餐/配送', '2': '配送中', '3': '待评价', '4': '已完成' }[order.status] || ''),
     statusClass: order.status === 0 ? 'status-pending' : order.status === -1 ? 'status-cancel' : 'status-success',
     showCallShop: canCallShop(order),
     showDelete: canDeleteInList(order),

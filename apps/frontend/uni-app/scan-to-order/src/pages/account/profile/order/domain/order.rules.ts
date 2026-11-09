@@ -28,9 +28,20 @@ export function canCancel(o: Pick<Order, 'status'>) {
   return o.status === OrderStatus.UNPAID
 }
 
-/** 只有待付款订单显示支付入口，不依据本地状态推断支付成功。 */
-export function canPay(o: Pick<Order, 'status'>) {
-  return o.status === OrderStatus.UNPAID
+/** 只识别服务端返回的现金结算扩展标记，不在本地伪造已支付。 */
+export function isCashOrder(o: { extJsonStr?: unknown, extJson?: unknown }) {
+  try {
+    const ext = typeof o.extJsonStr === 'string' ? JSON.parse(o.extJsonStr) : o.extJson
+    return !!ext && typeof ext === 'object' && ext['结算方式'] === '现金结算'
+  }
+  catch {
+    return false
+  }
+}
+
+/** 待付款且非现金结算订单才显示线上支付入口。 */
+export function canPay(o: Pick<Order, 'status'> & { extJsonStr?: unknown, extJson?: unknown }) {
+  return o.status === OrderStatus.UNPAID && !isCashOrder(o)
 }
 
 /** 仅允许对已取消或已完成订单显示删除记录入口。 */

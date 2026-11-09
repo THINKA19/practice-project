@@ -9,8 +9,6 @@ export function useHomeView() {
   const { t } = useI18n()
   const vm = useHomePage()
   const { banners, hasLogin, nick, avatar, levelName } = vm
-  /** wd-swiper 数据（value 为图片地址） */
-  const swiperList = computed(() => banners.value.map(b => ({ value: b.picUrl, linkUrl: b.linkUrl })))
   onLoad(() => {
     vm.init()
   })
@@ -19,5 +17,5 @@ export function useHomeView() {
   })
   onShareAppMessage(() => vm.shareAppMessage())
   onShareTimeline(() => vm.shareTimeline())
-  return { t, vm, banners, hasLogin, nick, avatar, levelName, swiperList }
+  return { t, vm, banners, hasLogin, nick, avatar, levelName }
 }

@@ -2,9 +2,11 @@ import { mount } from '@vue/test-utils'
 import { defineComponent, h, nextTick, ref } from 'vue'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 
+const navigation = vi.hoisted(() => vi.fn())
+vi.mock('@/utils/project/navigation', () => ({ navigate: navigation }))
 const lifecycle = vi.hoisted(() => ({ show: [] as (() => void)[], hide: [] as (() => void)[] }))
 vi.mock('../composables/use-gallery', () => ({ useServiceGallery: () => ({ groups: ref([]), loading: ref(false), loadGallery: vi.fn() }) }))
-vi.mock('@/components/contact-dock', () => ({ ContactDock: defineComponent({ render: () => h('div') }) }))
+vi.mock('@/components/contact-dock', () => ({ ContactDock: defineComponent({ name: 'ContactDock', props: ['directoryLabel'], render: () => h('div') }) }))
 beforeEach(() => {
   lifecycle.show = []
   lifecycle.hide = []
@@ -20,6 +22,8 @@ it('does not let a hidden cached service page overwrite another page title on la
   setLocale('zh-Hans')
   const Service = (await import('../index.vue')).default
   const wrapper = mount(Service, { global: { plugins: [i18n], stubs: { 'z-paging': true } } })
+  wrapper.findComponent({ name: 'ContactDock' }).vm.$emit('directory')
+  expect(navigation).toHaveBeenCalledWith('/pages/account/profile/contact/index')
   lifecycle.show.forEach(fn => fn())
   expect(uni.setNavigationBarTitle).toHaveBeenLastCalledWith({ title: '服务' })
   lifecycle.hide.forEach(fn => fn())

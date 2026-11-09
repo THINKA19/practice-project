@@ -19,6 +19,12 @@ it('取消等动作进行中时禁止发起支付', async () => {
   expect(m.amount).not.toHaveBeenCalled()
   expect(m.pay).not.toHaveBeenCalled()
 })
+it('现金结算订单不查询余额、不弹支付确认、不调用扣款', async () => {
+  await useOrderPay(vi.fn()).toPay({ ...order, extJsonStr: JSON.stringify({ 结算方式: '现金结算' }) })
+  expect(m.amount).not.toHaveBeenCalled()
+  expect(m.confirm).not.toHaveBeenCalled()
+  expect(m.pay).not.toHaveBeenCalled()
+})
 it('异常金额及异常余额不得进入扣款', async () => {
   const vm = useOrderPay(vi.fn())
   await vm.toPay({ ...order, amountReal: Number.NaN })

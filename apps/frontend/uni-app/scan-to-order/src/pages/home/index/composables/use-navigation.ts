@@ -13,6 +13,7 @@ import { t } from '@/locale'
 import { navigate } from '@/utils/project/navigation'
 import { toast } from '@/utils/project/feedback'
 import { ClientRoutes } from '@/pages/routes'
+import { openShopList } from '@/pages/ordering/index'
 
 /**
  * 创建首页交互方法。无参数。
@@ -90,13 +91,17 @@ export function useHomeNavigation() {
   }
 
   /**
-   * 打开点餐模块选店测试页，只传递配送方式，不新增门店状态。
+   * 设置配送方式并打开底部点餐商家列表。
    * @param deliveryType zq 为自取，kd 为配送。
    * @returns 导航结果 Promise，失败时显示本地化提示。
-   * @example openShopSelection('zq') // 进入选店测试页，携带 peisongType=zq
+   * @example openShopSelection('zq') // 设置自取并进入商家列表
    */
   function openShopSelection(deliveryType: 'zq' | 'kd') {
-    return openPage(ClientRoutes.Ordering.shopSelect, deliveryType)
+    return openShopList({ deliveryType }).then((result) => {
+      if (!result.ok)
+        toast(t('common.navigationFailed'))
+      return result
+    })
   }
 
   /**

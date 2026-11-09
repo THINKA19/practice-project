@@ -1,4 +1,6 @@
-import type { PHONE_COUNTRIES } from './enums'
+import type { PhoneCountry } from '@/utils/project/phone'
+
+export type { PhoneCountry } from '@/utils/project/phone'
 
 export interface Region {
   id: string
@@ -60,7 +62,5 @@ export interface AddressDraft {
   longitude?: number
   isDefault?: boolean
 }
-
-export type PhoneCountry = typeof PHONE_COUNTRIES[number]['code']
 
 export type DeliveryCountry = Exclude<PhoneCountry, 'CN'> | 'MY'

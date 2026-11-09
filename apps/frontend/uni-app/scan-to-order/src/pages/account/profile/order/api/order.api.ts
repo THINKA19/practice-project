@@ -8,7 +8,7 @@ export const orderRequests = {
     return http.Post<unknown>(endpoints.demoAction, { orderId, action }, { headers: getAuthorizationHeaders('customer'), cacheFor: 0, meta: { ignoreAuth: true, toast: false } }).send()
   },
   shopPhone(id: number) {
-    return http.Get<{ info?: { linkPhone?: string } }>(endpoints.shopDetail, { params: { id }, cacheFor: 0, meta: { ignoreAuth: true, toast: false } }).send()
+    return http.Get<{ info?: { id?: number, linkPhone?: string, countryCode?: string, name?: string, pic?: string, photos?: string[] } }>(endpoints.shopDetail, { params: { id }, cacheFor: 0, meta: { ignoreAuth: true, toast: false } }).send()
   },
   create(data: Record<string, unknown>) {
     return http.Post<CreateOrderResult>(endpoints.create, data, { headers: getAuthorizationHeaders('customer'), cacheFor: 0, meta: { ignoreAuth: true, toast: false } }).send()

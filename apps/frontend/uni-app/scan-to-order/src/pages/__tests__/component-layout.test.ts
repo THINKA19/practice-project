@@ -14,7 +14,13 @@ it('所有局部组件统一使用独立目录的 index.vue，页面不进入组
   const components = roots.flatMap(files).filter(file => file.endsWith('.vue') && file.split(path.sep).includes('components'))
   expect(components.length).toBeGreaterThan(0)
   for (const file of components) {
-    expect(path.basename(file), file).toBe('index.vue')
+    if (path.basename(path.dirname(file)) === 'parts') {
+      expect(path.basename(file), file).toMatch(/^[A-Z][A-Za-z0-9]*\.vue$/)
+      expect(fs.existsSync(path.join(path.dirname(file), '..', 'index.vue')), file).toBe(true)
+    }
+    else {
+      expect(path.basename(file), file).toBe('index.vue')
+    }
     expect(path.basename(path.dirname(file)), file).not.toBe('components')
     expect(fs.readFileSync(file, 'utf8'), file).not.toMatch(/\bdefinePage\s*\(/)
   }

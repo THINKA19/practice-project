@@ -1,3 +1,5 @@
+import { ClientRoutes } from '@/pages/routes'
+import { navigate } from '@/utils/project/navigation'
 import { PageState } from '@/components/page-state'
 import { ContactDock } from '@/components/contact-dock'
 import { useServiceContacts } from './use-contacts'
@@ -8,6 +10,9 @@ import { useServiceGallery } from './use-gallery'
 
 /** 页面状态与交互编排；每次调用拥有独立的页面实例。 */
 export function useServiceView() {
+  function openContactDirectory() {
+    void navigate(ClientRoutes.Account.contact)
+  }
   const galleryActions = useServiceGalleryActions()
   const contacts = useServiceContacts()
   const { groups, loading, failed, loadGallery } = useServiceGallery()
@@ -27,5 +32,5 @@ export function useServiceView() {
     if (pageVisible.value)
       setTitle()
   })
-  return { PageState, ContactDock, t, galleryActions, contacts, groups, loading, failed, loadGallery, setTitle, pageVisible }
+  return { openContactDirectory, PageState, ContactDock, t, galleryActions, contacts, groups, loading, failed, loadGallery, setTitle, pageVisible }
 }

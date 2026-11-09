@@ -61,24 +61,28 @@ export const ClientRoutes = {
 
   /** 点餐、选店与结算业务模块 */
   Ordering: {
+    /** 主包只持有跳转路径，不导入商家分包实现。 */
+    shopOnboarding: '/pages-shop/onboarding/index',
     /** 点餐选品主页（商品瀑布流/分类侧边栏、加购联动交互） */
-    order: '/pages/ordering/index/index',
+    order: '/pages/ordering/menu/index',
+    noticeDetail: '/pages/ordering/menu/notice-detail',
+    shopLocation: '/pages/ordering/shop-location/index',
     /** 统一在线支付/收银台页面（支持微信支付、余额抵扣等） */
-    pay: '/pages/ordering/pay/index',
-    /** 选店跳转测试页，接收 peisongType=zq/kd。 */
-    shopSelect: '/pages/ordering/shop/select',
+    pay: '/pages/ordering/menu-pay/index',
+    /** 平台商家列表，底部点餐统一入口。 */
+    shops: '/pages/ordering/index/index',
     /** 门店详情与资质介绍页（门店地址导航、营业时间、设施信息） */
-    shopDetail: '/pages/ordering/shop/detail',
+    shopDetail: '/pages/ordering/shop-detail/index',
     /** 优惠买单/到店直接快捷买单页（快速输入消费金额并核销优惠） */
     youhuiPay: '/pages/account/services/bill-pay/index',
     /** 购物车明细弹框/独立结算清单页（商品数量调整、清空、总价计算） */
-    cart: '/pages/ordering/cart/index',
+    cart: '/pages/ordering/menu-cart/index',
     /** 订单确认与提交结算页（就餐方式选择、备注说明、优惠券勾选） */
-    cartOrder: '/pages/ordering/cart/order',
+    cartOrder: '/pages/ordering/menu-cart/order',
     /** 单品详情页（商品大图预览、多规格/加料选择、营养成分说明） */
-    goodsDetails: '/pages/ordering/goods-details/index',
+    goodsDetails: '/pages/ordering/menu-goods-details/index',
     /** 商品专题/分类扩展检索列表页 */
-    goodsList: '/pages/ordering/goods/list',
+    goodsList: '/pages/ordering/menu-search/index',
   },
 
   /** 排队取号与预约等位模块 */
@@ -86,6 +90,7 @@ export const ClientRoutes = {
     /** 现场排队取号首页（当前等待桌数展示、取号状态管理） */
     queue: '/pages/queue/index/index',
     /** 预订订座页面（预约到店就餐时间、人数及包厢需求） */
+    bookingShops: '/pages/ordering/index/booking-shops',
     booking: '/pages/account/services/booking/index',
   },
 
@@ -133,6 +138,7 @@ export const ClientRoutes = {
     sign: '/pages/account/services/sign-in/index',
     scanResult: '/pages/account/services/scan-result/index',
     billPay: '/pages/account/services/bill-pay/index',
+    bookingShops: '/pages/ordering/index/booking-shops',
     booking: '/pages/account/services/booking/index',
     /** 积分收支明细流水日志页 */
     scoreLogs: '/pages/account/assets/score/index',

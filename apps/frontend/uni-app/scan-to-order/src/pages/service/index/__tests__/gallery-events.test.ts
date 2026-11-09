@@ -14,7 +14,7 @@ it('画廊把预览和更多操作交给调用方，组件不直接导航', asyn
     const more = page.findAll('view').find(view => view.classes().includes('justify-end'))!
     await more.trigger('click')
     expect(page.emitted('more')?.[0]).toEqual([group])
-    const imageCard = page.findAll('view').find(view => view.classes().includes('h-312rpx'))!
+    const imageCard = page.find('.gallery-image')
     await imageCard.trigger('click')
     expect(page.emitted('preview')?.[0]).toEqual([[image], image])
     expect(uni.navigateTo).not.toHaveBeenCalled()

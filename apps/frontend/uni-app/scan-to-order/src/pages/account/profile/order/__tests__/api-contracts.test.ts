@@ -8,6 +8,16 @@ beforeEach(() => {
   vi.clearAllMocks()
 })
 describe('订单接口契约', () => {
+  it('旧订单按自身门店补查照片与币种，同店合并一次且保留已有快照', async () => {
+    vi.mocked(http.Post).mockReturnValue({ send: async () => ({ orderList: [{ id: 1, shopId: 7 }, { id: 2, shopId: 7 }, { id: 3, shopId: 8, countryCode: 'TH', shopImage: '/kept.jpg', shopNameZt: '原门店' }], goodsMap: {} }) } as never)
+    vi.mocked(http.Get).mockReturnValue({ send: async () => ({ info: { id: 7, countryCode: 'VN', name: '七号门店', pic: '/shop-seven.jpg' } }) } as never)
+    const result = await orderApi.list({})
+    expect(http.Get).toHaveBeenCalledTimes(1)
+    expect(http.Get).toHaveBeenCalledWith('/shop/subshop/detail', expect.objectContaining({ params: { id: 7 } }))
+    expect(result.orderList[0]).toMatchObject({ countryCode: 'VN', shopImage: '/shop-seven.jpg', shopNameZt: '七号门店' })
+    expect(result.orderList[2]).toMatchObject({ countryCode: 'TH', shopImage: '/kept.jpg' })
+  })
+
   it('试算不变更 calculate，下单参数原样传递', async () => {
     vi.mocked(http.Post).mockReturnValue({ send: () => Promise.resolve({ amountReal: 12 }) } as never)
 

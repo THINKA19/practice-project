@@ -7,7 +7,7 @@ afterEach(() => {
   vi.mocked(uni.request).mockReset()
 })
 describe('首页 Mock 接入契约', () => {
-  it('首页轮播 API 经过 Mock 返回三张本地图片，其他类型为空且不访问网络', async () => {
+  it('首页轮播 API 经过 Mock 返回三张本地图片，点餐轮播可用且不访问网络', async () => {
     vi.resetModules()
     vi.stubEnv('DEV', true)
     vi.stubEnv('VITE_USE_MOCK', 'true')
@@ -18,6 +18,13 @@ describe('首页 Mock 接入契约', () => {
       '/src/mock/assets/images/home/banner/02.jpeg',
       '/src/mock/assets/images/home/banner/03.jpeg',
     ])
+    const ordering = await bannerApi.banners('diancang')
+    expect(ordering).toHaveLength(3)
+    expect(ordering.map(item => item.picUrl)).toEqual(banners.map(item => item.picUrl))
+    expect(ordering.every(item => item.type === 'diancang' && !item.linkUrl)).toBe(true)
+    const ads = await bannerApi.banners('ordering_ad')
+    expect(ads).toHaveLength(3)
+    expect(ads.every(item => item.type === 'ordering_ad')).toBe(true)
     expect(await bannerApi.banners('card')).toEqual([])
     expect(uni.request).not.toHaveBeenCalled()
   })

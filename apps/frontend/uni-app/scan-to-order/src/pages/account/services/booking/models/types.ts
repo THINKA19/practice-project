@@ -2,6 +2,7 @@
 export interface BookingDraft {
   name: string
   mobile: string
+  phoneCountry: string
   time: string
   personIndex: number
 }

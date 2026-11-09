@@ -8,6 +8,7 @@ uni.switchTab({ url: ClientRoutes.Home.home }) // 打开首页
 ============================================================================
 -->
 <script setup lang="ts">
+import { BannerCarousel } from '@/components/banner-carousel'
 import HomeUserCard from './components/HomeUserCard/index.vue'
 import { useHomeView } from './composables/use-view'
 
@@ -20,7 +21,7 @@ definePage({
   },
 })
 
-const { t, vm, banners, hasLogin, nick, avatar, levelName, swiperList } = useHomeView()
+const { t, vm, banners, hasLogin, nick, avatar, levelName } = useHomeView()
 </script>
 
 <template>
@@ -36,15 +37,7 @@ const { t, vm, banners, hasLogin, nick, avatar, levelName, swiperList } = useHom
     <view class="home-container">
       <!-- 轮播图 -->
       <view class="relative w-full overflow-hidden">
-        <wd-swiper
-          v-if="banners.length"
-          :list="swiperList"
-          height="230"
-          autoplay
-          loop
-          custom-class="banner-swiper"
-          @click="({ item }) => vm.tapBanner((item as { linkUrl?: string }).linkUrl)"
-        />
+        <BannerCarousel :items="banners" height="280rpx" radius="0 0 48rpx 48rpx" @select="item => vm.tapBanner(item.linkUrl)" />
       </view>
 
       <!-- 用户信息卡片 -->
@@ -145,11 +138,6 @@ const { t, vm, banners, hasLogin, nick, avatar, levelName, swiperList } = useHom
 <style lang="scss" scoped>
 .home-container {
   padding-bottom: 60rpx;
-}
-
-:deep(.banner-swiper) {
-  overflow: hidden;
-  border-radius: 0 0 48rpx 48rpx;
 }
 
 .section-title {

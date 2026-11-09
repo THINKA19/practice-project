@@ -1,21 +1,8 @@
 # 预约订座接口与字段
 
-## 接口约定
+- POST /shop/subshop/list 增加可选 capability=table-booking，服务端按地区、关键词和预约能力过滤后分页。
+- GET /yuyue/info 使用现有 SECONDARY 网关，传 key=table-booking、shopId。返回 id（该店的活动 ID）、shopName、slots（门店本地时间 YYYY-MM-DD HH:mm）。客户端在日期和时间联动弹层中展示未来七天内由门店提供的偶数整点起始时段，从 10:00–12:00 到 22:00–24:00，每两小时切一档，提交时再次检查范围。
+- POST /yuyue/join 使用 SECONDARY 网关，提交 shopId、yuyueId、requestId、extJsonStr。扩展字段为姓名、联系电话、到店时间、用餐人数。联系电话提交含国家区号的国际格式，例如 +84912345678。到店时间沿用原格式提交所选时段的起点。服务端需检查顾客身份、活动归属、预约能力和实时容量，并按顾客与 requestId 幂等。
+- accepted=true 表示接收申请。缺失确认时页面锁定本次提交并提示联系门店核对。正式预约单号、门店确认状态和结果查询需要服务端契约。
 
-POST /yuyue/join：参数 yuyueId、extJsonStr。extJsonStr 为姓名、联系电话、到店时间、用餐人数的 JSON。请求使用既有 SECONDARY 域名配置。
-
-## 字段与行为
-
-yuyueId 优先取业务入口页面参数，缺省时通过 bookingApi.info() 查询活动 ID；旧 shared/settings 不存在，当前不臆造系统配置来源。缺少活动 ID 时阻止提交。Mock 校验参数后返回 accepted=true，表示模拟接受报名，不代表真实占座。
-
-## 数据来源
-
-接口路径清单以本领域 api/endpoints.ts 为准；复用模块以其公开入口为准。统一响应信封为 { code, message, data }，由 src/http/alova.ts 解包。除明确标注的前端开发契约外，路径沿用原复制代码约定，尚未完成真实后端联调。
-
-当前没有数据库 DDL 或真实服务端表结构，不能据前端字段推断实际数据库表名、主外键、事务或索引。
-
-## 模拟边界
-
-模拟接口位于所属领域 mock/；Mock 入口独立于运行时 index.ts。测试通过现有 Alova 入口验证响应与失败分支。未登记接口仍访问网络，生产构建不启用 Mock。
-
-提交响应当前仅认可 data.accepted=true，表示申请已接收，不等于订座成功。无效响应或提交异常进入当前页面待核对状态，禁止再次提交；未提供服务端幂等键和结果查询，重进页面后的去重仍未实现。
+业务 Mock 展示开通和未开通门店、门店活动匹配和时段校验。正式接口需要在预发联调。

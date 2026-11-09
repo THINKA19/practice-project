@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { expect, it } from 'vitest'
-import OrderImage from '../components/OrderImage/index.vue'
+import { OrderImage } from '@/components/order-image'
 
 it('缺图和加载失败使用占位，新地址可以重新加载', async () => {
   const wrapper = mount(OrderImage)

@@ -4,6 +4,7 @@ import { requireIdentity, useSessionAccountScope } from '@/pages/auth/session'
 import { assetApi } from '@/pages/account/assets/asset'
 import { orderApi } from './use-requests'
 import { confirm, showError, toast } from '@/utils/project/interaction'
+import { canPay } from '../domain/order.rules'
 
 /** 当前只接真实余额支付；外部收银台未接入时明确提示，不模拟支付成功。 */
 export function useOrderPay(refresh: () => Promise<void>, blocked: () => boolean = () => false) {
@@ -13,8 +14,8 @@ export function useOrderPay(refresh: () => Promise<void>, blocked: () => boolean
     paying.value = false
   })
 
-  async function toPay(order: Pick<Order, 'id' | 'status' | 'amountReal' | 'score'>) {
-    if (blocked() || paying.value || order.status !== 0 || !requireIdentity('customer'))
+  async function toPay(order: Pick<Order, 'id' | 'status' | 'amountReal' | 'score'> & { extJsonStr?: unknown, extJson?: unknown }) {
+    if (blocked() || paying.value || !canPay(order) || !requireIdentity('customer'))
       return
 
     const ticket = scope.ticket()

@@ -2,28 +2,35 @@
 import type { ContactItem } from './models/contact'
 import WechatContactPopup from './components/WechatContactPopup.vue'
 import { useContactDockController } from './composables/use-controller'
-import { t } from '@/locale'
 
-defineProps<{ contacts: ContactItem[], hint?: string }>()
-const { expanded, selected, showContact, copy, activate } = useContactDockController()
+defineProps<{ contacts: ContactItem[], hint?: string, directoryLabel?: string }>()
+const emit = defineEmits<{ directory: [] }>()
+const { selected, showContact, copy, activate } = useContactDockController()
 </script>
 
 <template>
-  <view class="fixed right-12rpx top-1/2 z-50 flex flex-col items-center gap-12rpx rounded-32rpx bg-white/95 p-12rpx shadow-lg -translate-y-1/2">
-    <template v-if="expanded">
+  <view class="contact-dock fixed right-12rpx z-50 flex flex-col items-center gap-24rpx">
+    <button v-if="directoryLabel" class="contact-directory contact-button bg-white text-[#64748b] shadow-lg" :aria-label="directoryLabel" @click="emit('directory')">
+      <wd-icon name="headset" size="22px" />
+      <text class="contact-label">{{ directoryLabel }}</text>
+    </button>
+    <view class="flex flex-col items-center gap-12rpx rounded-32rpx bg-white/95 p-12rpx shadow-lg">
       <button v-for="contact in contacts" :key="contact.id" class="contact-button" :style="{ color: contact.color, background: contact.background }" :aria-label="contact.label" @click="activate(contact)">
         <wd-icon :name="contact.icon" size="24px" />
         <text class="contact-label">{{ contact.label }}</text>
       </button>
-    </template>
-    <button class="contact-button bg-[#f4f5f7] text-[#64748b] !min-h-64rpx" :aria-label="t(expanded ? 'contactDock.collapse' : 'contactDock.expand')" @click="expanded = !expanded">
-      <wd-icon :name="expanded ? 'arrow-up' : 'message'" size="20px" />
-    </button>
+    </view>
   </view>
   <WechatContactPopup v-model="showContact" :contact="selected" :hint="hint" @copy="copy" />
 </template>
 
 <style scoped>
+.contact-dock {
+  top: 50%;
+  transform: translateY(-50%);
+  max-height: 65vh;
+  overflow-y: auto;
+}
 .contact-button {
   display: flex;
   width: 88rpx;
@@ -36,6 +43,9 @@ const { expanded, selected, showContact, copy, activate } = useContactDockContro
   gap: 6rpx;
   border-radius: 22rpx;
   line-height: 1.2;
+}
+.contact-directory {
+  min-height: 80rpx;
 }
 .contact-button::after {
   border: 0;

@@ -1,18 +1,13 @@
-<script setup lang="ts">
-definePage({
-  style: {
-    navigationBarTitleText: '点餐',
-  },
-})
-</script>
+<script lang="ts">
+/**
+ * ============================================================================
+ * 【文件概述】底部选店首页入口，仅装配本模块共享选店组件与页面配置。
+ * 【方法与导出清单】default：选店页面组件。
+ * 【综合使用示例】import ShopSelectionPage from './components/ShopSelectionPage/index.vue'; // 本领域页面装配选店组件
+ * ============================================================================
+ */
+import ShopSelectionPage from './components/ShopSelectionPage/index.vue'
 
-<template>
-  <view class="p-6">
-    <view class="text-xl">
-      这是点餐测试页面
-    </view>
-    <view class="mt-2 text-sm text-gray-500">
-      src/pages/ordering/index/index.vue
-    </view>
-  </view>
-</template>
+definePage({ style: { navigationBarTitleText: '选择门店', disableScroll: true } })
+export default ShopSelectionPage
+</script>

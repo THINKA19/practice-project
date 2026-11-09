@@ -5,6 +5,9 @@ export type OrderFilter = 'all' | 'pickup' | 'delivery' | 'reservation' | 'dinei
 export type OrderStatusValue = typeof OrderStatus[keyof typeof OrderStatus]
 
 export interface Order {
+  /** 服务端回传的订单扩展信息；现金结算不等于已付款。 */
+  extJsonStr?: string
+  extJson?: Record<string, unknown>
   /** 开发 Mock 样本标记，真实订单不设置。 */
   demo?: boolean
   id: number
@@ -25,6 +28,8 @@ export interface Order {
   qudanhao?: string
   shopId?: number
   shopIdZt?: number
+  /** 订单自身计价国家，不使用当前选中门店。 */
+  countryCode?: string
   /** 订单所属门店照片 URL，缺失或失败时显示占位。 */
   shopImage?: string
   shopNameZt?: string

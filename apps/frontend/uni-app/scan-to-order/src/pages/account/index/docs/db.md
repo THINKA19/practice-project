@@ -40,7 +40,7 @@ export const FEEDBACK_COMMENT_TYPE = 1
 
 - [pages/account/asset](../../asset/docs/db.md)
 - [pages/account/benefits/coupons](../../benefits/coupons/docs/db.md)
-- [pages/ordering/shop](../../../ordering/shop/docs/db.md)
+- [pages/ordering/index](../../../ordering/index/docs/db.md)
 - [shared/media](../../../../asset/media/docs/db.md)
 - [shared/session](../../../../asset/session/docs/db.md)
 - [shared/settings](../../../../asset/settings/docs/db.md)

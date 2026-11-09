@@ -21,12 +21,18 @@ const { t, vm, addressRegion, addressList, loaded, addressEdit, addressData, fai
         <text class="address-title">{{ t('account.profile.address.title') }}</text>
       </template>
     </wd-navbar>
+    <view v-if="loading && !addressEdit" class="p-48rpx text-center text-28rpx text-#666">
+      正在加载收货地址…
+    </view>
     <view v-if="failed && !addressEdit && !addressList.length" class="px-48rpx py-120rpx text-center text-28rpx text-#91775e">
       {{ t('account.profile.address.unavailable') }}
+      <button class="mt-24rpx text-28rpx text-[#8b4513]" @tap="vm.refresh()">
+        重新加载
+      </button>
     </view>
     <view v-if="addressList.length > 0 && !addressEdit" class="address-list">
       <view class="address-cards">
-        <view v-for="item in addressList" :key="item.id" class="a-address">
+        <view v-for="item in addressList" :key="item.id" class="a-address" :class="{ 'address-selected': vm.selectionMode.value && vm.selectedId.value === String(item.id) }" @tap="vm.selectionMode.value && vm.chooseAddress(item.id)">
           <view class="left-text">
             <view class="contact-heading">
               <text class="contact-name">{{ item.linkMan }}</text>
@@ -44,11 +50,14 @@ const { t, vm, addressRegion, addressList, loaded, addressEdit, addressData, fai
             </view>
           </view>
           <view class="address-actions">
-            <button class="address-action" aria-label="编辑地址" :disabled="saving" @tap="vm.editAddress(item.id)">
+            <button v-if="vm.selectionMode.value" class="address-action" :disabled="saving || vm.choosing.value || loading" @tap.stop="vm.chooseAddress(item.id)">
+              使用
+            </button>
+            <button class="address-action" aria-label="编辑地址" :disabled="saving" @tap.stop="vm.editAddress(item.id)">
               <wd-icon name="edit" size="32rpx" />
             </button>
             <view class="address-action-separator" aria-hidden="true" />
-            <button class="address-action delete-action" aria-label="删除地址" :disabled="saving" @tap="vm.deleteAddress(item.id)">
+            <button class="address-action delete-action" aria-label="删除地址" :disabled="saving" @tap.stop="vm.deleteAddress(item.id)">
               <wd-icon name="delete" size="32rpx" />
             </button>
           </view>
@@ -80,9 +89,11 @@ const { t, vm, addressRegion, addressList, loaded, addressEdit, addressData, fai
     <AddressEditForm
       v-if="addressEdit && !editingLoading"
       :saving="saving"
+      :locating="vm.locating.value"
       :draft="addressData"
       @input="vm.setField"
       @save="vm.bindSave()"
+      @locate="vm.locateAddress()"
       @cancel="vm.editCancel()"
     />
   </view>
@@ -116,6 +127,10 @@ const { t, vm, addressRegion, addressList, loaded, addressEdit, addressData, fai
   border: 1px solid #ededed;
   border-left: 6rpx solid #ea8d79;
   border-radius: 24rpx;
+}
+.address-selected {
+  border-color: #8b4513;
+  background: #fff9f0;
 }
 .left-text {
   flex: 1;

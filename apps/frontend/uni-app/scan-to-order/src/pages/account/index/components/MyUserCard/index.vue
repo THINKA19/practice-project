@@ -26,7 +26,7 @@ const { t } = useI18n()
           @profile="emit('editNick')"
           @member="emit('vip')"
         />
-        <view class="member-code-entry flex flex-col items-center justify-center px-16rpx py-8rpx" @tap="emit('userCode')">
+        <view class="member-code-entry flex flex-col items-center justify-center px-16rpx py-4rpx" @tap="emit('userCode')">
           <view class="qr-icon-wrapper">
             <wd-icon name="qrcode" size="24px" color="#7353AD" />
           </view>
@@ -46,8 +46,8 @@ const { t } = useI18n()
   align-items: center;
   box-sizing: border-box;
   width: 100%;
-  min-height: 280rpx;
-  padding: 40rpx 32rpx;
+  min-height: 156rpx;
+  padding: 12rpx 32rpx;
   overflow: visible;
 }
 
@@ -78,7 +78,7 @@ const { t } = useI18n()
   box-sizing: border-box;
   width: 100%;
   z-index: 10;
-  padding: 40rpx 32rpx;
+  padding: 16rpx 32rpx;
   background: linear-gradient(115deg, #fff 0%, #fdfbff 60%, #f4f0ff 100%);
   border-radius: 32rpx;
   box-shadow:
@@ -87,13 +87,26 @@ const { t } = useI18n()
     0 2rpx 8rpx rgb(100 70 155 / 5%);
 }
 
+.user-card :deep(.profile-avatar) {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.user-card :deep(.customer-profile) {
+  gap: 16rpx;
+}
+
+.user-card :deep(.profile-name) {
+  font-size: 30rpx;
+}
+
 .qr-icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 72rpx;
-  height: 72rpx;
-  margin-bottom: 8rpx;
+  width: 56rpx;
+  height: 56rpx;
+  margin-bottom: 4rpx;
   background: linear-gradient(135deg, #f5eaff 0%, #e7dcfc 50%, #dce3ff 100%);
   border-radius: 50%;
   box-shadow:

@@ -31,7 +31,7 @@ it('我的各入口使用当前已实现页面，昵称根据登录状态跳转'
     await vm.navTo(title!)
     expect(mocks.navigate).toHaveBeenLastCalledWith(path)
   }
-  for (const [title, path] of [['扫码核销', '/pages/account/services/scan-result/index'], ['每日签到', '/pages/account/services/sign-in/index'], ['预约订座', '/pages/account/services/booking/index'], ['优惠买单', '/pages/account/services/bill-pay/index']]) {
+  for (const [title, path] of [['扫码核销', '/pages/account/services/scan-result/index'], ['每日签到', '/pages/account/services/sign-in/index'], ['预约订座', '/pages/ordering/index/booking-shops'], ['优惠买单', '/pages/account/services/bill-pay/index']]) {
     await vm.navTo(title!)
     expect(mocks.navigate).toHaveBeenLastCalledWith(path)
   }
@@ -41,7 +41,9 @@ it('我的各入口使用当前已实现页面，昵称根据登录状态跳转'
   }
   await vm.navTo('会员中心')
   expect(mocks.navigate).toHaveBeenLastCalledWith('/pages/account/users/member-center/index')
-  for (const title of ['商家后台', '申请商家入驻', '骑手工作台']) {
+  await vm.navTo('申请商家入驻')
+  expect(mocks.navigate).toHaveBeenLastCalledWith('/pages-shop/onboarding/index')
+  for (const title of ['商家后台', '骑手工作台']) {
     mocks.navigate.mockClear()
     await vm.navTo(title)
     expect(mocks.navigate).not.toHaveBeenCalled()

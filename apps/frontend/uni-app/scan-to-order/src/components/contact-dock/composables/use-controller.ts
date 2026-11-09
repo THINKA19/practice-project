@@ -1,9 +1,8 @@
 import type { ContactItem } from '../models/contact'
 import { ref } from 'vue'
 
-/** 维护当前组件的展开与联系方式弹窗状态；复制和外链行为按平台执行，不保存业务账号。 */
+/** 维护当前组件的联系方式弹窗状态；复制和外链行为按平台执行，不保存业务账号。 */
 export function useContactDockController() {
-  const expanded = ref(true)
   const selected = ref<ContactItem | null>(null)
   const showContact = ref(false)
   function copy(value: string) {
@@ -27,5 +26,5 @@ export function useContactDockController() {
     // #endif
     // #endif
   }
-  return { expanded, selected, showContact, copy, activate }
+  return { selected, showContact, copy, activate }
 }

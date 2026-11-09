@@ -2,7 +2,9 @@
 /**
  * 订单卡片（纯展示：props 进 / emit 出）
  */
-import OrderImage from '../OrderImage/index.vue'
+import { OrderImage } from '@/components/order-image'
+import { formatOrderPrice } from '../../models/presentation'
+import { currentLocale } from '@/locale'
 import type { OrderCardVM } from './types'
 
 defineOptions({ name: 'OrderCard' })
@@ -26,7 +28,7 @@ const emit = defineEmits<{
     <!-- 订单头部：店铺名称 + 订单状态 -->
     <view class="order-header">
       <view class="shop-info">
-        <wd-icon name="shop" size="22px" color="#8b7355" custom-class="mr-16rpx" />
+        <OrderImage :src="card.order.shopImage" class="mr-16rpx h-80rpx w-80rpx shrink-0" label="暂无门店照片" />
         <view class="min-w-0">
           <view class="shop-name">
             {{ card.order.shopNameZt || '订单详情' }}
@@ -85,12 +87,7 @@ const emit = defineEmits<{
           {{ card.order.status === 0 ? '待付金额' : card.order.status === -1 ? '订单金额' : '实付金额' }}
         </text>
         <view class="price-value">
-          <text class="currency">
-            ¥
-          </text>
-          <text class="amount">
-            {{ Number(card.order.status === -1 ? (card.order.amount ?? card.order.amountReal) : card.order.amountReal).toFixed(2) }}
-          </text>
+          <text class="amount">{{ formatOrderPrice(card.order, card.order.status === -1 ? (card.order.amount ?? card.order.amountReal) : card.order.amountReal, currentLocale) }}</text>
         </view>
       </view>
       <view v-if="card.showCallShop || card.showDelete || card.showCancel || card.showRefund || card.showPay" class="action-btns">

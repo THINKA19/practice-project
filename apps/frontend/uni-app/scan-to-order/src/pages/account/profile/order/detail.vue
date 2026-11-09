@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { onLoad, onShow } from '@dcloudio/uni-app'
-import OrderImage from './components/OrderImage/index.vue'
+import { onHide, onLoad, onShow } from '@dcloudio/uni-app'
+import { OrderImage } from '@/components/order-image'
+import { formatOrderPrice } from './models/presentation'
+import { currentLocale } from '@/locale'
 import { ORDER_TABS } from './models/enums'
 import { useOrderDetailPage } from './composables/use-detail-page'
 
 definePage({ style: { navigationBarTitleText: '订单详情' } })
-const { detail, loading, failed, needsLogin, init, load, login } = useOrderDetailPage()
+const { detail, loading, failed, needsLogin, submissionResult, cashOrder, nextStep, amountLabel, viewOrders, suspend, init, load, login } = useOrderDetailPage()
+onHide(suspend)
 onLoad(init)
 onShow(() => {
   void load()
@@ -28,8 +31,17 @@ onShow(() => {
       </button>
     </view>
     <view v-else-if="detail" class="detail-card">
-      <view class="status-title">
-        {{ detail.orderInfo.statusStr }}
+      <view v-if="submissionResult" class="submission-result">
+        订单已提交
+      </view>
+      <view class="status-title" :class="{ 'status-secondary': submissionResult }">
+        {{ detail.orderInfo.status === 0 && cashOrder ? '待现金结算' : detail.orderInfo.statusStr }}
+      </view>
+      <view v-if="nextStep" class="next-step">
+        {{ nextStep }}
+      </view>
+      <view v-if="cashOrder && detail.orderInfo.status >= 0" class="info-row">
+        结算方式：现金结算，无需线上支付
       </view>
       <view class="shop-title">
         <OrderImage :src="detail.orderInfo.shopImage" label="暂无门店照片" class="shop-image" />
@@ -49,11 +61,14 @@ onShow(() => {
         <OrderImage :src="goods.pic" class="goods-image" />
         <view class="goods-info">
           <view>{{ goods.goodsName }}</view><text class="goods-count">× {{ goods.number }}</text>
-        </view><text>¥{{ Number(goods.amount).toFixed(2) }}</text>
+        </view><text>{{ formatOrderPrice(detail.orderInfo, goods.amount, currentLocale) }}</text>
       </view>
       <view class="total-row">
-        <text>{{ detail.orderInfo.status === 0 ? '待付金额' : detail.orderInfo.status === -1 ? '订单金额' : '实付金额' }}</text><text class="total-price">¥{{ Number(detail.orderInfo.amountReal).toFixed(2) }}</text>
+        <text>{{ amountLabel }}</text><text class="total-price">{{ formatOrderPrice(detail.orderInfo, detail.orderInfo.amountReal, currentLocale) }}</text>
       </view>
+      <button v-if="submissionResult" class="view-orders" @tap="viewOrders">
+        查看全部订单
+      </button>
       <view v-if="detail.logistics">
         收货人：{{ detail.logistics.linkMan }} {{ detail.logistics.mobile }}<view>{{ detail.logistics.address }}</view>
       </view>
@@ -78,12 +93,34 @@ onShow(() => {
   background: #fff;
   border-radius: 24rpx;
 }
+.submission-result {
+  margin-bottom: 16rpx;
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #8b4513;
+}
+.next-step {
+  margin-bottom: 24rpx;
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: #666;
+}
+.view-orders {
+  margin-top: 24rpx;
+  font-size: 28rpx;
+  color: #8b4513;
+  background: #fff8f0;
+}
 .status-title {
   margin-bottom: 32rpx;
   color: #8b7355;
   font-size: 42rpx;
   line-height: 1.5;
   font-weight: 600;
+}
+.status-title.status-secondary {
+  font-size: 28rpx;
+  color: #666;
 }
 .shop-image {
   flex-shrink: 0;
@@ -146,6 +183,7 @@ onShow(() => {
   font-size: 24rpx;
 }
 .total-row {
+  color: #333;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -154,7 +192,7 @@ onShow(() => {
   border-top: 1rpx solid #f0e6dc;
 }
 .total-price {
-  color: #8b7355;
+  color: #c93636;
   font-size: 36rpx;
   font-weight: 600;
 }

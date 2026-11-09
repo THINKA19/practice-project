@@ -4,6 +4,7 @@ import { enablePrivacyConsent, finishPrivacyConsent } from '../../agreement/comp
 
 const mocks = vi.hoisted(() => ({ exchange: vi.fn(), wxCode: vi.fn(), authenticate: vi.fn() }))
 vi.mock('../api/login.api', () => ({ loginApi: { demo: false, exchange: mocks.exchange } }))
+vi.mock('../composables/use-wechat-environment', () => ({ getWechatEnvironment: () => ({ channel: 'mini', mobileBrowser: false }) }))
 vi.mock('../composables/use-wechat-credential', () => ({ getWxCode: mocks.wxCode }))
 vi.mock('@/pages/auth/session', () => ({ useSessionState: () => ({ hasLogin: false, authenticate: mocks.authenticate }) }))
 beforeEach(() => {

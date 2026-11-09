@@ -3,7 +3,7 @@ import { expect, it } from 'vitest'
 import i18n from '@/locale'
 import AddressEditForm from '../components/AddressEditForm/index.vue'
 
-it('必填红星、五国电话和配送国家联动选择分开，不展示地图入口', async () => {
+it('必填红星、五国电话和配送国家联动选择分开，提供可选地图补充入口', async () => {
   const wrapper = mount(AddressEditForm, { props: { draft: {
     linkMan: '',
     mobile: '',
@@ -17,7 +17,9 @@ it('必填红星、五国电话和配送国家联动选择分开，不展示地�
   } } })
   try {
     expect(wrapper.findAll('.label .required')).toHaveLength(5)
-    expect(wrapper.text()).not.toContain('地图定位')
+    expect(wrapper.text()).toContain('补充地图定位（选填）')
+    await wrapper.find('.location-btn').trigger('tap')
+    expect(wrapper.emitted('locate')).toHaveLength(1)
     await wrapper.findAll('.country-picker')[0].trigger('tap')
     expect(wrapper.findAll('.sheet-option')).toHaveLength(5)
     expect(wrapper.find('.sheet').text()).toContain('中国 +86')

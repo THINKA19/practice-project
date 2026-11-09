@@ -42,6 +42,7 @@ import { h5Api } from '@/utils/h5'
 | 打包分析 visualizer | vite.config.ts | 仅 H5 production,产物在 `node_modules/.cache/visualizer/stats.html` |
 | 自动打开开发者工具 | scripts/open-dev-tools.js | mp-weixin / mp-alipay / mp-lark 构建后自动打开对应工具;上传脚本用 `SKIP_OPEN_DEVTOOLS=true` 跳过 |
 | bundle-optimizer 分包优化 | vite.config.ts | `enable: isMpWeixin`,仅微信小程序端 |
+| 门店联系电话 | src/pages/ordering/index/composables/use-phone-contact.ts | 小程序使用系统拨号；其他端（手机/桌面 H5、App）统一直接展示号码复制面板 |
 | 原生插件资源复制 | vite.config.ts | 仅 app 平台且 `VITE_COPY_NATIVE_RES_ENABLE=true` |
 
 ## 4. 多端请求地址

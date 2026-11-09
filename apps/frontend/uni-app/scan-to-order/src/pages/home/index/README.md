@@ -33,7 +33,7 @@
 
 其余测试路径相对 pages/home，显示测试标题及进入成功文字。会员中心和礼品卡已使用所属业务的正式页面；页面由 UniPages 自动注册，路径统一由 pages/routes.ts 维护。
 
-门店选择通过 ClientRoutes.Ordering.shopSelect 进入 /pages/ordering/shop/select 测试页，并传 peisongType=zq 或 kd，分别显示到店自取、外卖配送。测试页不请求门店数据；缺失或非法参数显示入口提示。关于仍指向尚未实现的 /pages/me/setting/about/index，跳转失败时显示通用的本地化导航失败提示。index11 仅参考入口语义，已排除页面扫描，不参与首页运行。
+首页到店自取与外卖配送通过 openShopList 进入底部点餐商家列表，先设置门店状态中的配送方式，再切换页面，不使用重复选店路由。
 
 首页原静态服务图片已缺失，改用现有 Carbon 图标；语言图标复用已有语言组件资源。
 

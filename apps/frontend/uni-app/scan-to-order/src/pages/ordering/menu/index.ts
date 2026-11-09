@@ -1,0 +1,61 @@
+/**
+ * ============================================================================
+ * 【文件概述】ordering 页面间使用的模块内适配出口；不修改或替换公共请求、会话、存储与路由。
+ * 【方法与导出清单】页面导航、平台调用与请求错误分类。
+ * 【综合使用示例】import { buildUrl, platformError } from '@/pages/ordering/menu'
+ * ============================================================================
+ */
+export { errorCode, isApiError, needsLogin, PlatformError, platformError } from './adapters/errors.adapter'
+
+export { buildUrl, openLink, redirect, relaunch } from './adapters/navigation.adapter'
+export { actionSheet, checkAndAuthorize, getLocation, hideTabBar, openLocation, requestPayment, requestSubscribe, showTabBar, stopPullDownRefresh } from './adapters/platform.adapter'
+export { catalogApi } from './api/catalog.api'
+
+export { pingtuanApi } from './api/pingtuan.api'
+export { default as GoodsItem } from './components/catalog/GoodsItem/index.vue'
+export { default as QuickSkuPanel } from './components/catalog/QuickSkuPanel/index.vue'
+export { useOrderingLocale } from './composables/use-locale'
+export { useOrderingSkuSelection } from './composables/use-sku-selection'
+export type { SkuCartPayload, SkuSelectionEngine, SkuSelectionOptions, TimeChoiceResult } from './composables/use-sku-selection'
+export { buildAdditionPayload } from './domain/catalog.rules'
+export { buildSkuPayload } from './domain/catalog.rules'
+export { computeBadges } from './domain/catalog.rules'
+export { emptySelection } from './domain/catalog.rules'
+export { isAdditionComplete } from './domain/catalog.rules'
+export { isSkuComplete } from './domain/catalog.rules'
+export { propertyChildIds } from './domain/catalog.rules'
+export { quotePrice } from './domain/catalog.rules'
+export { selectProperty } from './domain/catalog.rules'
+export { selectTimeSlot } from './domain/catalog.rules'
+export { toggleAddition } from './domain/catalog.rules'
+export { defaultTimeSelection } from './domain/catalog.rules'
+export { isAdditionSelected } from './domain/catalog.rules'
+export { isPropertySelected } from './domain/catalog.rules'
+export { selectedTimeSlot } from './domain/catalog.rules'
+export { categoryShopScope } from './domain/catalog.rules'
+export { goodsListAction } from './domain/catalog.rules'
+export { MENU_INITIAL_GOODS } from './domain/catalog.rules'
+export { miaoshaCountdown } from './domain/catalog.rules'
+export { skuPicture } from './domain/catalog.rules'
+export { pingtuanAvatars } from './domain/promotions.rules'
+export { toGoodsDetail, toGoodsList } from './models/goods.mappers'
+/** 本模块公共入口，仅导出外部使用的能力。 */
+export type { AdditionGroup } from './models/goods.types'
+export type { GoodsDetail } from './models/goods.types'
+export type { TimeScheduleDay } from './models/goods.types'
+export type { AdditionItem } from './models/goods.types'
+export type { PropertyChild } from './models/goods.types'
+export type { SkuPriceResult } from './models/goods.types'
+export type { Goods } from './models/goods.types'
+export type { Category } from './models/goods.types'
+export type { GoodsListAction } from './models/goods.types'
+export type { MenuSection } from './models/goods.types'
+export type { MiaoshaCountdown } from './models/goods.types'
+
+export type { SkuSelection } from './models/goods.types'
+export type { GoodsProperty } from './models/goods.types'
+export type { KanjiaInfo } from './models/goods.types'
+export type { KanjiaSet } from './models/goods.types'
+
+export type { PingtuanSet } from './models/goods.types'
+export type { GoodsListQuery, GoodsOrderBy } from './models/goods.types'

@@ -7,7 +7,7 @@ import { currentLocale, t } from '@/locale'
 
 /** 页面状态与交互编排；每次调用拥有独立的页面实例。 */
 export function useLoginView() {
-  const { agreed, loading, error, ticket, expired, channel, mobileBrowser, demo, init, start, confirmDemo, resume, pause } = useLoginFlow()
+  const { sendSms, signInWithSms, sendingSms, agreed, loading, error, ticket, expired, channel, mobileBrowser, demo, init, start, confirmDemo, resume, pause } = useLoginFlow()
   onLoad((query) => {
     void init(query)
   })
@@ -35,5 +35,5 @@ export function useLoginView() {
     if (pageVisible.value)
       setTitle()
   })
-  return { readPrivacyPolicy, readUserAgreement, t, agreed, loading, error, ticket, expired, channel, mobileBrowser, demo, init, start, confirmDemo, resume, pause, cancelLogin, pageVisible, setTitle }
+  return { readPrivacyPolicy, readUserAgreement, t, sendSms, signInWithSms, sendingSms, agreed, loading, error, ticket, expired, channel, mobileBrowser, demo, init, start, confirmDemo, resume, pause, cancelLogin, pageVisible, setTitle }
 }

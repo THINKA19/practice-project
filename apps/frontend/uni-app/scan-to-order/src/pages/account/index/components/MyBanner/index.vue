@@ -17,9 +17,9 @@ const banners = [
 </script>
 
 <template>
-  <view class="mx-32rpx mt-32rpx overflow-hidden rounded-24rpx">
+  <view class="mx-32rpx mt-20rpx overflow-hidden rounded-24rpx">
     <swiper
-      class="h-240rpx w-full"
+      class="h-120rpx w-full"
       :vertical="false"
       circular
       autoplay

@@ -2,7 +2,10 @@
 /**
  * 预约订座：联系人、电话、到店时间、用餐人数
  */
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { PhoneInput } from '@/components/phone-input'
+import { formatBookingSlot, isBookingSlot } from './domain/booking.rules'
 import { useBookingForm } from './composables/use-form'
 
 definePage({
@@ -14,7 +17,45 @@ definePage({
 
 const { t } = useI18n()
 const vm = useBookingForm()
-const { name, mobile, time, personIndex, personOptions, showDatetimePop, currentDate, minDate, configLoading, configFailed, submitting, pending } = vm
+const { name, mobile, phoneCountry, time, personIndex, personOptions, configLoading, configFailed, submitting, pending } = vm
+
+const shopImageFailed = ref(false)
+watch(vm.shopPic, () => {
+  shopImageFailed.value = false
+})
+
+const timeOpen = ref(false)
+const available = ref<string[]>([])
+const selectedDate = ref('')
+const selectedSlot = ref('')
+const dates = computed(() => [...new Set(available.value.map(slot => slot.slice(0, 10)))])
+const daySlots = computed(() => available.value.filter(slot => slot.startsWith(`${selectedDate.value} `)))
+
+function openTimePicker() {
+  if (configLoading.value || configFailed.value || submitting.value || pending.value)
+    return
+  const now = Date.now()
+  available.value = vm.slots.value.filter(slot => isBookingSlot(slot, now))
+  selectedSlot.value = available.value.includes(time.value) ? time.value : ''
+  selectedDate.value = selectedSlot.value.slice(0, 10) || dates.value[0] || ''
+  timeOpen.value = true
+}
+
+function selectDate(date: string) {
+  if (date !== selectedDate.value) {
+    selectedDate.value = date
+    selectedSlot.value = ''
+  }
+}
+
+function confirmTime() {
+  if (!vm.slots.value.includes(selectedSlot.value) || !isBookingSlot(selectedSlot.value)) {
+    openTimePicker()
+    return
+  }
+  time.value = selectedSlot.value
+  timeOpen.value = false
+}
 
 onLoad(() => {
   vm.init()
@@ -28,128 +69,171 @@ onShow(() => {
 <template>
   <z-paging fixed :use-page-scroll="false" :auto="false" :hide-empty-view="true" :refresher-enabled="false" :loading-more-enabled="false" :paging-style="{ background: 'linear-gradient(180deg,#fff5e6 0%,#fff 100%)' }">
     <view class="booking-container">
-      <view class="header-banner">
-        <view class="banner-bg" />
-        <view class="banner-content">
-          <view class="banner-icon">
-            🥤
+      <view class="mb-24rpx flex items-center gap-16rpx rounded-16rpx bg-white p-20rpx">
+        <image v-if="vm.shopPic.value && !shopImageFailed" :src="vm.shopPic.value" mode="aspectFill" class="h-88rpx w-88rpx shrink-0 rounded-12rpx" @error="shopImageFailed = true" />
+        <view class="min-w-0 flex-1">
+          <view class="text-30rpx font-600">
+            {{ vm.shopName.value || '请选择预约门店' }}
           </view>
-          <view class="mb-8rpx text-48rpx font-600 tracking-4rpx">
-            {{ t('booking.title') }}
-          </view>
-          <view class="text-26rpx opacity-90">
-            {{ t('booking.subtitle') }}
+          <view v-if="vm.shopAddress.value" class="mt-6rpx text-24rpx text-#666">
+            {{ vm.shopAddress.value }}
           </view>
         </view>
-      </view>
-
-      <view class="form-card">
-        <view class="section-title">
-          <view class="mr-12rpx text-40rpx">
-            👤
-          </view>
-          <text class="title-text">
-            {{ t('booking.infoTitle') }}
-          </text>
-        </view>
-        <view class="input-group">
-          <view class="input-label">
-            <text class="label-text">
-              {{ t('booking.name') }}
-            </text>
-            <text class="label-required">
-              *
-            </text>
-          </view>
-          <wd-input v-model="name" :placeholder="t('booking.namePlaceholder')" clearable focus custom-class="custom-field" />
-        </view>
-        <view class="input-group">
-          <view class="input-label">
-            <text class="label-text">
-              {{ t('booking.mobile') }}
-            </text>
-            <text class="label-required">
-              *
-            </text>
-          </view>
-          <wd-input v-model="mobile" type="number" :placeholder="t('booking.mobilePlaceholder')" clearable custom-class="custom-field" />
-        </view>
-        <view class="input-group">
-          <view class="input-label">
-            <text class="label-text">
-              {{ t('booking.time') }}
-            </text>
-            <text class="label-required">
-              *
-            </text>
-          </view>
-          <view class="custom-field time-field" @tap="vm.openTime()">
-            <text :class="time ? 'text-#333' : 'text-#bbb'">
-              {{ time || t('booking.timePlaceholder') }}
-            </text>
-            <wd-icon name="arrow-right" size="28rpx" color="#999" />
-          </view>
-        </view>
-      </view>
-
-      <view class="form-card">
-        <view class="section-title">
-          <view class="mr-12rpx text-40rpx">
-            👥
-          </view>
-          <text class="title-text">
-            {{ t('booking.person') }}
-          </text>
-        </view>
-        <view class="persion-num">
-          <view
-            v-for="(item, index) in personOptions"
-            :key="item"
-            class="person-item"
-            :class="{ active: personIndex === index }"
-            @tap="vm.selectPeople(index)"
-          >
-            <view class="person-icon">
-              {{ personIndex === index ? '✓' : '👥' }}
-            </view>
-            <view class="person-text">
-              {{ item }}
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <view class="px-30rpx pt-20rpx">
-        <view v-if="configFailed" class="mb-24rpx text-center text-red-500" @tap="vm.load()">
-          预约配置加载失败，点击重试
-        </view>
-        <view v-if="pending" class="mb-24rpx text-center text-26rpx">
-          预约申请已提交，结果请联系门店核对，请勿重复提交
-        </view>
-        <wd-button block custom-class="mb-20rpx" custom-style="height: 96rpx; border-radius: 48rpx; background: #C9935B; border: none; color: white;" :loading="submitting || configLoading" :disabled="configLoading || configFailed || submitting || pending" @click="vm.submit()">
-          {{ t('booking.title') }}
+        <wd-button size="small" :disabled="configLoading || submitting" @click="vm.chooseShop">
+          {{ vm.shopId.value ? '换门店' : '选择门店' }}
         </wd-button>
-        <view class="px-20rpx text-center text-24rpx text-#999 leading-relaxed">
-          {{ t('booking.tip') }}
-        </view>
       </view>
+      <template v-if="vm.shopId.value">
+        <view class="header-banner">
+          <view class="banner-bg" />
+          <view class="banner-content">
+            <view class="banner-icon">
+              🥤
+            </view>
+            <view class="mb-8rpx text-48rpx font-600 tracking-4rpx">
+              {{ t('booking.title') }}
+            </view>
+            <view class="text-26rpx opacity-90">
+              {{ t('booking.subtitle') }}
+            </view>
+          </view>
+        </view>
 
-      <wd-datetime-picker
-        v-model="currentDate"
-        v-model:visible="showDatetimePop"
-        :z-index="2000"
-        root-portal
-        type="datetime"
-        :min-date="minDate"
-        :formatter="vm.formatter"
-        :filter="vm.filter"
-        :confirm-button-text="t('common.confirm')"
-        :cancel-button-text="t('common.cancel')"
-        @cancel="vm.closeTime()"
-        @confirm="({ value }: { value: number }) => vm.confirm(value)"
-      />
+        <view class="form-card">
+          <view class="section-title">
+            <view class="mr-12rpx text-40rpx">
+              👤
+            </view>
+            <text class="title-text">
+              {{ t('booking.infoTitle') }}
+            </text>
+          </view>
+          <view v-if="vm.canBook.value" class="input-group">
+            <view class="input-label">
+              <text class="label-text">
+                {{ t('booking.name') }}
+              </text>
+              <text class="label-required">
+                *
+              </text>
+            </view>
+            <wd-input v-model="name" :placeholder="t('booking.namePlaceholder')" clearable focus custom-class="custom-field" />
+          </view>
+          <view v-if="vm.canBook.value" class="input-group">
+            <view class="input-label">
+              <text class="label-text">
+                {{ t('booking.mobile') }}
+              </text>
+              <text class="label-required">
+                *
+              </text>
+            </view>
+            <view class="custom-field phone-field">
+              <phone-input v-model="mobile" v-model:country="phoneCountry" :disabled="submitting || pending" :placeholder="t('booking.mobilePlaceholder')" required />
+            </view>
+          </view>
+          <view class="input-group">
+            <view class="input-label">
+              <text class="label-text">
+                {{ t('booking.time') }}
+              </text>
+              <text class="label-required">
+                *
+              </text>
+            </view>
+            <view class="time-field custom-field" @tap="openTimePicker">
+              <text>{{ time ? `${time.slice(0, 10)} ${formatBookingSlot(time)}` : t('booking.timePlaceholder') }}</text>
+              <text>›</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="form-card">
+          <view class="section-title">
+            <view class="mr-12rpx text-40rpx">
+              👥
+            </view>
+            <text class="title-text">
+              {{ t('booking.person') }}
+            </text>
+          </view>
+          <view class="persion-num">
+            <view
+              v-for="(item, index) in personOptions"
+              :key="item"
+              class="person-item"
+              :class="{ active: personIndex === index }"
+              @tap="vm.selectPeople(index)"
+            >
+              <view class="person-icon">
+                {{ personIndex === index ? '✓' : '👥' }}
+              </view>
+              <view class="person-text">
+                {{ item }}
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="px-30rpx pt-20rpx">
+          <view v-if="configFailed" class="mb-24rpx text-center text-red-500" @tap="vm.load()">
+            预约配置加载失败，点击重试
+          </view>
+          <view v-if="pending" class="mb-24rpx text-center text-26rpx">
+            预约申请已提交，结果请联系门店核对，请勿重复提交
+          </view>
+          <wd-button v-if="!vm.canBook.value" block :disabled="!time || configFailed" @click="vm.login">
+            登录后继续预约
+          </wd-button>
+          <wd-button v-else block custom-class="mb-20rpx" custom-style="height: 96rpx; border-radius: 48rpx; background: #C9935B; border: none; color: white;" :loading="submitting || configLoading" :disabled="configLoading || configFailed || submitting || pending || !time" @click="vm.submit()">
+            {{ t('booking.title') }}
+          </wd-button>
+          <view class="px-20rpx text-center text-24rpx text-#999 leading-relaxed">
+            {{ t('booking.tip') }}
+          </view>
+        </view>
+      </template>
     </view>
   </z-paging>
+  <wd-popup v-model="timeOpen" position="bottom" root-portal custom-style="background: #fff;" :z-index="1200" round safe-area-inset-bottom>
+    <view class="flex items-center justify-between px-32rpx py-28rpx">
+      <text class="text-32rpx font-600">{{ t('booking.timePlaceholder') }}</text>
+      <text class="text-26rpx" @tap="timeOpen = false">{{ t('common.cancel') }}</text>
+    </view>
+    <view class="px-32rpx pb-24rpx text-24rpx text-#888">
+      {{ t('booking.weekLimit') }}
+    </view>
+    <view v-if="!dates.length" class="px-32rpx py-48rpx text-center">
+      {{ t('booking.noSlots') }}
+    </view>
+    <view v-else class="flex border-y border-#eee">
+      <view class="min-w-0 flex-1 text-center">
+        <view class="py-20rpx font-600">
+          {{ t('booking.dateColumn') }}
+        </view>
+        <scroll-view scroll-y :show-scrollbar="false" class="h-440rpx">
+          <view v-for="date in dates" :key="date" class="py-26rpx text-26rpx" :class="{ 'font-600 bg-#fff5e6': selectedDate === date }" @tap="selectDate(date)">
+            {{ date.slice(5) }}
+          </view>
+        </scroll-view>
+      </view>
+      <view class="min-w-0 flex-1 border-l border-#eee text-center">
+        <view class="py-20rpx font-600">
+          {{ t('booking.timeColumn') }}
+        </view>
+        <scroll-view :key="selectedDate" scroll-y :show-scrollbar="false" class="h-440rpx">
+          <view v-for="slot in daySlots" :key="slot" class="py-26rpx text-26rpx" :class="{ 'font-600 bg-#fff5e6': selectedSlot === slot }" @tap="selectedSlot = slot">
+            {{ formatBookingSlot(slot) }}
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+    <view v-if="dates.length" class="px-32rpx py-28rpx">
+      <wd-button block :disabled="!selectedSlot" @click="confirmTime">
+        {{ t('common.confirm') }}
+      </wd-button>
+    </view>
+  </wd-popup>
 </template>
 
 <style lang="scss" scoped>
@@ -261,10 +345,15 @@ onShow(() => {
   border-radius: 16rpx !important;
 }
 
+.phone-field {
+  padding: 16rpx 24rpx;
+}
+
 .time-field {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 24rpx 32rpx;
   font-size: 28rpx;
 }
 

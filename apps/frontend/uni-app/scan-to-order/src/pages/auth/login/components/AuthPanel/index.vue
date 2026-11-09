@@ -5,7 +5,7 @@ import { usePanel } from './use-auth-panel'
 
 defineOptions({ name: 'WechatAuthorizationPanel' })
 
-const { visible, agreed, loading, error, demo, open, authorize, webLogin } = usePanel()
+const { visible, agreed, loading, error, open, authorize } = usePanel()
 defineExpose({ open })
 </script>
 
@@ -17,16 +17,9 @@ defineExpose({ open })
           微信授权登录
         </view>
         <AgreementConsent v-model="agreed" :disabled="loading" @read-user="readUserAgreement" @read-privacy="readPrivacyPolicy" />
-        <!-- #ifdef MP-WEIXIN -->
         <button class="authorize-button" :disabled="!agreed || loading" :loading="loading" @tap="authorize">
           授权登录
         </button>
-        <!-- #endif -->
-        <!-- #ifndef MP-WEIXIN -->
-        <button class="authorize-button" :disabled="!agreed || loading" :loading="loading" @tap="demo ? authorize() : webLogin()">
-          授权登录
-        </button>
-        <!-- #endif -->
         <view v-if="error" role="alert" class="mt-20rpx text-26rpx text-#d93025">
           {{ error }}
         </view>

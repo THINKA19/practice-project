@@ -71,3 +71,12 @@ it('never enables simulated confirmation in production', async () => {
 })
 
 beforeEach(() => resetAllMocks())
+
+it('enables customer Mock login in development when Mock is enabled', async () => {
+  vi.resetModules()
+  vi.stubEnv('MODE', 'development')
+  vi.stubEnv('DEV', true)
+  vi.stubEnv('VITE_USE_MOCK', 'true')
+  const { loginApi } = await import('../../api/login.api')
+  expect(loginApi.demo).toBe(true)
+})

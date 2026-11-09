@@ -1,43 +1,75 @@
 /**
  * 在线订座 ViewModel
- * 来源：bee-master/pages/booking/index.js
- *   onLoad(formatter)、onShow(登录校验)、selectPeople、submit、showDatetimePop、closeTime、confirm、filter
  */
 import { computed, onScopeDispose, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { BOOKING_PERSON_OPTIONS } from '../models/enums'
-import { checkBookingDraft, nextBookingTime } from '../domain/booking.rules'
+import { checkBookingDraft, isBookingSlot } from '../domain/booking.rules'
 import { isAccepted } from '../models/mappers'
 import { bookingApi } from './use-requests'
 import { submitBooking } from './use-actions'
-import dayjs from 'dayjs'
 import { useSessionState } from '@/pages/auth/session'
 import { toLoginPage } from '@/utils/toLoginPage'
+import { ClientRoutes } from '@/pages/routes'
 import { toast } from '@/utils/project/feedback'
+
+function readShopField(value: unknown): string {
+  if (typeof value !== 'string')
+    return ''
+  try {
+    return decodeURIComponent(value).trim()
+  }
+  catch {
+    return value.trim()
+  }
+}
 
 /** 维护订座活动、人数与时间草稿；服务端未确认结果时阻止重复提交，换号清空个人输入。 */
 export function useBookingForm() {
   const { t, locale } = useI18n()
   const session = useSessionState()
   const reservationId = ref('')
+  const shopId = ref(0)
+  const shopName = ref('')
+  const shopAddress = ref('')
+  const shopPic = ref('')
+  const slots = ref<string[]>([])
+  const configLoading = ref(false)
+  const submitting = ref(false)
+  const time = ref('')
+  function chooseShop() {
+    if (configLoading.value || submitting.value)
+      return
+    uni.navigateTo({
+      url: `${ClientRoutes.Account.bookingShops}?change=1&shopId=${shopId.value}`,
+      events: { bookingShopSelected: (id: number, name: string, address = '', pic = '') => selectShop(id, name, address, pic) },
+    })
+  }
   let disposed = false
   let revision = 0
   onScopeDispose(() => {
     disposed = true
     revision++
   })
-  const configLoading = ref(false)
   const configFailed = ref(false)
   const pending = ref(false)
   async function load() {
-    if (disposed || configLoading.value)
+    if (disposed || configLoading.value || !shopId.value)
       return
     configLoading.value = true
     configFailed.value = false
     try {
-      const info = await bookingApi.info()
+      const info = await bookingApi.info(shopId.value)
       if (!disposed) {
         reservationId.value = typeof info?.id === 'string' ? info.id.trim() : ''
+        if (!shopName.value)
+          shopName.value = info?.shopName || ''
+        const now = Date.now()
+        slots.value = Array.isArray(info?.slots)
+          ? [...new Set(info.slots.filter(slot => typeof slot === 'string' && isBookingSlot(slot, now)))].sort()
+          : []
+        if (!slots.value.includes(time.value))
+          time.value = ''
         configFailed.value = !reservationId.value
       }
     }
@@ -50,20 +82,29 @@ export function useBookingForm() {
         configLoading.value = false
     }
   }
-  onLoad((query) => {
-    reservationId.value = typeof query?.yuyueId === 'string' ? query.yuyueId.trim() : ''
-    if (!reservationId.value)
-      void load()
-  })
-
+  function selectShop(id: number, name: string, address: string, pic: string, keepTime = false) {
+    if (!Number.isSafeInteger(id) || id <= 0 || id === shopId.value)
+      return
+    shopId.value = id
+    shopName.value = name.trim()
+    shopAddress.value = address.trim()
+    shopPic.value = pic.trim()
+    reservationId.value = ''
+    slots.value = []
+    if (!keepTime)
+      time.value = ''
+    pending.value = false
+    void load()
+  }
   const name = ref('')
   const mobile = ref('')
-  const time = ref('')
+  const phoneCountry = ref('VN')
   const personIndex = ref(0)
-  const showDatetimePop = ref(false)
-  const minDate = ref(Date.now())
-  const currentDate = ref<number>(nextBookingTime(minDate.value))
-  const submitting = ref(false)
+  onLoad((query) => {
+    if (typeof query?.time === 'string')
+      time.value = query.time
+    selectShop(Number(query?.shopId), readShopField(query?.shopName), readShopField(query?.shopAddress), readShopField(query?.shopPic), true)
+  })
   watch(() => session.sessionRevision, () => {
     revision++
     submitting.value = false
@@ -71,8 +112,8 @@ export function useBookingForm() {
     personIndex.value = 0
     name.value = ''
     mobile.value = ''
+    phoneCountry.value = 'VN'
     time.value = ''
-    showDatetimePop.value = false
   }, { flush: 'sync' })
 
   /** 人数选项按语言展示（原 persionNum[language]） */
@@ -85,52 +126,22 @@ export function useBookingForm() {
   }
 
   /** 每次显示同步标题，提交动作再进行身份校验。 */
-  async function refresh() {
+  function refresh() {
     init()
+    if (shopId.value && !pending.value && !submitting.value)
+      void load()
   }
 
   function selectPeople(idx: number) {
     personIndex.value = idx
   }
 
-  /** 分钟只保留 10 的整数倍 */
-  function filter(column: { type: string, values: number[] }) {
-    if (column.type === 'minute') {
-      return column.values.filter(v => v % 10 === 0)
-    }
-    return column.values
-  }
+  const canBook = computed(() => session.hasLogin && session.identity === 'customer')
 
-  function formatter(type: string, value: string | number) {
-    switch (type) {
-      case 'year':
-        return `${value}${t('date.year')}`
-      case 'month':
-        return `${value}${t('date.month')}`
-      case 'date':
-        return `${value}${t('date.day')}`
-      case 'hour':
-        return `${value}${t('date.hour')}`
-      case 'minute':
-        return `${value}${t('date.minutes')}`
-      default:
-        return `${value}`
-    }
-  }
-
-  function openTime() {
-    minDate.value = Date.now()
-    currentDate.value = Math.max(currentDate.value, nextBookingTime(minDate.value))
-    showDatetimePop.value = true
-  }
-
-  function closeTime() {
-    showDatetimePop.value = false
-  }
-
-  function confirm(value: number | string) {
-    time.value = dayjs(Number(value)).format('YYYY-MM-DD HH:mm')
-    closeTime()
+  function login() {
+    toast('请先登录后预约')
+    const redirect = `${ClientRoutes.Account.booking}?shopId=${shopId.value}&shopName=${encodeURIComponent(shopName.value)}&shopAddress=${encodeURIComponent(shopAddress.value)}&shopPic=${encodeURIComponent(shopPic.value)}&time=${encodeURIComponent(time.value)}`
+    toLoginPage({ queryString: `?redirect=${encodeURIComponent(redirect)}` })
   }
 
   async function submit(): Promise<void> {
@@ -138,12 +149,15 @@ export function useBookingForm() {
     if (disposed || submitting.value || pending.value) {
       return
     }
-    if (!session.hasLogin || session.identity !== 'customer') {
-      toast(t('demoFlow.signIn'))
-      toLoginPage()
+    if (!shopId.value) {
+      chooseShop()
       return
     }
-    const draft = { name: name.value, mobile: mobile.value, time: time.value, personIndex: personIndex.value }
+    if (!session.hasLogin || session.identity !== 'customer') {
+      login()
+      return
+    }
+    const draft = { name: name.value, mobile: mobile.value, phoneCountry: phoneCountry.value, time: time.value, personIndex: personIndex.value }
     const err = checkBookingDraft(draft)
     if (err) {
       toast(t(err))
@@ -153,10 +167,15 @@ export function useBookingForm() {
       toast('缺少预约活动配置，请联系门店')
       return
     }
+    if (!slots.value.includes(draft.time)) {
+      toast('请选择门店提供的可预约时段')
+      return
+    }
+    const requestId = `booking-${Date.now()}-${Math.random().toString(36).slice(2)}`
     const request = revision
     submitting.value = true
     try {
-      const result = await submitBooking(reservationId.value, draft)
+      const result = await submitBooking(shopId.value, reservationId.value, draft, requestId)
       if (disposed || request !== revision)
         return
       if (!isAccepted(result)) {
@@ -181,6 +200,14 @@ export function useBookingForm() {
   }
 
   return {
+    shopId,
+    shopName,
+    shopAddress,
+    shopPic,
+    slots,
+    chooseShop,
+    canBook,
+    login,
     configLoading,
     configFailed,
     pending,
@@ -188,20 +215,13 @@ export function useBookingForm() {
     load,
     name,
     mobile,
+    phoneCountry,
     time,
     personIndex,
     personOptions,
-    showDatetimePop,
-    currentDate,
-    minDate,
     init,
     refresh,
     selectPeople,
-    filter,
-    formatter,
-    openTime,
-    closeTime,
-    confirm,
     submit,
   }
 }

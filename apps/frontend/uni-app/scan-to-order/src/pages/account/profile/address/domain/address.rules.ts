@@ -1,5 +1,6 @@
-import type { Address, AddressForm, DeliveryCountry, PhoneCountry } from '../models/types'
-import { DELIVERY_COUNTRIES, DELIVERY_REGIONS, PHONE_COUNTRIES } from '../models/enums'
+import { internationalPhone } from '@/utils/project/phone'
+import type { Address, AddressForm, DeliveryCountry } from '../models/types'
+import { DELIVERY_COUNTRIES, DELIVERY_REGIONS } from '../models/enums'
 
 /** 校验地址表单，返回错误 i18n key；通过返回 null */
 export function validateAddress(f: AddressForm): string | null {
@@ -47,27 +48,4 @@ export function defaultAddressFirst(addresses: Address[]): Address[] {
 /** 获取当前配送国家可选地区，未知国家返回空列表。 */
 export function deliveryRegions(country: string): readonly string[] {
   return DELIVERY_COUNTRIES.some(item => item.code === country) ? DELIVERY_REGIONS[country as DeliveryCountry] : []
-}
-
-/** 基础格式校验并转为国际格式，不验证号码归属或是否开通。 */
-export function internationalPhone(value: string, countryCode = 'VN'): string | null {
-  const country = PHONE_COUNTRIES.find(item => item.code === countryCode)
-  if (!country)
-    return null
-  let number = value.trim().replace(/[\s()-]/g, '')
-  if (number.startsWith('+')) {
-    if (!number.startsWith(`+${country.dial}`))
-      return null
-    number = number.slice(country.dial.length + 1)
-  }
-  if (country.code !== 'CN')
-    number = number.replace(/^0/, '')
-  if (!/^\d+$/.test(number) || number.length < country.min || number.length > country.max)
-    return null
-  return `+${country.dial}${number}`
-}
-
-/** 回填国际号码的区号，旧中国本地号码保留中国区号。 */
-export function phoneCountryOf(value: string): PhoneCountry {
-  return PHONE_COUNTRIES.find(country => value.startsWith(`+${country.dial}`))?.code || (/^1\d{10}$/.test(value) ? 'CN' : 'VN')
 }

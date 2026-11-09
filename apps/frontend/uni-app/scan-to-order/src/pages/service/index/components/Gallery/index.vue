@@ -33,7 +33,7 @@ const {
 
 <template>
   <view
-    class="ml-32rpx mr-132rpx mt-40rpx"
+    class="mx-32rpx mt-40rpx"
   >
     <!-- 标题 -->
     <wd-row align="middle" justify="space-between">
@@ -64,25 +64,25 @@ const {
         scroll-x
         enable-flex
         :show-scrollbar="false"
-        class="h-360rpx w-full whitespace-nowrap"
+        class="gallery-viewport w-full whitespace-nowrap"
         @scroll="onScroll(group.id)($event)"
       >
         <view
-          class="flex flex-nowrap select-none gap-24rpx"
+          class="h-full flex flex-nowrap select-none gap-24rpx"
           :class="getState(group.id).dragging ? 'cursor-grabbing' : 'cursor-grab'"
           @mousedown="(e) => handleMouseDown(group.id, e)"
         >
           <view
             v-for="(item, index) in group.images"
             :key="`${group.id}-${index}`"
-            class="relative h-312rpx w-280rpx flex-shrink-0 overflow-hidden rounded-20rpx bg-white shadow-[0_4rpx_16rpx_rgba(0,0,0,0.08)]"
+            class="gallery-image relative flex-shrink-0 overflow-hidden rounded-20rpx bg-white shadow-[0_4rpx_16rpx_rgba(0,0,0,0.08)]"
             @click="!getState(group.id).dragMoved && emit('preview', group.images, item)"
             @touchstart="getState(group.id).dragMoved = false"
           >
             <wd-img
               :src="item.url"
-              width="280rpx"
-              height="312rpx"
+              width="100%"
+              height="100%"
               custom-class="rounded-20rpx"
             />
             <!-- 图片底部渐变遮罩 + 标签 -->
@@ -95,11 +95,12 @@ const {
         </view>
       </scroll-view>
 
-      <!-- 左右箭头：除 App-NVUE 外所有端都可见（H5 PC 浏览器、微信小程序 PC 模拟器等） -->
+      <!-- H5 中仅宽屏且支持精细指针的设备显示箭头。 -->
       <!-- #ifdef H5 -->
       <button
+        v-show="canScroll(group.id, -1) || canScroll(group.id, 1)"
         :class="canScroll(group.id, -1) ? 'bg-white/95 text-[#333] cursor-pointer' : 'bg-[#f2f2f2] text-[#b8b8b8] cursor-not-allowed'"
-        class="absolute left-12rpx top-1/2 z-10 m-0 h-80rpx w-80rpx flex items-center justify-center border border-white/60 rounded-full p-0 shadow-[0_6rpx_18rpx_rgba(0,0,0,0.18)] transition-all duration-200 -translate-y-1/2 active:scale-90 hover:bg-white hover:shadow-[0_8rpx_22rpx_rgba(0,0,0,0.22)]"
+        class="gallery-arrow absolute left-12rpx top-1/2 z-10 m-0 h-80rpx w-80rpx flex items-center justify-center border border-white/60 rounded-full p-0 shadow-[0_6rpx_18rpx_rgba(0,0,0,0.18)] transition-all duration-200 -translate-y-1/2 active:scale-90 hover:bg-white hover:shadow-[0_8rpx_22rpx_rgba(0,0,0,0.22)]"
         hover-class="scale-90"
         :disabled="!canScroll(group.id, -1)"
         :aria-disabled="!canScroll(group.id, -1)"
@@ -109,8 +110,9 @@ const {
         <wd-icon name="arrow-left" size="24px" />
       </button>
       <button
+        v-show="canScroll(group.id, -1) || canScroll(group.id, 1)"
         :class="canScroll(group.id, 1) ? 'bg-white/95 text-[#333] cursor-pointer' : 'bg-[#f2f2f2] text-[#b8b8b8] cursor-not-allowed'"
-        class="absolute right-12rpx top-1/2 z-10 m-0 h-80rpx w-80rpx flex items-center justify-center border border-white/60 rounded-full p-0 shadow-[0_6rpx_18rpx_rgba(0,0,0,0.18)] transition-all duration-200 -translate-y-1/2 active:scale-90 hover:bg-white hover:shadow-[0_8rpx_22rpx_rgba(0,0,0,0.22)]"
+        class="gallery-arrow absolute right-12rpx top-1/2 z-10 m-0 h-80rpx w-80rpx flex items-center justify-center border border-white/60 rounded-full p-0 shadow-[0_6rpx_18rpx_rgba(0,0,0,0.18)] transition-all duration-200 -translate-y-1/2 active:scale-90 hover:bg-white hover:shadow-[0_8rpx_22rpx_rgba(0,0,0,0.22)]"
         hover-class="scale-90"
         :disabled="!canScroll(group.id, 1)"
         :aria-disabled="!canScroll(group.id, 1)"
@@ -123,3 +125,30 @@ const {
     </view>
   </view>
 </template>
+
+<style scoped>
+.gallery-viewport {
+  height: 286rpx;
+}
+.gallery-image {
+  width: calc((100% - 48rpx) / 2.3);
+  height: 286rpx;
+}
+.gallery-arrow {
+  display: none;
+}
+/* #ifdef H5 */
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
+  .gallery-viewport {
+    height: 312rpx;
+  }
+  .gallery-image {
+    width: 280rpx;
+    height: 312rpx;
+  }
+  .gallery-arrow {
+    display: flex;
+  }
+}
+/* #endif */
+</style>
