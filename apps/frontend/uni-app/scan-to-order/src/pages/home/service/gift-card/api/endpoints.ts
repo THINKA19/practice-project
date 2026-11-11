@@ -1,17 +1,17 @@
-/** 后端路径清单；网关由接口函数显式选择。 */
+/**
+ * ============================================================================
+ * 【文件概述】卡包路径清单，只拥有目录、持卡查询及开发资产操作。
+ * 【方法与导出清单】endpoints。
+ * 【综合使用示例】
+ * import { endpoints } from './endpoints'
+ * const path = endpoints.my // => '/card/my'
+ * ============================================================================
+ */
 export const endpoints = {
-  /** 查询列表；main 网关。 */
+  /** 开发专用模拟购卡、消费、退款；非生产协议。 */
+  demoAction: '/__mock/gift-card/action',
+  /** 默认网关，公开模板查询。 */
   list: '/card/list',
-  /** 查询当前用户记录；main 网关。 */
+  /** 默认网关，当前客户持卡查询。 */
   my: '/card/my',
-  /** 查询使用流水；main 网关。 */
-  logs: '/card/logs',
-  /** 兑换券或卡；main 网关。 */
-  exchange: '/card/exchange',
-  /** 开启礼品卡赠送；main 网关。 */
-  shareOpen: '/card/share/open',
-  /** 撤回礼品卡赠送；main 网关。 */
-  shareClose: '/card/share/close',
-  /** 预览或领取赠送卡；main 网关。 */
-  shareFetch: '/card/share/fetch',
 } as const

@@ -9,7 +9,9 @@ const actions = vi.hoisted(() => ({
 }))
 const state = vi.hoisted(() => ({ loggedIn: false }))
 vi.mock('../use-user', () => ({
-  useHomeUser: () => ({ hasLogin: { get value() { return state.loggedIn } }, refresh: vi.fn() }),
+  useHomeUser: () => ({ hasLogin: { get value() {
+    return state.loggedIn
+  } }, refresh: vi.fn() }),
 }))
 vi.mock('../use-banners', () => ({ useHomeBanners: () => ({ banners: ref([]), loadBanners: vi.fn(), tapBanner: vi.fn() }) }))
 vi.mock('../use-navigation', () => ({ useHomeNavigation: () => actions }))

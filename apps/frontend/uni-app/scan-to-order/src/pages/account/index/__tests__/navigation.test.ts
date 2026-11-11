@@ -40,7 +40,7 @@ it('我的各入口使用当前已实现页面，昵称根据登录状态跳转'
     expect(mocks.navigate).toHaveBeenLastCalledWith(path)
   }
   await vm.navTo('会员中心')
-  expect(mocks.navigate).toHaveBeenLastCalledWith('/pages/account/users/member-center/index')
+  expect(mocks.navigate).toHaveBeenLastCalledWith('/pages/home/user/member-center/index')
   await vm.navTo('申请商家入驻')
   expect(mocks.navigate).toHaveBeenLastCalledWith('/pages-shop/onboarding/index')
   for (const title of ['商家后台', '骑手工作台']) {

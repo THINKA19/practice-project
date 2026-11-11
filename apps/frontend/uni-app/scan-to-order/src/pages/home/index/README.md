@@ -22,7 +22,7 @@
 
 分享使用当前首页 TEA WORK 品牌文字；仅有效登录用户附带 userId 邀请参数，未接入旧配置中心及分享图片。
 
-## 本次测试入口
+## 首页学习入口
 
 - user/member-center/index.vue：会员中心。
 - user/coupons/index.vue：优惠券。
@@ -31,7 +31,7 @@
 - service/group-buying/index.vue：团购。
 - service/welfare/index.vue：福利。
 
-其余测试路径相对 pages/home，显示测试标题及进入成功文字。会员中心和礼品卡已使用所属业务的正式页面；页面由 UniPages 自动注册，路径统一由 pages/routes.ts 维护。
+上述目录均为首页模块内的独立页面。会员中心、优惠券、收藏、团购与福利按学习示例展示；礼品卡沿用现有业务契约。页面由 UniPages 自动注册，新增服务子页面路径由 home/service/routes.ts 维护。
 
 首页到店自取与外卖配送通过 openShopList 进入底部点餐商家列表，先设置门店状态中的配送方式，再切换页面，不使用重复选店路由。
 
@@ -51,7 +51,7 @@ banner/list 以 type 区分首页 shouye、点餐 diancang、礼品卡 card。pi
 
 mock/entry.mock.ts 仅供公共发现器收集；banner/handlers.ts 使用 api/endpoints.ts 定义的路径，banner/data.ts 维护首页轮播样本。公共发现器按约定自动收集入口，不再保留首页 handler 或数据副本。公共适配器、开关、响应信封和故障工具仍在 src/mock。页面和 API 不直接导入 mock，生产开关及未命中回退策略不变。
 
-首页用户卡与“我的”共用账户模块公开的 CustomerProfile。两边使用相同的顾客资料、黄色等级徽章和绿色微信登录按钮：游客显示欢迎文案和默认头像，登录后显示当前顾客已保存的昵称与头像，等级缺失显示“游客”。退出、失效或非顾客身份均不显示缓存用户资料。会员入口已指向 /pages/account/users/member-center/index；未登录点击登录按钮、会员或优惠券入口先进入现有客户登录页。真实微信资料授权与等级升级仍由既有认证服务及后端规则负责，不在首页伪造。
+首页用户卡与“我的”共用账户模块公开的 CustomerProfile。两边使用相同的顾客资料、黄色等级徽章和绿色微信登录按钮：游客显示欢迎文案和默认头像，登录后显示当前顾客已保存的昵称与头像，等级缺失显示“游客”。退出、失效或非顾客身份均不显示缓存用户资料。会员入口已指向 /pages/home/user/member-center/index；未登录点击登录按钮、会员或优惠券入口先进入现有客户登录页。真实微信资料授权与等级升级仍由既有认证服务及后端规则负责，不在首页伪造。
 
 ## 当前目录与职责边界
 

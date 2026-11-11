@@ -1,47 +1,34 @@
-import { parseShareToken } from '../models/mappers'
+/**
+ * ============================================================================
+ * 【文件概述】卡包业务查询门面，归一化空列表；子领域请求已迁回所属目录。
+ * 【方法与导出清单】cardApi：list、my、demoAction。
+ * 【综合使用示例】
+ * import { cardApi } from '@/pages/home/service/gift-card'
+ * const cards = await cardApi.my() // => 空数据时返回 []
+ * ============================================================================
+ */
 import { cardRequests } from '../api/card.api'
-import type { CardLog, CardTemplate, MyCard } from '../models/types'
+import type { CardTemplate, MyCard } from '../models/types'
 
-/** 礼品卡业务门面：兼容空列表与分页响应，分享动作拒绝空凭证，预览和领取参数保持分离。 */
 export const cardApi = {
-
-  async list(data: Record<string, unknown> = {}): Promise<CardTemplate[]> {
+  /** 开发资产动作，参数及限制见 cardRequests.demoAction。 */
+  demoAction: cardRequests.demoAction,
+  /**
+   * 查询模板并归一化空结果。
+   * @param data { status?: number }；可选状态筛选。
+   * @returns Promise<CardTemplate[]>；请求失败拒绝。
+   * @example await cardApi.list() // => 模板数组或 []
+   */
+  async list(data: { status?: number } = {}): Promise<CardTemplate[]> {
     return (await cardRequests.list(data)) || []
   },
-
+  /**
+   * 查询当前客户持卡并归一化空结果。
+   * 无参数。
+   * @returns Promise<MyCard[]>；请求失败拒绝。
+   * @example await cardApi.my() // => 持卡数组或 []
+   */
   async my(): Promise<MyCard[]> {
     return (await cardRequests.my()) || []
-  },
-
-  async logs(data: Record<string, unknown> = {}): Promise<{ result: CardLog[], totalPage?: number }> {
-    return (await cardRequests.logs(data)) || { result: [] }
-  },
-
-  exchange(data: Record<string, unknown>) {
-    return cardRequests.exchange(data)
-  },
-
-  shareOpen(data: Record<string, unknown>) {
-    return cardRequests.shareOpen(data)
-  },
-
-  shareClose(data: Record<string, unknown>) {
-    return cardRequests.shareClose(data)
-  },
-
-  shareFetch(data: Record<string, unknown>) {
-    return cardRequests.shareFetch(data)
-  },
-
-  /** 开启赠送，返回分享 token（原 cardShareOpen，res.data 即 shareToken） */
-  async openShare(id: number | string, remark = ''): Promise<string> {
-    const res = await cardRequests.openShare(id, remark)
-
-    return parseShareToken(res)
-  },
-
-  /** 领取赠送：calculate=true 仅预览（赠送人、卡信息），false 正式领取 */
-  fetchShare(id: number | string, shareToken: string, calculate: boolean) {
-    return cardRequests.fetchShare(id, shareToken, calculate)
   },
 }

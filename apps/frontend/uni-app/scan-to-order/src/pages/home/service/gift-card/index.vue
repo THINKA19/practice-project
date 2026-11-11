@@ -1,21 +1,26 @@
 <script setup lang="ts">
-import { onLoad, onShow } from '@dcloudio/uni-app'
+import { onLoad, onShareAppMessage, onShareTimeline, onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
 import GiftCardItem from './components/GiftCardItem/index.vue'
 import MyGiftCard from './components/MyGiftCard/index.vue'
 import { CARD_TAB_MY, useCardPage } from './composables/use-page'
+import { BannerCarousel } from '@/components/banner-carousel'
+import { PaymentPanel } from '@/pages/ordering/menu-pay'
 
 definePage({ style: { navigationBarTitleText: '礼品卡', navigationBarBackgroundColor: '#ffffff', navigationBarTextStyle: 'black', backgroundColor: '#f7f7f7', disableScroll: true } })
 const { t } = useI18n()
 const vm = useCardPage()
-const { active, cardList, cardMyList, loading, failed } = vm
+const isDemo = import.meta.env.DEV && import.meta.env.VITE_USE_MOCK === 'true'
+const { active, cardList, cardMyList, loading, failed, visibleCards, visibleMyCards, hasMore, selectedCard, paymentShow, nextAction, banners, cancellingId } = vm
 onLoad(query => void vm.init(query as { tab?: string }))
 onShow(() => void vm.refresh())
+onShareAppMessage(vm.shareAppMessage)
+onShareTimeline(vm.shareTimeline)
 </script>
 
 <template>
-  <z-paging :auto="false" :hide-empty-view="true" :refresher-enabled="false" :loading-more-enabled="false">
-    <template #top>
+  <scroll-view scroll-y class="gift-page" refresher-enabled :refresher-triggered="vm.refreshing.value" @refresherrefresh="vm.pullRefresh()" @scrolltolower="hasMore && vm.loadMore()">
+    <view class="sticky top-0 z-10">
       <view class="gift-tabs" role="tablist" aria-label="礼品卡分类">
         <button class="gift-tab" :class="{ 'is-active': active === 0 }" role="tab" :aria-selected="active === 0" @tap="vm.tabChange(0)">
           {{ t('card.tabBuy') }}
@@ -24,20 +29,34 @@ onShow(() => void vm.refresh())
           {{ t('card.tabMy') }}
         </button>
       </view>
-    </template>
+    </view>
     <view class="gift-content">
+      <BannerCarousel v-if="active === 0 && banners.length" :items="banners" height="280rpx" @select="vm.tapBanner($event.linkUrl)" />
       <view v-if="active === 0" class="gift-notice">
-        在线购买暂未开放，可先查看卡片；持兑换码或好友赠送链接可领取。
+        选一张礼品卡送上心意，购买后可在「我的」查看和赠送。
       </view>
-      <view v-else class="exchange-entry" @tap="vm.goExchange()">
-        <view>
+      <view v-else class="grid grid-cols-2 mb-24rpx gap-16rpx">
+        <button class="wallet-entry" hover-class="wallet-entry-pressed" @tap="vm.goExchange()">
           <view class="text-30rpx text-#333 font-600">
             {{ t('card.exchange.title') }}
-          </view><view class="mt-8rpx text-24rpx text-#777">
-            {{ t('card.exchangeDesc') }}
           </view>
-        </view>
-        <text>→</text>
+          <view class="mt-8rpx text-24rpx text-#777">
+            {{ isDemo ? '使用 GIFT-DEMO 兑换测试卡（每个账户一次）' : t('card.exchangeDesc') }}
+          </view>
+        </button>
+        <button class="wallet-entry wallet-entry-receive" hover-class="wallet-entry-pressed" @tap="vm.goReceive()">
+          <view class="text-30rpx text-#333 font-600">
+            领取好友赠送
+          </view>
+          <view class="mt-8rpx text-24rpx text-#777">
+            <!-- #ifdef H5 -->
+            粘贴领取链接
+            <!-- #endif -->
+            <!-- #ifndef H5 -->
+            从好友分享的消息领取
+            <!-- #endif -->
+          </view>
+        </button>
       </view>
       <view v-if="loading" class="gift-state">
         加载中…
@@ -52,20 +71,41 @@ onShow(() => void vm.refresh())
           暂无可展示的礼品卡
         </view>
         <view v-else class="gift-grid">
-          <GiftCardItem v-for="item in cardList" :key="item.id" :card="item" buy-text="查看详情" @buy="vm.buy(item)" />
+          <view v-for="item in visibleCards" :key="item.id">
+            <GiftCardItem :card="item" buy-text="立即购买" @buy="vm.buy(item)" />
+            <button v-if="isDemo" :disabled="vm.demoBusy.value" class="retry-button" @tap="vm.demoPurchase(item)">
+              模拟购卡（不支付）
+            </button>
+          </view>
         </view>
       </template>
       <template v-else>
         <view v-if="!cardMyList.length" class="gift-state">
-          暂无礼品卡。领取好友赠送或兑换成功后，会显示在这里。
+          暂无礼品卡。购买、领取好友赠送或兑换成功后，会显示在这里。
         </view>
-        <MyGiftCard v-for="item in cardMyList" :key="item.id" :card="item" @send="vm.sendUser(item)" @cancel-share="vm.cardShareClose(item)" @logs="vm.goLogs(item)" />
+        <MyGiftCard
+          v-for="item in visibleMyCards" :key="item.id" :card="item" :cancelling="cancellingId === item.id"
+          @send="vm.sendUser(item)" @share-again="vm.shareAgain(item)" @cancel-share="vm.cardShareClose(item)"
+          @details="vm.goLogs(item, 'details')"
+        />
       </template>
+      <button v-if="hasMore && !loading && !failed" class="retry-button" @tap="vm.loadMore()">
+        加载更多
+      </button>
+      <view v-else-if="!loading && !failed && (active === 0 ? cardList.length : cardMyList.length)" class="gift-state">
+        已经到底了
+      </view>
     </view>
-  </z-paging>
+  </scroll-view>
+  <PaymentPanel v-if="selectedCard" v-model="paymentShow" :money="selectedCard.price!" :remark="`购买礼品卡：${selectedCard.name}`" :next-action="nextAction" @ok="vm.paymentOk()" />
 </template>
 
 <style scoped>
+.gift-page {
+  width: 100%;
+  height: calc(100vh - var(--window-top, 0px) - var(--window-bottom, 0px));
+  background: #f7f7f7;
+}
 .gift-tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -102,9 +142,8 @@ onShow(() => void vm.refresh())
   content: '';
 }
 .gift-content {
-  min-height: 100%;
   box-sizing: border-box;
-  padding: 28rpx 24rpx 48rpx;
+  padding: 28rpx 24rpx calc(48rpx + env(safe-area-inset-bottom));
   background: #f7f7f7;
 }
 .gift-notice {
@@ -125,14 +164,25 @@ onShow(() => void vm.refresh())
   font-size: 28rpx;
   line-height: 44rpx;
 }
-.exchange-entry {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 28rpx;
-  margin-bottom: 24rpx;
-  border-radius: 16rpx;
+.wallet-entry {
+  width: 100%;
+  min-height: 132rpx;
+  margin: 0;
+  padding: 20rpx 16rpx;
+  border: 2rpx solid #eee2d7;
+  border-radius: 20rpx;
   background: #fff;
+  line-height: 1.4;
+}
+.wallet-entry-receive {
+  border-color: #ddc5b3;
+  background: #f8eee5;
+}
+.wallet-entry-pressed {
+  filter: brightness(0.95);
+}
+.wallet-entry::after {
+  border: 0;
 }
 .retry-button {
   margin-top: 20rpx;

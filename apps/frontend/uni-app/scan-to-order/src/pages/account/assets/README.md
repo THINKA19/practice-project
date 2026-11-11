@@ -35,4 +35,4 @@ card/ 和 card7/ 是原代码参考，本次不修改、不作为运行时依赖
 
 ## 业务边界
 
-本目录保留钱包、充值与资金明细、优惠券、积分。礼品卡目录、赠送及领取统一归 pages/home/service 下的 gift-card、gift-send、gift-receive，不在账户资产中维护第二套实现。
+本目录保留钱包、充值与资金明细、优惠券、积分。礼品卡目录、赠送及领取统一归 pages/home/service 下的 gift-card、gift-card-send、gift-card-receive，不在账户资产中维护第二套实现。

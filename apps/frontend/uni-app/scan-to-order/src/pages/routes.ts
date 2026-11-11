@@ -1,5 +1,6 @@
 import { AGREEMENT_PAGES } from '@/pages/auth/agreement'
 import { AUTH_ROUTES } from '@/pages/auth/session/routes/index'
+import { HomeServiceRoutes } from '@/pages/home/service/routes'
 /**
  * ============================================================================
  * 客户端主包与核心业务路由定义表 (Client Subpackage Route Contracts)
@@ -39,14 +40,14 @@ export const ClientRoutes = {
     /** 实体礼品卡/电子储值卡卡包列表页 */
     card: '/pages/home/service/gift-card/index',
     /** 卡券消费与划扣明细流水日志页 */
-    cardLogs: '/pages/home/service/gift-card/logs',
+    cardLogs: HomeServiceRoutes.cardLogs,
     /** 礼品卡兑换/卡密激活输入页 */
-    cardExchange: '/pages/home/service/gift-card/exchange',
+    cardExchange: HomeServiceRoutes.cardExchange,
     /** 礼品卡转赠与赠送发起页 */
-    cardSend: '/pages/home/service/gift-send/index',
+    cardSend: HomeServiceRoutes.cardSend,
     /** 接收好友礼品卡转赠的领取落地页 */
-    cardReceive: '/pages/home/service/gift-receive/index',
-    /** 首页用户入口：最简测试页。 */
+    cardReceive: HomeServiceRoutes.cardReceive,
+    /** 会员资料、资产、等级规则与会员服务入口。 */
     memberCenter: '/pages/home/user/member-center/index',
     coupons: '/pages/home/user/coupons/index',
     /** 首页服务入口：最简测试页。 */
@@ -121,7 +122,7 @@ export const ClientRoutes = {
     /** 收货地址管理与新增、编辑页面 */
     address: '/pages/account/profile/address/index',
     /** 会员中心首页（会员等级进阶、权益特权介绍、专属折扣） */
-    memberCenter: '/pages/account/users/member-center/index',
+    memberCenter: '/pages/home/user/member-center/index',
     /** 订单售后与退款申请页（选择退款原因、上传凭据） */
     refundApply: '/pages/account/profile/order-refund-apply/index',
     /** 关于品牌与系统信息页（版本更新说明、品牌故事、用户协议） */

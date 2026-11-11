@@ -43,7 +43,7 @@ export function useHomeNavigation() {
    * @example openMemberCenter() // 会员中心测试页
    */
   function openMemberCenter() {
-    return openPage(ClientRoutes.Account.memberCenter)
+    return openPage(ClientRoutes.Home.memberCenter)
   }
   /** 打开现有客户登录页，不在首页另建微信认证流程。 */
   function login() {

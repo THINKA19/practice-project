@@ -23,6 +23,7 @@ watch(() => props.card.pic, () => {
     <view class="card-container">
       <view class="card-image-wrapper">
         <image class="h-full w-full" :src="!imageFailed && card.pic ? card.pic : '/static/images/gift-card/classic.png'" mode="aspectFill" @error="imageFailed = true" />
+        <view class="card-shine" />
       </view>
       <view class="p-24rpx">
         <view class="mb-20rpx text-28rpx text-#333 font-600 leading-snug">
@@ -37,9 +38,9 @@ watch(() => props.card.pic, () => {
               {{ card.price ?? card.amount }}
             </text>
           </view>
-          <view class="buy-btn" @tap="emit('buy')">
+          <button class="buy-btn" @tap="emit('buy')">
             <text>{{ buyText }}</text>
-          </view>
+          </button>
         </view>
       </view>
     </view>
@@ -67,7 +68,33 @@ watch(() => props.card.pic, () => {
   background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
 }
 
+.card-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 35%) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: card-shine 750ms ease-out 1 both;
+}
+@keyframes card-shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-shine {
+    animation: none;
+  }
+}
+.buy-btn::after {
+  border: 0;
+}
 .buy-btn {
+  margin: 0;
+  line-height: 1.5;
   padding: 12rpx 16rpx;
   font-size: 22rpx;
   font-weight: 500;

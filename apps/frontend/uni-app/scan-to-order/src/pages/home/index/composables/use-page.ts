@@ -45,7 +45,7 @@ export function useHomePage() {
    * 页面挂载初始化入口
    * 触发基础数据拉取（如首页 Banner）
    * 无参数。
-   * @returns {void} 异步加载由轮播模块处理。
+   * @returns {void} 更新本函数所属的页面或模拟状态。
    * @example init() // 开始加载首页轮播
    */
   function init() {

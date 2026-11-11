@@ -28,7 +28,7 @@ export function useHomeUser() {
 
   /**
    * 已登录时刷新资料，旧会话隔离由 Session 负责。无参数。
-   * @returns Promise<void>，请求失败保留当前资料；提示由现有请求层负责。
+   * @returns {void} 更新本函数所属的页面或模拟状态。
    * @example await refresh() // 游客不发请求
    */
   async function refresh() {

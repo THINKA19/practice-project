@@ -47,7 +47,7 @@ beforeEach(() => {
 
 describe('首页接入', () => {
   it.each([
-    ['openMemberCenter', '/pages/account/users/member-center/index'],
+    ['openMemberCenter', '/pages/home/user/member-center/index'],
     ['openCoupons', '/pages/home/user/coupons/index'],
     ['openFavorites', '/pages/home/service/favorites/index'],
     ['openMemberCard', '/pages/home/service/gift-card/index'],

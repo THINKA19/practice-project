@@ -47,6 +47,9 @@ const { t } = useI18n()
     />
     <view class="flex flex-wrap items-center justify-end gap-16rpx">
       <LanguageSwitcher icon-only />
+      <button class="member-entry m-0 rounded-40rpx bg-#8b7355 px-24rpx py-12rpx text-26rpx text-white leading-normal" @tap="emit('member')">
+        会员中心
+      </button>
       <view class="coupon-btn" @tap="emit('coupon')">
         <text class="mr-4rpx">
           {{ t('coupons.title') }}

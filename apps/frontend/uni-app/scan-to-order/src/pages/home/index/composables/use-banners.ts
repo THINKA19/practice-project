@@ -26,7 +26,7 @@ export function useHomeBanners() {
 
   /**
    * 加载首页轮播。无参数。
-   * @returns Promise<void>，失败降级为空列表。
+   * @returns {void} 更新本函数所属的页面或模拟状态。
    * @example await loadBanners() // 更新 banners
    */
   async function loadBanners() {
@@ -36,7 +36,7 @@ export function useHomeBanners() {
   /**
    * 打开轮播应用内目标，按现有 tabbar 配置选择导航 API。
    * @param url 可选链接；空链接不操作，外链提示暂不支持。
-   * @returns Promise<void>，完成导航或本地化提示。
+   * @returns {void} 更新本函数所属的页面或模拟状态。
    * @example tapBanner('/pages/home/user/coupons/index') // 打开优惠券测试页
    */
   async function tapBanner(url?: string) {

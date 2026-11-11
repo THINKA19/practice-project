@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * 我的礼品卡（纯展示）：可赠送 / 赠送中(可取消) / 已激活(消费明细、赠送人)
+ * 展示持卡状态，并提供赠送、撤回和查看详情入口。
  */
 import type { MyCard } from '../../models/types'
 import { computed, ref, watch } from 'vue'
@@ -9,12 +9,13 @@ import { myCardState } from '../../domain/card.rules'
 
 defineOptions({ name: 'MyGiftCard' })
 
-const props = defineProps<{ card: MyCard }>()
+const props = defineProps<{ card: MyCard, cancelling?: boolean }>()
 
 const emit = defineEmits<{
   send: []
+  shareAgain: []
   cancelShare: []
-  logs: []
+  details: []
 }>()
 
 const { t } = useI18n()
@@ -49,7 +50,7 @@ watch(() => props.card.cardInfo?.pic, () => {
           </view>
         </view>
         <view v-if="state === 'sharing'" class="card-status-tag">
-          {{ t('card.giftSending') }}
+          待好友领取
         </view>
       </view>
       <view class="p-32rpx">
@@ -57,19 +58,30 @@ watch(() => props.card.cardInfo?.pic, () => {
           {{ card.cardInfo?.name }}
         </view>
         <view v-if="state === 'canShare'" class="card-actions">
-          <view class="action-btn primary" @tap="emit('send')">
+          <button class="action-btn primary" hover-class="action-pressed" @tap="emit('send')">
             {{ t('card.giftToFriend') }}
-          </view>
+          </button>
         </view>
-        <view v-else-if="state === 'sharing'" class="card-actions">
-          <view class="action-btn danger" @tap="emit('cancelShare')">
-            {{ t('card.cancelShare') }}
-          </view>
+        <view v-else-if="state === 'sharing'" class="gift-share-actions">
+          <button class="action-btn primary" hover-class="action-pressed" :disabled="cancelling" @tap="emit('shareAgain')">
+            <!-- #ifdef H5 -->
+            复制领取链接
+            <!-- #endif -->
+            <!-- #ifndef H5 -->
+            再次分享
+            <!-- #endif -->
+          </button>
+          <button class="action-btn secondary" hover-class="action-pressed" :disabled="cancelling" :loading="cancelling" @tap="emit('cancelShare')">
+            {{ cancelling ? '撤回中…' : '撤回赠送' }}
+          </button>
         </view>
-        <view v-else class="card-actions">
-          <view class="action-btn outline" @tap="emit('logs')">
-            {{ t('card.usageLogs') }}
-          </view>
+        <view v-if="state === 'expired' || state === 'empty' || state === 'active'" class="mb-16rpx text-26rpx text-#777">
+          {{ state === 'expired' ? '已过期' : state === 'empty' ? '余额或次数已用完' : card.fromUid || card.fromUser ? '已领取' : '已激活' }}
+        </view>
+        <view class="card-actions" :class="{ 'mt-16rpx': state !== 'active' }">
+          <button class="action-btn outline" hover-class="action-pressed" @tap="emit('details')">
+            查看详情
+          </button>
           <view v-if="card.fromUser" class="gift-from">
             <image class="from-avatar" :src="card.fromUser.avatarUrl || '/static/images/who.png'" mode="aspectFill" />
             <text class="text-26rpx text-#666">
@@ -133,14 +145,14 @@ watch(() => props.card.cardInfo?.pic, () => {
 
 .card-status-tag {
   position: absolute;
-  top: 32rpx;
-  right: 0;
-  padding: 12rpx 28rpx;
+  top: 24rpx;
+  right: 24rpx;
+  padding: 8rpx 20rpx;
   font-size: 24rpx;
   font-weight: 500;
-  color: #fff;
-  background: linear-gradient(135deg, rgb(255 107 107 / 95%) 0%, rgb(255 66 66 / 95%) 100%);
-  border-radius: 32rpx 0 0 32rpx;
+  color: #654226;
+  background: #fff4df;
+  border-radius: 24rpx;
 }
 
 .card-actions {
@@ -149,29 +161,51 @@ watch(() => props.card.cardInfo?.pic, () => {
   gap: 16rpx;
 }
 
+.gift-share-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 16rpx;
+}
+
 .action-btn {
-  padding: 20rpx 0;
+  width: 100%;
+  min-height: 88rpx;
+  margin: 0;
+  padding: 16rpx 12rpx;
   font-size: 28rpx;
-  font-weight: 500;
+  font-weight: 600;
+  line-height: 1.4;
   text-align: center;
-  border-radius: 48rpx;
+  border: 2rpx solid transparent;
+  border-radius: 20rpx;
 
   &.primary {
     color: #fff;
-    background: linear-gradient(135deg, #a0826d 0%, #8b6f47 100%);
-    box-shadow: 0 6rpx 20rpx rgb(160 130 109 / 30%);
+    background: #754e37;
   }
 
-  &.danger {
-    color: #fff;
-    background: linear-gradient(135deg, #ff9aa2 0%, #ff6b6b 100%);
-    box-shadow: 0 6rpx 20rpx rgb(255 107 107 / 30%);
+  &.secondary {
+    color: #923d31;
+    background: #fff7f4;
+    border-color: #e8c4bc;
   }
 
   &.outline {
-    color: #a0826d;
+    color: #654735;
     background: #fff;
-    border: 2rpx solid #a0826d;
+    border-color: #e6d7ca;
+  }
+
+  &[disabled] {
+    opacity: 0.55;
+  }
+
+  &.action-pressed:not([disabled]) {
+    filter: brightness(0.94);
+  }
+
+  &::after {
+    border: 0;
   }
 }
 
