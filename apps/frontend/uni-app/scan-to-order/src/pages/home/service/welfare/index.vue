@@ -8,6 +8,7 @@ import View from '@/pages/home/service/welfare/index.vue'
 ============================================================================
 -->
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { CouponCard, CouponPwdDialog } from '../../user/coupons'
 import { useWelfarePage } from './composables/use-page'
 import ListEnd from '@/components/list-end/index.vue'
@@ -57,7 +58,7 @@ onPullDownRefresh(async () => {
       加载失败，点击重试
     </button>
     <view v-else-if="loading" class="py-6 text-center">
-      正在加载福利…
+      <PageLoading title="正在加载福利…" />
     </view>
     <view v-else-if="!templates.length" class="py-12 text-center">
       暂无可领取福利

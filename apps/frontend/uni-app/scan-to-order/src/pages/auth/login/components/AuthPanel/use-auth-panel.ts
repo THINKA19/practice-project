@@ -14,7 +14,7 @@ export function usePanel() {
       visible.value = false
   })
   function open() {
-    if (demo || getWechatEnvironment().channel !== 'mini') {
+    if ((session.hasLogin && session.identity !== 'customer') || demo || getWechatEnvironment().channel !== 'mini') {
       redirectToLogin({ identity: 'customer' })
       return
     }

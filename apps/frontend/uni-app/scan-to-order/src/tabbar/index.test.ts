@@ -25,6 +25,7 @@ beforeEach(() => {
   setLocale('zh-Hans')
   vi.stubGlobal('onShow', (fn: () => void) => lifecycle.show.push(fn))
   vi.stubGlobal('onHide', (fn: () => void) => lifecycle.hide.push(fn))
+  vi.stubGlobal('onReady', vi.fn())
   vi.stubGlobal('onLoad', vi.fn())
   vi.stubGlobal('onMounted', vi.fn())
 })
@@ -41,22 +42,27 @@ it('refreshes on show and language changes, skips hidden pages, and disposes its
     lifecycle.show.forEach(fn => fn())
     expect(setTabbarItem).toHaveBeenCalledTimes(1)
 
+    const [onPageReady] = vi.mocked(onReady).mock.calls[0]
+    onPageReady()
+    expect(setTabbarItem).toHaveBeenCalledTimes(2)
+    vi.mocked(setTabbarItem).mockClear()
+
     setLocale('vi')
     await nextTick()
-    expect(setTabbarItem).toHaveBeenCalledTimes(2)
+    expect(setTabbarItem).toHaveBeenCalledTimes(1)
 
     lifecycle.hide.forEach(fn => fn())
     setLocale('zh-Hans')
     await nextTick()
-    expect(setTabbarItem).toHaveBeenCalledTimes(2)
+    expect(setTabbarItem).toHaveBeenCalledTimes(1)
 
     lifecycle.show.forEach(fn => fn())
-    expect(setTabbarItem).toHaveBeenCalledTimes(3)
+    expect(setTabbarItem).toHaveBeenCalledTimes(2)
   }
   finally {
     wrapper.unmount()
   }
   setLocale('en')
   await nextTick()
-  expect(setTabbarItem).toHaveBeenCalledTimes(3)
+  expect(setTabbarItem).toHaveBeenCalledTimes(2)
 })

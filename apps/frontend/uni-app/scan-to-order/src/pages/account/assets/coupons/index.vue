@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import CouponCard from './components/CouponCard/index.vue'
 import CouponPwdDialog from './components/CouponPwdDialog/index.vue'
 import { useCouponView } from './composables/use-view'
@@ -15,6 +16,15 @@ const { COUPON_TAB_EXCHANGE, t, vm, tabs, activeIndex, templates, mine, showPwdP
 
 <template>
   <z-paging ref="paging" :auto="false" :default-page-size="15" :inside-more="true" :refresher-enabled="activeIndex !== COUPON_TAB_EXCHANGE" :loading-more-enabled="activeIndex !== COUPON_TAB_EXCHANGE" :hide-empty-view="activeIndex === COUPON_TAB_EXCHANGE" @query="query">
+    <template #loading>
+      <PageLoading class="py-48rpx" />
+    </template>
+    <template #refresher="{ refresherStatus }">
+      <PageLoading inline :refresh-status="refresherStatus" class="h-80rpx w-full" />
+    </template>
+    <template #loadingMoreLoading>
+      <PageLoading inline class="w-full py-24rpx" />
+    </template>
     <template #loadingMoreDefault>
       <view class="py-24rpx text-center text-24rpx text-#999">
         继续上滑加载更多

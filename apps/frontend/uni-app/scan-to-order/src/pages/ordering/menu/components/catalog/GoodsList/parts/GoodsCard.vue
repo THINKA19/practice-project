@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import GoodsTags from '../../GoodsTags.vue'
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -38,7 +40,7 @@ const emit = defineEmits<{
   detail: [goods: Goods]
 }>()
 
-const { currencySymbol, currencyUnit } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 
 const { t } = useI18n()
 
@@ -72,7 +74,7 @@ const showOriginalPrice = computed(() => props.goods.originalPrice > 0 && props.
           custom-class="count-down"
         />
         <text v-else-if="goods.kanjia" class="desc-text">
-          {{ t('goodsDetail.minPrice') }} {{ goods.kanjiaPrice }}
+          {{ t('goodsDetail.minPrice') }} <FgPrice :amount="goods.kanjiaPrice" :country-code="countryCode" />
         </text>
         <text v-else class="desc-text">
           {{ goods.characteristic }}
@@ -80,8 +82,8 @@ const showOriginalPrice = computed(() => props.goods.originalPrice > 0 && props.
       </view>
       <view class="bottom">
         <view class="goods-prices">
-          <text class="price">{{ currencySymbol }}{{ goods.minPrice }}{{ currencyUnit }}</text>
-          <text v-if="showOriginalPrice" class="origin-price">{{ currencySymbol }}{{ goods.originalPrice }}{{ currencyUnit }}</text>
+          <text class="price"><FgPrice :amount="goods.minPrice" :country-code="countryCode" /></text>
+          <text v-if="showOriginalPrice" class="origin-price"><FgPrice :amount="goods.originalPrice" :country-code="countryCode" /></text>
         </view>
         <view class="goods-actions">
           <wd-button v-if="action === 'soldOut'" size="small" type="primary" round disabled custom-style="background: #e9e3dc; color: #6f6258; opacity: 1;">
@@ -103,7 +105,7 @@ const showOriginalPrice = computed(() => props.goods.originalPrice > 0 && props.
             {{ t('index.selectSku') }}
           </wd-button>
           <view v-else class="add-btn" :class="{ 'is-adding': adding }" @tap="!adding && emit('add', goods)">
-            <wd-loading v-if="adding" size="28rpx" color="#fff" />
+            <PageLoading inline indicator-only v-if="adding" size="28rpx" color="#fff" />
             <wd-icon v-else name="plus" size="32rpx" color="#fff" />
           </view>
         </view>

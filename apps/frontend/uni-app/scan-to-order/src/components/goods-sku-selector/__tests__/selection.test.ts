@@ -26,7 +26,7 @@ describe('goods-sku-selector', () => {
     expect(second.selectedNames.value).toEqual([])
   })
   it('renders prices and emits choice IDs without mutating controlled values', async () => {
-    const groups = [{ id: 1, name: '份量', choices: [{ id: 11, name: '小份', active: false, priceText: '4.8' }] }]
+    const groups = [{ id: 1, name: '份量', choices: [{ id: 11, name: '小份', active: false, price: 4.8 }] }]
     const wrapper = mount(GoodsSkuSelector, { props: { groups } })
     expect(wrapper.text()).toContain('4.8')
     await wrapper.find('.sku-choice').trigger('tap')

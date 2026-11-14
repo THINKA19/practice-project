@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -28,6 +30,7 @@ import { showError, toast } from '@/utils/project/interaction'
 const props = withDefaults(defineProps<{
   modelValue: boolean
   money: number
+  countryCode?: string
   remark: string
   nextAction?: NextAction
   extData?: Record<string, string | number>
@@ -42,7 +45,7 @@ const emit = defineEmits<{
   'cancel': []
 }>()
 
-const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
+const { countryCode: shopCountryCode } = useOrderingCurrency()
 
 const { pay } = usePayActions()
 const { t } = useI18n()
@@ -110,7 +113,7 @@ async function submit() {
         {{ remark }}
       </view>
       <view class="my-16rpx text-center text-56rpx text-#c93636 font-bold">
-        {{ currencySymbol }}{{ money }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+        <FgPrice :amount="money" :country-code="countryCode ?? shopCountryCode" show-currency-name />
       </view>
       <wd-divider>{{ t('payment.select') }}</wd-divider>
       <view class="pay-item" @tap="choose('wx')">
@@ -134,7 +137,8 @@ async function submit() {
         </view>
       </block>
       <view v-else class="mt-48rpx">
-        <wd-button type="danger" round block :loading="submitting" @click="submit">
+        <wd-button type="danger" round block :disabled="submitting" @click="submit">
+          <PageLoading v-if="submitting" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
           {{ t('order.toPayTap') }}
         </wd-button>
       </view>

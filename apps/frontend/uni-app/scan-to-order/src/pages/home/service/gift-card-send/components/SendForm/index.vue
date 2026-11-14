@@ -16,6 +16,7 @@ const vm = useGiftSendPage() // 在父页面 setup 中调用
 ============================================================================
 -->
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { useI18n } from 'vue-i18n'
 import { myCardState } from '../../../gift-card'
 // #ifdef H5
@@ -61,7 +62,7 @@ function copyReceiveUrl() {
 
     <view class="relative z-1 w-full">
       <view v-if="loading" class="py-8 text-center">
-        正在加载礼品卡…
+        <PageLoading title="正在加载礼品卡…" />
       </view>
       <view v-else-if="!cardUser" class="py-8 text-center">
         {{ failed ? '加载失败，请重试' : '未找到可赠送的礼品卡，请返回卡包选择' }}
@@ -121,7 +122,8 @@ function copyReceiveUrl() {
       </view>
 
       <!-- #ifdef H5 || MP-WEIXIN -->
-      <wd-button v-if="cardUser && !shareToken && myCardState(cardUser) === 'canShare'" round block :disabled="preparing" :loading="preparing" @click="vm.prepare()">
+      <wd-button v-if="cardUser && !shareToken && myCardState(cardUser) === 'canShare'" round block :disabled="preparing" @click="vm.prepare()">
+        <PageLoading v-if="preparing" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
         确认赠送
       </wd-button>
       <!-- #endif -->

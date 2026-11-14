@@ -2,25 +2,29 @@
 /**
  * 订单卡片（纯展示：props 进 / emit 出）
  */
+import { computed } from 'vue'
+import PhoneContact from '@/components/phone-contact/index.vue'
 import { OrderImage } from '@/components/order-image'
-import { formatOrderPrice } from '../../models/presentation'
-import { currentLocale } from '@/locale'
+import { orderPresentation } from '../../models/presentation'
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import type { OrderCardVM } from './types'
 
 defineOptions({ name: 'OrderCard' })
 
-defineProps<{
+const props = defineProps<{
   card: OrderCardVM
+  resolveShopPhone?: () => Promise<string | void>
 }>()
 
 const emit = defineEmits<{
   detail: []
-  callShop: []
   delete: []
   cancel: []
   refund: []
   pay: []
 }>()
+
+const countryCode = computed(() => orderPresentation(props.card.order).countryCode)
 </script>
 
 <template>
@@ -87,13 +91,20 @@ const emit = defineEmits<{
           {{ card.order.status === 0 ? '待付金额' : card.order.status === -1 ? '订单金额' : '实付金额' }}
         </text>
         <view class="price-value">
-          <text class="amount">{{ formatOrderPrice(card.order, card.order.status === -1 ? (card.order.amount ?? card.order.amountReal) : card.order.amountReal, currentLocale) }}</text>
+          <text class="amount">
+            <FgPrice :amount="card.order.status === -1 ? (card.order.amount ?? card.order.amountReal) : card.order.amountReal" :country-code="countryCode" show-currency-name />
+            <text v-if="!countryCode">（币种待确认）</text>
+          </text>
         </view>
       </view>
       <view v-if="card.showCallShop || card.showDelete || card.showCancel || card.showRefund || card.showPay" class="action-btns">
-        <view v-if="card.showCallShop" class="order-btn btn-secondary" @tap="emit('callShop')">
-          <text class="btn-icon">📞</text><text>{{ '联系商家' }}</text>
-        </view>
+        <PhoneContact v-if="card.showCallShop" :resolve-phone="resolveShopPhone">
+          <template #trigger="{ open }">
+            <view class="order-btn btn-secondary" @tap="open">
+              <text class="btn-icon">📞</text><text>{{ '联系商家' }}</text>
+            </view>
+          </template>
+        </PhoneContact>
         <view v-if="card.showDelete" class="order-btn btn-danger" @tap="emit('delete')">
           <text class="btn-icon">🗑</text><text>{{ '删除记录' }}</text>
         </view>

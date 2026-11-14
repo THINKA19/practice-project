@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, nextTick, ref } from 'vue'
 import { afterEach, expect, it, vi } from 'vitest'
 import i18n, { setLocale } from '@/locale'
 
@@ -26,10 +26,8 @@ vi.mock('../composables/use-page', () => ({
 afterEach(() => vi.unstubAllGlobals())
 
 it('整页渲染资产与菜单，不显示版本和演示说明，点击保留原入口', async () => {
-  const load: Array<() => void> = []
   const show: Array<() => void> = []
   vi.stubGlobal('definePage', vi.fn())
-  vi.stubGlobal('onLoad', (fn: () => void) => load.push(fn))
   vi.stubGlobal('onShow', (fn: () => void) => show.push(fn))
   setLocale('zh-Hans')
   const Page = (await import('../index.vue')).default
@@ -43,7 +41,6 @@ it('整页渲染资产与菜单，不显示版本和演示说明，点击保留�
     expect(paging.props('auto')).toBe(false)
     expect(paging.props('refresherEnabled')).toBe(false)
     expect(paging.props('loadingMoreEnabled')).toBe(false)
-    load.forEach(fn => fn())
     show.forEach(fn => fn())
     expect(actions.init).toHaveBeenCalled()
     expect(actions.refresh).toHaveBeenCalled()
@@ -62,8 +59,25 @@ it('整页渲染资产与菜单，不显示版本和演示说明，点击保留�
     const feedback = wrapper.findAll('.menu-list-item').find(item => item.text().includes('意见反馈'))!
     await feedback.trigger('tap')
     expect(actions.navTo).toHaveBeenCalledWith('意见反馈')
+
+    setLocale('en')
+    await nextTick()
+    for (const text of ['Quick actions', 'My services', 'Other settings', 'Merchant services', 'For merchants', 'Open merchant dashboard', 'Apply as a merchant', 'Rider management', 'For riders', 'Open rider workspace'])
+      expect(wrapper.text()).toContain(text)
+    const merchant = wrapper.findAll('.menu-list-item').find(item => item.text().includes('Open merchant dashboard'))!
+    await merchant.trigger('tap')
+    expect(actions.navTo).toHaveBeenCalledWith('商家后台')
+
+    setLocale('vi')
+    await nextTick()
+    for (const text of ['Tính năng thường dùng', 'Dịch vụ của tôi', 'Cài đặt khác', 'Dịch vụ cửa hàng', 'Dành cho cửa hàng', 'Vào trang quản lý cửa hàng', 'Đăng ký trở thành đối tác', 'Quản lý tài xế', 'Dành cho tài xế', 'Vào khu vực làm việc của tài xế'])
+      expect(wrapper.text()).toContain(text)
+    const rider = wrapper.findAll('.menu-list-item').find(item => item.text().includes('Vào khu vực làm việc của tài xế'))!
+    await rider.trigger('tap')
+    expect(actions.navTo).toHaveBeenCalledWith('骑手工作台')
   }
   finally {
     wrapper.unmount()
+    setLocale('zh-Hans')
   }
 }, 15000)

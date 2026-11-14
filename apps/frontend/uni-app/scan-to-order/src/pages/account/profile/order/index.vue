@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import OrderCard from './components/OrderCard/index.vue'
 import OrdersEmpty from './components/OrdersEmpty/index.vue'
 import { useOrderListPage } from './composables/use-list-page'
@@ -21,6 +22,7 @@ onShow(() => {
           点击重试
         </view>
       </view>
+      <PageLoading v-else-if="loading && !cards.length" class="py-48rpx" />
       <OrdersEmpty v-else-if="apiOk && !loading && !cards.length" :title="activeTab === 'all' ? '还没有订单' : '当前分类暂无订单'" desc="下单后，您可以在这里查看订单进度" button-text="去点餐" @action="vm.toIndexPage()" />
       <view v-else-if="cards.length" class="box-border w-full p-16rpx">
         <view v-if="failed" class="py-24rpx text-center text-24rpx text-#91775e" @tap="vm.refresh()">
@@ -28,7 +30,7 @@ onShow(() => {
         </view>
         <OrderCard
           v-for="card in cards" :key="card.order.id" :card="card"
-          @detail="vm.toDetail(card.order.id)" @call-shop="vm.callShop(card.order.shopIdZt || card.order.shopId, card.order.demo === true)"
+          :resolve-shop-phone="() => vm.resolveShopPhone(card.order.shopIdZt || card.order.shopId, card.order.demo === true)" @detail="vm.toDetail(card.order.id)"
           @delete="vm.deleteOrder(card.order.id)" @cancel="vm.cancelOrder(card.order.id)"
           @refund="vm.refundApply(card.order.id)" @pay="vm.toPay(card.order)"
         />

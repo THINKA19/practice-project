@@ -63,7 +63,7 @@ export const ClientRoutes = {
   /** 点餐、选店与结算业务模块 */
   Ordering: {
     /** 主包只持有跳转路径，不导入商家分包实现。 */
-    shopOnboarding: '/pages-shop/onboarding/index',
+    shopOnboarding: '/pages-shop/auth/onboarding/index',
     /** 点餐选品主页（商品瀑布流/分类侧边栏、加购联动交互） */
     order: '/pages/ordering/menu/index',
     noticeDetail: '/pages/ordering/menu/notice-detail',

@@ -65,17 +65,16 @@ it('拨号需确认，离开页面后确认结果不能继续拨号', async () =
   const vm = scope.run(useContactConfig)!
   await vm.load()
   vi.mocked(confirm).mockResolvedValueOnce(true)
-  await vm.showTelTips()
-  expect(uni.makePhoneCall).toHaveBeenCalledTimes(1)
+  await expect(vm.resolveServicePhone()).resolves.toBe('13800000000')
   let finish!: (value: boolean) => void
   vi.mocked(confirm).mockImplementationOnce(() => new Promise((resolve) => {
     finish = resolve
   }))
-  const pending = vm.showTelTips()
+  const pending = vm.resolveServicePhone()
   scope.stop()
   finish(true)
-  await pending
-  expect(uni.makePhoneCall).toHaveBeenCalledTimes(1)
+  await expect(pending).resolves.toBeUndefined()
+  expect(uni.makePhoneCall).not.toHaveBeenCalled()
 })
 
 it('推荐渠道首次展开，用户收起后刷新不重新展开，已隐藏渠道不残留', async () => {

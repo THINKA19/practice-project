@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -21,7 +23,7 @@ import type { CartItem } from './models/types'
 import { describeCartItem } from './domain/cart.rules'
 import { useCartPage } from './composables/use-page'
 
-const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 
 definePage({
   style: {
@@ -30,7 +32,7 @@ definePage({
   },
 })
 
-const { t, cart, init, loadCart, changeNumber, clearCart, goCreateOrder, submitting, checkoutReason } = useCartPage()
+const { t, cart, loading, init, loadCart, changeNumber, clearCart, goCreateOrder, submitting, checkoutReason } = useCartPage()
 
 /** 异步步进（原 van-stepper async-change）：拦截组件内部变更，以接口刷新后的数量为准 */
 function beforeChange(item: CartItem) {
@@ -64,6 +66,7 @@ function showSelection(item: CartItem) {
 
 <template>
   <view class="cart-container">
+    <PageLoading v-if="loading" overlay />
     <text v-if="checkoutReason" class="block p-24rpx text-26rpx text-[#777]">{{ checkoutReason }}。可继续选购，价格与库存以结算时为准。</text>
     <!-- 空状态 -->
     <view v-if="!cart" class="empty-state">
@@ -111,7 +114,7 @@ function showSelection(item: CartItem) {
             </view>
             <view class="item-controls">
               <view class="item-price">
-                {{ currencySymbol }}{{ item.price }}{{ currencyUnit }}
+                <FgPrice :amount="item.price" :country-code="countryCode" />
               </view>
               <wd-input-number
                 :model-value="item.number"
@@ -132,14 +135,15 @@ function showSelection(item: CartItem) {
               合计
             </view>
             <view class="mb-4rpx flex items-baseline">
-              <text class="text-48rpx text-#c93636 font-bold">{{ currencySymbol }}{{ cart.price }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text></text>
+              <text class="text-48rpx text-#c93636 font-bold"><FgPrice :amount="cart.price" :country-code="countryCode" show-currency-name /></text>
             </view>
             <view class="text-22rpx text-#999">
               共{{ cart.number }}{{ t('cart.num') }}
             </view>
           </view>
           <view class="submit-btn" :style="checkoutReason || submitting ? { background: '#999' } : undefined" role="button" :aria-disabled="!!checkoutReason || submitting" @tap="!checkoutReason && !submitting && goCreateOrder()">
-            <text>{{ checkoutReason ? '暂不可下单' : submitting ? '正在提交…' : t('cart.btn') }}</text>
+            <PageLoading v-if="submitting && !checkoutReason" inline size="28rpx" title="正在提交…" color="currentColor" />
+            <text v-else>{{ checkoutReason ? '暂不可下单' : t('cart.btn') }}</text>
             <wd-icon name="arrow-right" color="#fff" size="16px" />
           </view>
         </view>

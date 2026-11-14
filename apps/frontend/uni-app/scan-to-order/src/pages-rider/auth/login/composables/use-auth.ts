@@ -1,13 +1,24 @@
 /**
- * 【文件概述】骑手身份访问与退出编排，不维护第二份会话。
- * 【方法与导出清单】见下方具名导出。
- * 【综合使用示例】通过所属模块 index.ts 调用。
+ * ============================================================================
+ * 【文件概述】骑手登录的页面编排与领域状态层。数据与逻辑由本业务模块独立维护。
+ * 【方法与导出清单】
+ * - useRiderLoginAuth：骑手准入及退出编排；退出确认与服务端响应均受会话版本约束。
+ * 【综合使用示例】
+ * import { useRiderLoginAuth } from '@/pages-rider/auth/login/composables/use-auth'
+ * const auth = useRiderLoginAuth(); auth.ensureLogin() // 非骑手跳转登录
+ * ============================================================================
  */
 import { computed, onScopeDispose } from 'vue'
+import { t } from '@/locale'
 import { AUTH_ROUTES, useSessionState } from '@/pages/auth/session'
 import { ClientRoutes } from '@/pages/routes'
 
-/** 骑手准入与退出流程；确认框及注销响应只作用于发起它们的会话，销毁后不导航。 */
+/**
+ * 骑手准入及退出编排；退出确认与服务端响应均受会话版本约束。
+ * 无参数。
+ * @returns 页面绑定或领域状态对象，按所属生命周期使用。
+ * @example const auth = useRiderLoginAuth(); auth.ensureLogin() // 非骑手跳转登录
+ */
 export function useRiderLoginAuth() {
   const session = useSessionState()
   let disposed = false
@@ -33,7 +44,12 @@ export function useRiderLoginAuth() {
     const revision = session.sessionRevision
     exiting = true
     try {
-      const result = await uni.showModal({ title: '提示', content: '确定退出骑手登录吗？' })
+      const result = await uni.showModal({
+        title: t('rider.login.exitTitle'),
+        content: t('rider.login.exitConfirm'),
+        cancelText: t('common.cancel'),
+        confirmText: t('common.confirm'),
+      })
       if (!result.confirm || disposed || revision !== session.sessionRevision || session.identity !== 'rider')
         return
 
@@ -50,16 +66,16 @@ export function useRiderLoginAuth() {
       if (disposed || clearedRevision !== session.sessionRevision || session.identity !== null)
         return
       if (failure)
-        uni.showToast({ title: failure instanceof Error ? failure.message : '本地会话已清除', icon: 'none' })
+        uni.showToast({ title: t('rider.login.signOutFailed'), icon: 'none' })
       uni.reLaunch({ url: backToClient ? ClientRoutes.Account.my : AUTH_ROUTES.rider })
     }
-    catch (error) {
+    catch {
       if (!disposed && revision === session.sessionRevision)
-        uni.showToast({ title: error instanceof Error ? error.message : '退出操作未完成', icon: 'none' })
+        uni.showToast({ title: t('rider.login.exitFailed'), icon: 'none' })
     }
     finally {
       exiting = false
     }
   }
-  return { isLogin, profile: computed(() => isLogin.value ? session.userInfo : null), ensureLogin, logout: () => exit(), goBackClient: () => exit(true) }
+  return { isLogin, profile: computed(() => isLogin.value ? { name: session.userInfo.nickname || session.userInfo.username, phone: '', joinedAt: '' } : null), ensureLogin, logout: () => exit(), goBackClient: () => exit(true) }
 }

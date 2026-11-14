@@ -7,7 +7,7 @@ import { currentLocale, t } from '@/locale'
 
 /** 页面状态与交互编排；每次调用拥有独立的页面实例。 */
 export function useOrderDetailView() {
-  const { scene, scenes, selectScene, loading, failed, orderId, money, paymentShow, paymentConfirm, orderDetail, shopSubdetail, fetchOrderDetail, toPayTap, callShop } = useOrderDetailData()
+  const { scene, scenes, selectScene, loading, failed, orderId, money, paymentShow, paymentConfirm, orderDetail, shopSubdetail, fetchOrderDetail, toPayTap } = useOrderDetailData()
   /** 导航栏标题：definePage 里的是编译期静态兜底，这里按当前语言覆盖 */
   function setTitle() {
     uni.setNavigationBarTitle({ title: t('tabbar.pickup1') })
@@ -27,5 +27,5 @@ export function useOrderDetailView() {
     setTitle()
     fetchOrderDetail()
   })
-  return { PageState, ClientRoutes, navigate, t, scene, scenes, selectScene, loading, failed, orderId, money, paymentShow, paymentConfirm, orderDetail, shopSubdetail, fetchOrderDetail, toPayTap, callShop, setTitle, pageVisible }
+  return { PageState, ClientRoutes, navigate, t, scene, scenes, selectScene, loading, failed, orderId, money, paymentShow, paymentConfirm, orderDetail, shopSubdetail, fetchOrderDetail, toPayTap, setTitle, pageVisible }
 }

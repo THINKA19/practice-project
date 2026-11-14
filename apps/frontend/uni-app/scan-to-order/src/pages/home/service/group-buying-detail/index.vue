@@ -8,6 +8,7 @@ import View from '@/pages/home/service/group-buying-detail/index.vue'
 ============================================================================
 -->
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import GroupProgress from './components/GroupProgress/index.vue'
 import { useGroupBuyingDetailPage } from './composables/use-page'
 
@@ -33,7 +34,7 @@ onPullDownRefresh(async () => {
 <template>
   <view class="min-h-screen bg-orange-50 p-4">
     <view v-if="loading" class="py-10 text-center">
-      正在加载团购…
+      <PageLoading title="正在加载团购…" />
     </view>
     <button v-if="failed" @tap="refresh()">
       团购不存在或加载失败，点击重试

@@ -3,7 +3,7 @@ import { expect, it, vi } from 'vitest'
 import PayGoodsCard from '../components/PayGoodsCard/index.vue'
 import CartPopup from '../../menu/components/cart/CartPopup/index.vue'
 
-vi.mock('@/pages/ordering/index', () => ({ useOrderingCurrency: () => ({ currencySymbol: '₫', currencyUnit: '万', currencyName: '越南盾' }) }))
+vi.mock('@/pages/ordering/index', () => ({ useOrderingCurrency: () => ({ countryCode: 'VN' }) }))
 vi.mock('@/pages/ordering/menu-cart', async () => ({
   isCartItemShortage: () => false,
   describeCartItem: (await import('../../menu-cart/domain/cart.rules')).describeCartItem,

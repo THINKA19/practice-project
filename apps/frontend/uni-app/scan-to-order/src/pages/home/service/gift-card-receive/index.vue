@@ -15,6 +15,7 @@ void navigate(HomeServiceRoutes.cardReceive, { id: '7', shareToken: 'example-tok
 ============================================================================
 -->
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import ReceiveCard from './components/ReceiveCard/index.vue'
 import { useGiftReceivePage } from './composables/use-page'
 import { ref } from 'vue'
@@ -82,9 +83,9 @@ onShow(() => vm.init(shareQuery.value))
         {{ linkError }}
       </view>
       <wd-button
-        class="mt-24rpx" custom-class="receive-link-button" block :disabled="openingLink || !pastedLink.trim()"
-        :loading="openingLink" @click="openGiftLink()"
+        class="mt-24rpx" custom-class="receive-link-button" block :disabled="openingLink || !pastedLink.trim()" @click="openGiftLink()"
       >
+        <PageLoading v-if="openingLink" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
         查看待领取礼品卡
       </wd-button>
       <!-- #endif -->

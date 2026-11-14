@@ -50,8 +50,14 @@ const domains: Record<string, string> = {
   'pages/service/index': 'Service',
   'pages-shop/auth/login': 'ShopLogin',
   'pages-shop/auth/permissions': 'Merchant',
-  'pages-shop/onboarding': 'Onboarding',
+  'pages-shop/auth/onboarding': 'Onboarding',
+  'pages-rider/auth/permissions': 'RiderPermissions',
   'pages-rider/auth/login': 'RiderLogin',
+  'pages-rider/workspace/index': 'RiderWorkspace',
+  'pages-rider/account/index': 'RiderAccount',
+  'pages-rider/account/profile': 'RiderProfile',
+  'pages-rider/account/settings': 'RiderSettings',
+  'pages-rider/delivery/task': 'RiderTask',
 }
 
 function files(dir: string): string[] {

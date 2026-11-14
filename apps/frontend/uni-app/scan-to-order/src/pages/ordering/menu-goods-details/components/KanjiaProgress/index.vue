@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -24,7 +25,7 @@ defineProps<{
   percentage: number
 }>()
 
-const { currencySymbol, currencyUnit, currencyName, formatPrice } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 
 const { t } = useI18n()
 </script>
@@ -35,8 +36,12 @@ const { t } = useI18n()
       <wd-cell-group :title="t('goodsDetail.kanJiaSetting')">
         <wd-cell :title="t('goodsDetail.limit')" :value="kanjiaSet.number ?? ''" />
         <wd-cell :title="t('goodsDetail.saledNum')" :value="kanjiaSet.numberBuy ?? ''" />
-        <wd-cell :title="t('goodsDetail.originalPrice')" :value="formatPrice(kanjiaSet.originalPrice)" />
-        <wd-cell :title="t('goodsDetail.minPrice')" :value="formatPrice(kanjiaSet.minPrice)" />
+        <wd-cell :title="t('goodsDetail.originalPrice')">
+          <FgPrice :amount="kanjiaSet.originalPrice" :country-code="countryCode" show-currency-name />
+        </wd-cell>
+        <wd-cell :title="t('goodsDetail.minPrice')">
+          <FgPrice :amount="kanjiaSet.minPrice" :country-code="countryCode" show-currency-name />
+        </wd-cell>
         <wd-cell :title="t('goodsDetail.end')" :value="kanjiaSet.dateEnd || ''" />
       </wd-cell-group>
     </view>
@@ -49,7 +54,7 @@ const { t } = useI18n()
       <view class="bar">
         <wd-progress :percentage="percentage" color="#1aad19" hide-text />
         <view class="pivot">
-          {{ currencySymbol }}{{ progress.kanjiaInfo.curPrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+          <FgPrice :amount="progress.kanjiaInfo.curPrice" :country-code="countryCode" show-currency-name />
         </view>
       </view>
       <view class="share">

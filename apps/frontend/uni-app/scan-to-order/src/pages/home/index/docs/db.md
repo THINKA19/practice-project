@@ -14,6 +14,8 @@ banner/list 以 type 区分首页 shouye、点餐 diancang、礼品卡 card。pi
 
 - `banners(type: string)`：GET `/banner/list`；通过现有 http/alova，使用默认服务地址及 ignoreAuth 元数据。开发 Mock 为 shouye 返回三张本地轮播图片，其他类型返回空数组，不涉及数据库。生产或关闭 Mock 时请求真实服务。空值或非数组降级为空数组，仅保留具有有效 picUrl 的记录；请求失败由首页降级为空列表。真实服务地址、响应协议和权限仍待后端确认。
 
+- 首页竖版弹窗请求 GET `/banner/list?type=shouye_popup`，取首条具有有效 `picUrl` 的记录。开发 Mock 返回 `popup-poster.jpeg`。生产后端需支持此类型并返回可访问的海报 URL，无投放返回空数组。正式接口和图片域名待联调。
+
 参数签名表示当前前端封装；Record/ApiParams 容器不代表后端接受任意字段。对象序列化与默认值以对应接口函数为准。各接口具体读取/写入的表、事务和连带更新均需后端确认。
 
 ## 字段和枚举

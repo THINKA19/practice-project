@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { computed, ref, watch } from 'vue'
 import { useProfileEditor } from './use-profile-editor'
 
@@ -69,7 +70,8 @@ defineExpose({ open: vm.open })
         <button class="clear-birthday" :class="{ 'clear-birthday--hidden': !form.birthday }" :disabled="!ready || saving || !form.birthday" @tap="form.birthday = ''">
           清空生日
         </button>
-        <button class="panel-button save-button" :loading="saving" :disabled="!ready || saving" @tap="vm.save">
+        <button class="panel-button save-button" :disabled="!ready || saving" @tap="vm.save">
+          <PageLoading v-if="saving" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
           保存
         </button>
       </view>
@@ -93,7 +95,8 @@ defineExpose({ open: vm.open })
         <button class="logout-cancel" :disabled="logoutPending" @tap="logoutConfirmVisible = false">
           取消
         </button>
-        <button class="logout-confirm-button" :disabled="logoutPending" :loading="logoutPending" @tap="vm.confirmLogout">
+        <button class="logout-confirm-button" :disabled="logoutPending" @tap="vm.confirmLogout">
+          <PageLoading v-if="logoutPending" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
           确定
         </button>
       </view>

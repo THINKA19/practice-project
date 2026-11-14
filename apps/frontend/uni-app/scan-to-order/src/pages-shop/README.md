@@ -1,6 +1,6 @@
 # pages-shop 业务模块
 
-当前包含 2 个页面文件。页面路径保持不变，组件与私有 parts 不参与页面注册；纯能力模块不创建 index.vue。
+商家端按功能直接分目录。一个功能可包含入口、详情、编辑等多个页面。组件与私有 parts 不参与页面注册；纯能力模块不创建 index.vue。页面路径见 [routes.ts](routes.ts)，由 UniPages 扫描页面生成注册配置。
 
 ## 分层约定
 
@@ -18,9 +18,14 @@
 
 ## 模块导航
 
-- [auth/login](auth/login/README.md)
-- [auth/permissions](auth/permissions/README.md)
-- [onboarding](onboarding/README.md)
+- [订单管理](order/list/README.md) · [入口](order/index/index.vue) · [列表](order/list/index.vue) · [详情](order/detail/index.vue)
+- [数据统计](statistics/index/README.md) · [报表](statistics/index/index.vue)
+- [商品管理](goods/index/README.md) · [列表](goods/index/index.vue)
+- [桌台看板](table/index/README.md) · [桌台列表](table/index/index.vue)
+- [骑手管理](delivery/index/README.md) · [页面源码](delivery/index/index.vue)
+- [店铺设置](shop/index/README.md) · [设置页](shop/index/index.vue) · [选择门店与邀请](shop/index/select.vue)
+- [商家工作台](shop/workspace/README.md) · [商家账号](staff/account/README.md)
+- [商家登录](auth/login/README.md) · [门店权限](auth/permissions/README.md) · [入驻申请](auth/onboarding/README.md)
 
 ## 回归检查
 

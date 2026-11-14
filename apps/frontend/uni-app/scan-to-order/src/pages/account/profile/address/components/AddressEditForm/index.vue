@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { ref } from 'vue'
 import { PhoneInput } from '@/components/phone-input'
 import type { PhoneInputHandle } from '@/components/phone-input'
@@ -57,13 +58,15 @@ function save() {
         <textarea class="field detail-input" :disabled="saving" :value="draft.address" :placeholder="t('account.profile.address.addressPlaceholder')" auto-height :maxlength="300" @input="emit('input', 'address', $event.detail.value)" />
       </view>
     </view>
-    <button class="location-btn" :loading="locating" :disabled="saving || locating" @tap="emit('locate')">
+    <button class="location-btn" :disabled="saving || locating" @tap="emit('locate')">
+      <PageLoading v-if="locating" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
       {{ draft.latitude != null && draft.longitude != null ? '重新选择地图位置' : '补充地图定位（选填）' }}
     </button>
     <view v-if="draft.latitude != null && draft.longitude != null" class="text-24rpx text-#666">
       已保存地址定位
     </view>
-    <button class="save-btn" :loading="saving" :disabled="saving || locating" @tap="save">
+    <button class="save-btn" :disabled="saving || locating" @tap="save">
+      <PageLoading v-if="saving" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
       {{ t('account.profile.address.save') }}
     </button>
     <button class="cancel-btn" :disabled="saving" @tap="emit('cancel')">

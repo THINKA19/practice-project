@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -24,7 +26,7 @@ import KanjiaProgress from './components/KanjiaProgress/index.vue'
 import SkuOptions from './components/SkuOptions/index.vue'
 import { useGoodsDetailPage } from './composables/use-page'
 
-const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 
 definePage({
   style: {
@@ -52,6 +54,7 @@ onShareAppMessage(() => vm.shareMessage())
 
 <template>
   <view class="goods-detail-page">
+    <PageLoading v-if="poster.generating || kanjia.joining" overlay />
     <!-- 商品图片 / 视频 -->
     <swiper
       class="swiper-box"
@@ -76,10 +79,10 @@ onShareAppMessage(() => vm.shareMessage())
       </view>
       <view class="price-section">
         <view class="current-price">
-          <text class="price-num">{{ currencySymbol }}{{ sku.selectSizePrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text></text>
+          <text class="price-num"><FgPrice :amount="sku.selectSizePrice" :country-code="countryCode" show-currency-name /></text>
         </view>
         <view v-if="basicInfo.originalPrice && basicInfo.originalPrice > 0" class="original-price">
-          <text>{{ currencySymbol }}{{ sku.selectSizeOPrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text></text>
+          <text><FgPrice :amount="sku.selectSizeOPrice" :country-code="countryCode" show-currency-name /></text>
         </view>
       </view>
       <view class="goods-title">
@@ -221,7 +224,7 @@ onShareAppMessage(() => vm.shareMessage())
             {{ t('goodsDetail.kanjiaBtn') }}
           </wd-button>
           <wd-button v-else-if="kanjia.curKanjiaprogress && kanjia.isOwner" type="warning" block @click="vm.onBuyTap()">
-            {{ currencySymbol }}{{ kanjia.curKanjiaprogress.kanjiaInfo.curPrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text> {{ t('goodsDetail.buy') }}
+            <FgPrice :amount="kanjia.curKanjiaprogress.kanjiaInfo.curPrice" :country-code="countryCode" show-currency-name /> {{ t('goodsDetail.buy') }}
           </wd-button>
           <wd-button v-else type="warning" block @click="vm.onBuyTap()">
             {{ t('goodsDetail.addCartBtn') }}
@@ -250,8 +253,8 @@ onShareAppMessage(() => vm.shareMessage())
           {{ basicInfo?.name }}
         </view>
         <view class="popup-price-row">
-          <text class="popup-current-price">{{ currencySymbol }}{{ sku.selectSizePrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text></text>
-          <text v-if="sku.selectSizePrice !== sku.selectSizeOPrice" class="popup-original-price">{{ currencySymbol }}{{ sku.selectSizeOPrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text></text>
+          <text class="popup-current-price"><FgPrice :amount="sku.selectSizePrice" :country-code="countryCode" show-currency-name /></text>
+          <text v-if="sku.selectSizePrice !== sku.selectSizeOPrice" class="popup-original-price"><FgPrice :amount="sku.selectSizeOPrice" :country-code="countryCode" show-currency-name /></text>
         </view>
       </view>
     </view>
@@ -283,7 +286,7 @@ onShareAppMessage(() => vm.shareMessage())
     </view>
     <view class="popup-action-area">
       <view v-if="kanjia.isOwner" class="popup-confirm-btn" @tap="sku.addShopCar()">
-        {{ currencySymbol }}{{ kanjia.curKanjiaprogress?.kanjiaInfo.curPrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text> {{ t('goodsDetail.buy') }}
+        <FgPrice :amount="kanjia.curKanjiaprogress?.kanjiaInfo.curPrice" :country-code="countryCode" show-currency-name /> {{ t('goodsDetail.buy') }}
       </view>
       <view v-else class="popup-confirm-btn" @tap="sku.addShopCar()">
         {{ t('goodsDetail.addCartBtn') }}

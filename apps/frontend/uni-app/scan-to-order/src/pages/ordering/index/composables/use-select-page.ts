@@ -58,7 +58,7 @@ export function useShopSelectPage(capability?: 'table-booking') {
   const favorites = useShopFavorites()
   const session = useSessionState()
   const favoritesNeedLogin = computed(() => category.value === 'favorites' && (!session.hasLogin || session.identity !== 'customer'))
-  const emptyText = computed(() => favoritesNeedLogin.value ? '登录后查看收藏门店' : category.value === 'favorites' ? '当前筛选条件下暂无收藏门店' : category.value === 'promotions' ? '当前地区暂无优惠活动，试试其他地区' : '没有找到门店，试试其他关键词或地区')
+  const emptyText = computed(() => category.value === 'promotions' ? '当前地区暂无优惠活动，试试其他地区' : '没有找到门店，试试其他关键词或地区')
   const searchValue = ref('')
   const countryCode = ref('')
   const cityCode = ref('')
@@ -196,6 +196,10 @@ export function useShopSelectPage(capability?: 'table-booking') {
     category.value = 'all'
     if (options.defaultPickup)
       shopStore.setPeisongType('zq')
+    clearFilters()
+  }
+
+  function clearFilters() {
     searchValue.value = ''
     countryCode.value = ''
     cityCode.value = ''
@@ -276,5 +280,5 @@ export function useShopSelectPage(capability?: 'table-booking') {
     clearTimeout(promotionTimer)
   })
 
-  return { setVisible, category, favorites, favoritesNeedLogin, loginForFavorites, emptyText, changeCategory, paging, shops, searchValue, countryCode, cityCode, districtCode, regionLabel, regions, regionsLoading, regionsError, regionsReady, loadRegions, selectedShopId, rememberScroll, restorePosition, init, query, reload, resetFilters, searchChange, applyRegion, goShop }
+  return { setVisible, category, favorites, favoritesNeedLogin, loginForFavorites, emptyText, changeCategory, paging, shops, searchValue, countryCode, cityCode, districtCode, regionLabel, regions, regionsLoading, regionsError, regionsReady, loadRegions, selectedShopId, rememberScroll, restorePosition, init, query, reload, clearFilters, resetFilters, searchChange, applyRegion, goShop }
 }

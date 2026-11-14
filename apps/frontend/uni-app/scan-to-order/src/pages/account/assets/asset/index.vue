@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 /**
  * 我的钱包：余额、充值套餐/自定义金额、充值记录与资金明细入口
  */
@@ -50,7 +51,7 @@ onShow(() => {
       <view class="circle circle-1" />
       <view class="circle circle-2" />
       <view v-if="loading && !loaded" class="wallet-status">
-        {{ t('common.loading') }}
+        <PageLoading :title="t('common.loading')" />
       </view>
       <view v-else-if="failed" class="wallet-status" @tap="vm.refresh()">
         {{ t('common.loadFailed') }} · {{ t('common.retry') }}
@@ -152,7 +153,8 @@ onShow(() => {
         <view v-if="demo" class="mb-24rpx text-24rpx text-#999">
           开发演示，不产生真实扣款
         </view>
-        <wd-button block :loading="paying" @click="vm.paymentOk">
+        <wd-button block :disabled="paying" @click="vm.paymentOk">
+          <PageLoading v-if="paying" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
           确认演示充值
         </wd-button>
         <view v-if="!paying" class="mt-24rpx text-#999" @tap="vm.paymentCancel">

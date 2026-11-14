@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -24,7 +25,7 @@ defineProps<{
 
 const emit = defineEmits<{ select: [card: MyCard | null] }>()
 
-const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 
 /** cardInfo.type：0 次卡 1 储值卡 */
 function cardType(card: MyCard) {
@@ -78,7 +79,7 @@ function cardType(card: MyCard) {
               剩余 {{ item.amount }} 次
             </text>
             <text v-if="cardType(item) === 1">
-              余额 {{ currencySymbol }}{{ item.amount }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+              余额 <FgPrice :amount="item.amount" :country-code="countryCode" show-currency-name />
             </text>
             <text class="ml-8rpx text-#999">
               | 至 {{ item.dateEnd }}

@@ -16,6 +16,7 @@ const vm = useGiftReceivePage() // 在父页面 setup 中调用
 ============================================================================
 -->
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { useI18n } from 'vue-i18n'
 import type { useGiftReceivePage } from '../../composables/use-page'
 
@@ -50,7 +51,8 @@ const { t } = useI18n()
       </wd-button>
     </view>
     <view v-else-if="!cardInfo" class="receive-state" role="status">
-      {{ submitting ? '正在加载礼品卡…' : '暂无可领取的礼品卡' }}
+      <PageLoading v-if="submitting" title="正在加载礼品卡…" />
+      <text v-else>暂无可领取的礼品卡</text>
     </view>
     <view v-else class="main-card">
       <view class="mb-32rpx flex items-center py-20rpx">
@@ -107,7 +109,8 @@ const { t } = useI18n()
         有效期至 {{ cardUser.dateEnd }}
       </view>
       <view class="mt-32rpx">
-        <wd-button block size="large" custom-class="receive-button" :disabled="submitting" :loading="submitting" @click="vm.submit()">
+        <wd-button block size="large" custom-class="receive-button" :disabled="submitting" @click="vm.submit()">
+          <PageLoading v-if="submitting" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
           确认领取
         </wd-button>
       </view>

@@ -19,7 +19,7 @@ import type { Ref } from 'vue'
 import type { GoodsDetail } from '@/pages/ordering/menu'
 import { useSessionState } from '@/pages/auth/session'
 import { goodsMediaApi } from '@/pages/ordering/menu-goods-details'
-import { showError, withLoading } from '@/utils/project/interaction'
+import { showError } from '@/utils/project/interaction'
 
 /**
  * 海报绘制数据（传给 GoodsPoster 组件）
@@ -64,14 +64,13 @@ export function useGoodsDetailPoster(detail: Ref<GoodsDetail | null>) {
     generating.value = true
 
     try {
-      const qrcode = await withLoading(() => goodsMediaApi.wxaQrcode({
+      const qrcode = await goodsMediaApi.wxaQrcode({
         scene: `${b.id},${String(session.userInfo.userId)}`,
         page: 'pages/ordering/menu-goods-details/index',
         is_hyaline: true,
         autoColor: true,
         expireHours: 1,
-      }))
-
+      })
       source.value = { pic: b.pic, name: b.name, price: b.minPrice, qrcode }
     }
     catch (e) {

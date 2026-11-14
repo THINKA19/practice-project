@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
+import FgPrice from '@/components/fg-price/fg-price.vue'
+import { computed } from 'vue'
+import { orderPresentation } from '@/pages/account/profile/order'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -22,7 +26,7 @@ import { stopPullDownRefresh } from '@/pages/ordering/menu'
  */
 import { useCartTableOrderPage } from './composables/use-table-order-page'
 
-const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
+const { countryCode: shopCountryCode } = useOrderingCurrency()
 
 definePage({
   style: {
@@ -34,6 +38,7 @@ definePage({
 const {
   t,
   orderInfo,
+  loading,
   goodsList,
   paymentShow,
   paySuccess,
@@ -45,6 +50,8 @@ const {
   paymentOk,
   paymentCancel,
 } = useCartTableOrderPage()
+
+const countryCode = computed(() => (orderInfo.value && orderPresentation(orderInfo.value).countryCode) || shopCountryCode.value)
 
 onLoad(() => {
   init()
@@ -62,7 +69,8 @@ onPullDownRefresh(async () => {
 
 <template>
   <view class="table-order-page">
-    <PageState v-if="!paySuccess && !orderInfo" status="empty" :title="t('cart.empty')" />
+    <PageLoading v-if="loading" overlay />
+    <PageState v-if="!loading && !paySuccess && !orderInfo" status="empty" :title="t('cart.empty')" />
     <block v-if="!paySuccess && orderInfo">
       <!-- 桌号 -->
       <view class="px-32rpx pb-24rpx pt-32rpx">
@@ -114,7 +122,7 @@ onPullDownRefresh(async () => {
             </view>
             <view class="flex items-end justify-between">
               <view class="price">
-                {{ currencySymbol }}{{ item.amount }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+                <FgPrice :amount="item.amount" :country-code="countryCode" show-currency-name />
               </view>
               <view class="goods-quantity">
                 x{{ item.number }}
@@ -138,7 +146,7 @@ onPullDownRefresh(async () => {
             {{ t('cart.Consumptionamount') }}
           </view>
           <view class="summary-value">
-            {{ currencySymbol }}{{ orderInfo.amount }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+            <FgPrice :amount="orderInfo.amount" :country-code="countryCode" show-currency-name />
           </view>
         </view>
         <view class="summary-divider" />
@@ -147,7 +155,7 @@ onPullDownRefresh(async () => {
             {{ t('cart.Payableamount') }}
           </view>
           <view class="price text-44rpx">
-            {{ currencySymbol }}{{ orderInfo.amountReal }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+            <FgPrice :amount="orderInfo.amountReal" :country-code="countryCode" show-currency-name />
           </view>
         </view>
       </view>
@@ -159,7 +167,7 @@ onPullDownRefresh(async () => {
             {{ t('PickingUp.total') }}
           </view>
           <view class="price text-40rpx">
-            {{ currencySymbol }}{{ orderInfo.amountReal }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+            <FgPrice :amount="orderInfo.amountReal" :country-code="countryCode" show-currency-name />
           </view>
         </view>
         <view class="checkout-button" @tap="goPayOrder()">
@@ -182,6 +190,7 @@ onPullDownRefresh(async () => {
     <PaymentPanel
       v-model="paymentShow"
       :money="money"
+      :country-code="countryCode"
       :remark="t('payment.maidan')"
       :next-action="nextAction"
       @ok="paymentOk()"

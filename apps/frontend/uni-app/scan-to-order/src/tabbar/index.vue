@@ -91,6 +91,11 @@ onShow(() => {
   pageVisible.value = true
   setTabbarItem()
 })
+// 首次 onShow 时，原生导航可能还未就绪。
+onReady(() => {
+  if (pageVisible.value)
+    setTabbarItem()
+})
 onHide(() => {
   pageVisible.value = false
 })

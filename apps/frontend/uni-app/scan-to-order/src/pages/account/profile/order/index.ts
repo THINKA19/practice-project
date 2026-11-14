@@ -10,5 +10,7 @@ export { orderApi, uploadOrderFile } from './composables/use-requests'
 // 规则
 export { attachRefundGoods, canApplyRefund, canCallShop, canCancel, canConfirmReceive, canDeleteInList, canEvaluate, canPay, fullAddress, logisticsOf, orderIdFromPayNextAction, orderListStatusKey } from './domain/order.rules'
 
+export { orderPresentation } from './models/presentation'
+
 // 类型
 export type { Order, OrderDetail, OrderGoods, OrderGoodsCoupon, OrderLogistics, RefundableGoods, RefundApplyRecord, ReputationItem, ReputationLevel } from './models/types'

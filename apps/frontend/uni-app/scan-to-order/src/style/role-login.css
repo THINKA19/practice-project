@@ -1,0 +1,44 @@
+.role-login {
+  --wot-button-primary-bg: #067a45;
+  --wot-button-primary-bg-active: #056238;
+  --wot-button-primary-plain-border: #067a45;
+  --wot-color-theme: #067a45;
+  --wot-input-bg: #f8faf9;
+  --wot-input-padding: 12px 14px;
+  --wot-input-inner-height: 22px;
+  --wot-input-inner-font-size: 16px;
+  min-height: calc(100vh - var(--window-top, 0px) - var(--window-bottom, 0px));
+  min-height: calc(100dvh - var(--window-top, 0px) - var(--window-bottom, 0px));
+  padding-top: 32px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  background: #f5f7f6;
+  background: linear-gradient(150deg, #e6f3eb 0%, #f7faf8 52%, #f0f3f2 100%);
+}
+
+.role-login-card {
+  border: 1px solid #dce7e0;
+  box-shadow: 0 12px 32px rgb(23 57 42 / 8%);
+}
+
+.role-login-field {
+  border: 1px solid #cbdad1;
+}
+
+.role-login-field:focus-within {
+  border-color: #067a45;
+}
+
+.role-login-note {
+  border-top: 1px solid #e3ebe6;
+}
+
+@media (min-width: 768px) {
+  .role-login {
+    justify-content: center;
+    padding: 48px 32px;
+  }
+
+  .role-login-card {
+    padding: 40px 48px;
+  }
+}

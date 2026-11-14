@@ -71,6 +71,8 @@ mock/entry.mock.ts 仅供公共发现器收集；banner/handlers.ts 使用 api/e
 - `mock/`：仅开发模拟；entry.mock.ts 沿用现有发现机制，跨 Mock 仅通过 mock/index.ts。
 - `docs/`：业务契约、后端接入与参考资料。
 
+`components/HomePromotionPopup/` 管理竖屏广告的界面、展示轮次、请求入口及模拟数据。首页传入可见性并处理福利跳转。
+
 ### 状态归属
 
 - 共享身份、凭证和用户资料：唯一事实源仍为 `@/pages/auth/session`，本模块不复制会话。

@@ -8,6 +8,7 @@ import View from '@/pages/home/service/group-buying/index.vue'
 ============================================================================
 -->
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import GroupCard from './components/GroupCard/index.vue'
 import { useGroupBuyingPage } from './composables/use-page'
 import ListEnd from '@/components/list-end/index.vue'
@@ -42,7 +43,7 @@ onPullDownRefresh(async () => {
       加载失败，点击重试
     </button>
     <view v-else-if="loading" class="py-6 text-center">
-      团购加载中…
+      <PageLoading title="团购加载中…" />
     </view>
     <view v-else-if="!items.length" class="py-12 text-center">
       暂无团购活动

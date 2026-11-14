@@ -8,9 +8,6 @@ import HomeUserCard from '@/pages/home/index/components/HomeUserCard/index.vue'
 ============================================================================
 -->
 <script setup lang="ts">
-/**
- * 首页用户卡片（纯展示）：头像、昵称、会员等级、优惠券入口
- */
 import { useI18n } from 'vue-i18n'
 import LanguageSwitcher from '@/components/language-switcher/index.vue'
 import { CustomerProfile } from '@/pages/account/index'
@@ -35,27 +32,30 @@ const { t } = useI18n()
 
 <template>
   <view class="user-card">
-    <CustomerProfile
-      :has-login="hasLogin"
-      :avatar="avatar"
-      :nick="nick"
-      :level-name="levelName"
-      @login="emit('login')"
-      @avatar="emit('member')"
-      @profile="emit('member')"
-      @member="emit('member')"
-    />
-    <view class="flex flex-wrap items-center justify-end gap-16rpx">
-      <LanguageSwitcher icon-only />
-      <button class="member-entry m-0 rounded-40rpx bg-#8b7355 px-24rpx py-12rpx text-26rpx text-white leading-normal" @tap="emit('member')">
-        会员中心
-      </button>
-      <view class="coupon-btn" @tap="emit('coupon')">
-        <text class="mr-4rpx">
-          {{ t('coupons.title') }}
-        </text>
-        <wd-icon name="arrow-right" size="14px" color="#fff" />
+    <view class="flex flex-wrap items-center gap-16rpx">
+      <view class="min-w-0 flex flex-auto">
+        <CustomerProfile
+          :has-login="hasLogin"
+          :avatar="avatar"
+          :nick="nick"
+          :level-name="levelName"
+          @login="emit('login')"
+          @avatar="emit('member')"
+          @profile="emit('member')"
+          @member="emit('member')"
+        />
       </view>
+      <view class="ml-auto min-w-0 max-w-full">
+        <LanguageSwitcher />
+      </view>
+    </view>
+    <view class="grid grid-cols-2 gap-16rpx">
+      <button class="card-action member-entry" @tap="emit('member')">
+        {{ t('market.member') }}
+      </button>
+      <button class="card-action coupon-btn" @tap="emit('coupon')">
+        {{ t('coupons.title') }}
+      </button>
     </view>
   </view>
 </template>
@@ -65,15 +65,13 @@ const { t } = useI18n()
   position: relative;
   z-index: 10;
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 24rpx;
-  justify-content: space-between;
-  padding: 20rpx 32rpx;
+  padding: 24rpx 28rpx;
   margin: 20rpx 32rpx 0;
-  background: linear-gradient(135deg, #fff 0%, #fff9f6 100%);
+  background: #fffcfa;
   border-radius: 28rpx;
-  box-shadow: 0 8rpx 32rpx rgb(255 107 157 / 12%);
+  box-shadow: 0 6rpx 24rpx rgb(116 66 46 / 8%);
 }
 
 .user-card :deep(.profile-avatar) {
@@ -89,14 +87,31 @@ const { t } = useI18n()
   font-size: 30rpx;
 }
 
-.coupon-btn {
+.card-action {
   display: flex;
   align-items: center;
-  padding: 12rpx 24rpx;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 64rpx;
+  padding: 10rpx 16rpx;
+  margin: 0;
+  border-radius: 32rpx;
   font-size: 26rpx;
-  color: #fff;
-  background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
-  border-radius: 40rpx;
-  box-shadow: 0 4rpx 16rpx rgb(255 107 157 / 30%);
+  line-height: 1.4;
+}
+
+.card-action::after {
+  border: none;
+}
+
+.member-entry {
+  color: #634b36;
+  background: #f4ebe0;
+}
+
+.coupon-btn {
+  color: #a42d56;
+  background: #fce5ed;
 }
 </style>

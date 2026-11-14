@@ -8,14 +8,14 @@ import { redirectToLogin } from '../composables/use-login-navigation'
 vi.mock('../composables/use-login-navigation', () => ({ redirectToLogin: vi.fn() }))
 vi.mock('../api/session', () => ({ sessionApi: { profile: vi.fn(), refresh: vi.fn(), logout: vi.fn() } }))
 
-it('未登录引导目标登录页，身份不符只提示退出', () => {
+it('未登录或身份不符时引导至目标登录页', () => {
   expect(requireIdentity('shop')).toBe(false)
   expect(redirectToLogin).toHaveBeenCalledWith({ identity: 'shop' })
   vi.mocked(redirectToLogin).mockClear()
   seedSession({}, 'rider')
   expect(requireIdentity('shop')).toBe(false)
-  expect(redirectToLogin).not.toHaveBeenCalled()
-  expect(uni.showToast).toHaveBeenCalledWith({ title: '请先退出当前身份', icon: 'none' })
+  expect(redirectToLogin).toHaveBeenCalledExactlyOnceWith({ identity: 'shop' })
+  expect(getIdentity()).toBe('rider')
   expect(requireIdentity('rider')).toBe(true)
 })
 

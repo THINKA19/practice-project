@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import GoodsSkuSelector from '@/components/goods-sku-selector/index.vue'
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -47,7 +49,7 @@ const emit = defineEmits<{
   'pingtuanBuy': []
 }>()
 
-const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 
 const { t } = useI18n()
 
@@ -72,9 +74,9 @@ function onNumber(v: number | string) {
       </view>
 
       <view class="option-group">
-        <goods-sku-selector :groups="propertyGroups" @select="(g, c) => emit('property', g, c)" />
-        <goods-sku-selector :groups="additionGroups" @select="(g, c) => emit('addition', g, c)" />
-        <goods-sku-selector :groups="timeGroups" @select="(g, c) => emit('time', g, c)" />
+        <goods-sku-selector :groups="propertyGroups" :country-code="countryCode" @select="(g, c) => emit('property', g, c)" />
+        <goods-sku-selector :groups="additionGroups" :country-code="countryCode" @select="(g, c) => emit('addition', g, c)" />
+        <goods-sku-selector :groups="timeGroups" :country-code="countryCode" @select="(g, c) => emit('time', g, c)" />
       </view>
 
       <view v-if="content" class="introduce">
@@ -87,7 +89,7 @@ function onNumber(v: number | string) {
       <view class="blank" />
       <view class="add-box">
         <view class="price">
-          {{ currencySymbol }}{{ price }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+          <FgPrice :amount="price" :country-code="countryCode" show-currency-name />
         </view>
         <wd-input-number :model-value="number" :min="min" :max="max" @update:model-value="onNumber" />
       </view>
@@ -95,7 +97,8 @@ function onNumber(v: number | string) {
         <wd-button v-if="pingtuanMode" block type="primary" size="large" @click="emit('pingtuanBuy')">
           {{ t('index.pingtuan') }}
         </wd-button>
-        <wd-button v-else block type="primary" size="large" :loading="submitting" :disabled="submitting" @click="!submitting && emit('addCart')">
+        <wd-button v-else block type="primary" size="large" :disabled="submitting" @click="!submitting && emit('addCart')">
+          <PageLoading v-if="submitting" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
           {{ t('goodsDetail.addCartBtn') }}
         </wd-button>
       </view>

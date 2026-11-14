@@ -7,7 +7,8 @@
  * ============================================================================
  */
 import { useOrderingLocale as useI18n } from '@/pages/ordering/menu'
-import { ShopBusinessBadge, ShopFavorite, ShopLabels, ShopPhoneDialog } from '@/pages/ordering/index'
+import { ShopBusinessBadge, ShopFavorite, ShopLabels } from '@/pages/ordering/index'
+import PhoneContact from '@/components/phone-contact/index.vue'
 import { useShopDetailPage } from './composables/use-detail-page'
 import { PageState } from '@/components/page-state'
 import ShopPhotoGallery from './components/ShopPhotoGallery/index.vue'
@@ -21,7 +22,7 @@ definePage({
 
 const { t } = useI18n()
 const vm = useShopDetailPage()
-const { shopInfo, phoneContact, loading, error, photos, services, introductionExpanded } = vm
+const { shopInfo, loading, error, photos, services, introductionExpanded } = vm
 const shopId = ref<string>()
 const pageActive = ref(true)
 const locationPreview = ref<InstanceType<typeof ShopImagePreview>>()
@@ -129,17 +130,26 @@ onLoad((query) => {
       </view>
 
       <view class="action-buttons">
-        <view class="action-btn" @tap="vm.phoneCall()">
-          <view class="btn-icon">
-            📞
-          </view>
-          <view class="btn-text">
-            {{ t('shop.contactUs') }}
-          </view>
-          <view class="btn-sub-text">
-            {{ shopInfo?.linkPhone || '暂未提供联系电话' }}
-          </view>
-        </view>
+        <PhoneContact
+          :phone="shopInfo?.linkPhone"
+          title="联系门店"
+          description="请复制门店电话号码，使用手机拨打联系门店。"
+          unavailable-message="门店暂未提供联系电话"
+        >
+          <template #trigger="{ open }">
+            <view class="action-btn" @tap.stop="open">
+              <view class="btn-icon">
+                📞
+              </view>
+              <view class="btn-text">
+                {{ t('shop.contactUs') }}
+              </view>
+              <view class="btn-sub-text">
+                {{ shopInfo?.linkPhone || '暂未提供联系电话' }}
+              </view>
+            </view>
+          </template>
+        </PhoneContact>
         <view class="action-divider" />
         <view class="action-btn" @tap="vm.guideNow()">
           <view class="btn-icon">
@@ -219,7 +229,6 @@ onLoad((query) => {
       </view>
       <ShopImagePreview :key="shopInfo.id" ref="locationPreview" @open="locationOpened" @close="locationClosed" />
       <view class="h-40rpx" />
-      <ShopPhoneDialog :success-visible="phoneContact.successVisible.value" :copy-fallback-available="phoneContact.copyFallbackAvailable.value" :model-value="phoneContact.visible.value" :phone="phoneContact.phone.value" :message="phoneContact.message.value" :copying="phoneContact.copying.value" @fallback="phoneContact.showCopyFallback()" @update:model-value="phoneContact.close()" @copy="phoneContact.copy()" />
     </template>
   </view>
 </template>

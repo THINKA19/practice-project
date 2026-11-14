@@ -3,7 +3,8 @@ export interface SkuChoice {
   name: string
   active: boolean
   disabled?: boolean
-  priceText?: string
+  price?: number
+  isSurcharge?: boolean
 }
 export interface SkuGroup {
   id: number

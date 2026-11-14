@@ -1,9 +1,9 @@
 /** 个人中心：读取正式会话，未接入功能显示提示。 */
 import { computed } from 'vue'
-import { useSessionState } from '@/pages/auth/session'
-import { useAccountNavigation } from './use-navigation'
-import { useAccountAssets } from './use-assets'
 import { t } from '@/locale'
+import { useSessionState } from '@/pages/auth/session'
+import { useAccountAssets } from './use-assets'
+import { useAccountNavigation } from './use-navigation'
 
 /** 获取个人中心展示和动作；未接入功能不提交资料、不清除登录状态。 */
 export function useAccountPage() {
@@ -30,7 +30,7 @@ export function useAccountPage() {
     assetStatus: assets.status,
     myBg: undefined,
     customerServiceType: 'QW',
-    init: () => uni.setNavigationBarTitle({ title: '我的' }),
+    init: () => uni.setNavigationBarTitle({ title: t('tabbar.me') }),
     refresh: () => {
       session.updateNowTime()
       return assets.refresh()

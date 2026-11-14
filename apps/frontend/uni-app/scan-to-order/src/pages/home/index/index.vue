@@ -9,6 +9,7 @@ uni.switchTab({ url: ClientRoutes.Home.home }) // 打开首页
 -->
 <script setup lang="ts">
 import { BannerCarousel } from '@/components/banner-carousel'
+import HomePromotionPopup from './components/HomePromotionPopup/index.vue'
 import HomeUserCard from './components/HomeUserCard/index.vue'
 import { useHomeView } from './composables/use-view'
 
@@ -21,7 +22,7 @@ definePage({
   },
 })
 
-const { t, vm, banners, hasLogin, nick, avatar, levelName } = useHomeView()
+const { t, vm, banners, hasLogin, nick, avatar, levelName, pageVisible } = useHomeView()
 </script>
 
 <template>
@@ -64,9 +65,6 @@ const { t, vm, banners, hasLogin, nick, avatar, levelName } = useHomeView()
             <view class="mb-8rpx text-30rpx text-#333 font-600">
               {{ t('home.delivery.pickup') }}
             </view>
-            <view class="text-24rpx text-#999">
-              {{ t('home.delivery.pickupDescription') }}
-            </view>
           </view>
           <view class="delivery-card" @tap="vm.openShopSelection('kd')">
             <view class="delivery-icon-wrapper">
@@ -74,9 +72,6 @@ const { t, vm, banners, hasLogin, nick, avatar, levelName } = useHomeView()
             </view>
             <view class="mb-8rpx text-30rpx text-#333 font-600">
               {{ t('home.delivery.takeout') }}
-            </view>
-            <view class="text-24rpx text-#999">
-              {{ t('home.delivery.takeoutDescription') }}
             </view>
           </view>
         </view>
@@ -133,6 +128,8 @@ const { t, vm, banners, hasLogin, nick, avatar, levelName } = useHomeView()
       </view>
     </view>
   </z-paging>
+
+  <HomePromotionPopup :page-visible="pageVisible" @select="vm.openWelfare()" />
 </template>
 
 <style lang="scss" scoped>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -22,7 +23,7 @@ defineProps<{
   helps: KanjiaHelpLog[]
 }>()
 
-const { formatPrice } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 
 const { t } = useI18n()
 </script>
@@ -34,10 +35,14 @@ const { t } = useI18n()
         <image class="avatar" :src="item.avatarUrl" mode="aspectFill" />
         <view class="flex-1">
           <wd-cell
-            :title="formatPrice(item.cutPrice ?? '')"
+            use-title-slot
             :label="`${item.nick || ''} ${item.dateAdd || ''} ${t('goodsDetail.help2')}`"
             size="large"
-          />
+          >
+            <template #title>
+              <FgPrice :amount="item.cutPrice" :country-code="countryCode" show-currency-name />
+            </template>
+          </wd-cell>
         </view>
       </view>
       <view class="h-64rpx" />

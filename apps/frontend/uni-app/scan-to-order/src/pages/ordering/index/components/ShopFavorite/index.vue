@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 /**
  * ============================================================================
  * 【文件概述】店内收藏入口，与选店列表共享顾客收藏状态。
@@ -20,7 +21,8 @@ watch(() => session.sessionRevision, () => {
 
 <template>
   <button class="favorite-button m-0 shrink-0 rounded-16rpx bg-[#fff9f0] px-20rpx py-8rpx text-24rpx text-[#8b4513]" :disabled="favorites.loading || favorites.saving" @tap.stop="favorites.error ? favorites.load() : favorites.toggle(shopId)">
-    {{ favorites.error ? '重试收藏' : favorites.loading ? '加载收藏…' : favorites.ids.includes(shopId) ? '★ 已收藏' : '☆ 收藏' }}
+    <PageLoading v-if="favorites.loading && !favorites.error" inline size="28rpx" title="加载收藏…" />
+    <text v-else>{{ favorites.error ? '重试收藏' : favorites.ids.includes(shopId) ? '★ 已收藏' : '☆ 收藏' }}</text>
   </button>
 </template>
 

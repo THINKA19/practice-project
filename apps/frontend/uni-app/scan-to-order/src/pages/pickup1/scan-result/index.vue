@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import ScanCouponCard from './components/ScanCouponCard/index.vue'
 import ScanFeeCard from './components/ScanFeeCard/index.vue'
 import ScanGoodsCard from './components/ScanGoodsCard/index.vue'
@@ -36,7 +37,7 @@ const { t, demo, permissionDenied, hxNumber, orderDetail, canHx, loading, failed
       </view>
 
       <view v-if="loading" class="py-48rpx text-center text-[#8B7355]">
-        {{ t('common.loading') }}
+        <PageLoading :title="t('common.loading')" />
       </view>
       <view v-else-if="permissionDenied || !hxNumber || failed" class="mx-24rpx mb-24rpx rounded-24rpx bg-white p-32rpx text-center text-[#8B7355]">
         <view>{{ t(permissionDenied ? 'orderScan.staffOnly' : hxNumber ? 'orderScan.loadFailed' : 'orderScan.missingCode') }}</view>
@@ -69,7 +70,8 @@ const { t, demo, permissionDenied, hxNumber, orderDetail, canHx, loading, failed
           class="h-96rpx w-full center rounded-48rpx bg-[linear-gradient(135deg,#A0673E_0%,#8B5A3C_100%)] text-32rpx text-white font-bold tracking-4rpx shadow-[0_8rpx_24rpx_rgba(139,90,60,0.4)] transition-all active:scale-98 active:shadow-[0_4rpx_12rpx_rgba(139,90,60,0.5)]"
           @click="doneHx"
         >
-          {{ t(submitting ? 'common.loading' : 'orderScan.confirmVerification') }}
+          <PageLoading v-if="submitting" inline size="28rpx" color="currentColor" />
+          <text v-else>{{ t('orderScan.confirmVerification') }}</text>
         </view>
       </view>
     </template>

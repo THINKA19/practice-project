@@ -17,8 +17,7 @@ import { ref, watch } from 'vue'
 import ShopLabels from '../ShopLabels/index.vue'
 import ShopBusinessBadge from '../ShopBusinessBadge/index.vue'
 import type { Shop } from '../../models/types'
-import { useShopPhoneContact } from '../../composables/use-phone-contact'
-import ShopPhoneDialog from '../ShopPhoneDialog/index.vue'
+import PhoneContact from '@/components/phone-contact/index.vue'
 import { navigate } from '@/utils/project/navigation'
 import { ClientRoutes } from '@/pages/routes'
 
@@ -30,8 +29,6 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{ select: [shop?: Shop] }>()
-const phoneContact = useShopPhoneContact(() => props.shop.linkPhone)
-const { phone } = phoneContact
 function navigateToShop() {
   void navigate(ClientRoutes.Ordering.shopLocation, { id: props.shop.id })
 }
@@ -104,10 +101,18 @@ function onImageLoad(event: { detail: { width: number | string, height: number |
       </view>
     </view>
     <view class="shop-actions">
-      <button class="shop-quick-action" :disabled="!phone" :aria-label="phone ? `联系${shop.name}` : '门店暂未提供电话'" @tap.stop="phoneContact.open()">
-        <wd-icon name="phone" size="32rpx" />
-        <text>电话</text>
-      </button>
+      <PhoneContact
+        :phone="shop.linkPhone"
+        title="联系门店"
+        description="请复制门店电话号码，使用手机拨打联系门店。"
+      >
+        <template #trigger="{ open, available }">
+          <button class="shop-quick-action" :disabled="!available" :aria-label="available ? `联系${shop.name}` : '门店暂未提供电话'" @tap.stop="open">
+            <wd-icon name="phone" size="32rpx" />
+            <text>电话</text>
+          </button>
+        </template>
+      </PhoneContact>
       <button class="shop-quick-action" :aria-label="`导航到${shop.name}`" @tap.stop="navigateToShop">
         <wd-icon name="location" size="32rpx" />
         <text>导航</text>
@@ -118,7 +123,6 @@ function onImageLoad(event: { detail: { width: number | string, height: number |
         <text>{{ selectText }}</text>
       </view>
     </view>
-    <ShopPhoneDialog :success-visible="phoneContact.successVisible.value" :copy-fallback-available="phoneContact.copyFallbackAvailable.value" :model-value="phoneContact.visible.value" :phone="phoneContact.phone.value" :message="phoneContact.message.value" :copying="phoneContact.copying.value" @fallback="phoneContact.showCopyFallback()" @update:model-value="phoneContact.close()" @copy="phoneContact.copy()" />
   </view>
 </template>
 

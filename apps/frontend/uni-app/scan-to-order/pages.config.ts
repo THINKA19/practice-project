@@ -5,14 +5,16 @@ export default defineUniPages({
   globalStyle: {
     navigationStyle: 'default',
     navigationBarTitleText: 'unibest',
-    navigationBarBackgroundColor: '#f8f8f8',
+    navigationBarBackgroundColor: '#ffffff',
     navigationBarTextStyle: 'black',
     backgroundColor: '#FFFFFF',
   },
   easycom: {
     autoscan: true,
     custom: {
-      '^fg-(.*)': '@/components/fg-$1/fg-$1.vue',
+      '^fg-empty$': '@/components/fg-empty/index.vue',
+      '^status-tag$': '@/components/status-tag/status-tag.vue',
+      '^fg-(?!empty$)(.*)$': '@/components/fg-$1/fg-$1.vue',
       '^(?!z-paging-refresh|z-paging-load-more)z-paging(.*)':
         'z-paging/components/z-paging$1/z-paging$1.vue',
       '^wd-(.*)': '@wot-ui/ui/components/wd-$1/wd-$1.vue',

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { readPrivacyPolicy, readUserAgreement } from '../../composables/use-agreement-navigation'
 import AgreementConsent from '../AgreementConsent/index.vue'
 import { usePanel } from './use-auth-panel'
@@ -17,7 +18,8 @@ defineExpose({ open })
           微信授权登录
         </view>
         <AgreementConsent v-model="agreed" :disabled="loading" @read-user="readUserAgreement" @read-privacy="readPrivacyPolicy" />
-        <button class="authorize-button" :disabled="!agreed || loading" :loading="loading" @tap="authorize">
+        <button class="authorize-button" :disabled="!agreed || loading" @tap="authorize">
+          <PageLoading v-if="loading" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
           授权登录
         </button>
         <view v-if="error" role="alert" class="mt-20rpx text-26rpx text-#d93025">

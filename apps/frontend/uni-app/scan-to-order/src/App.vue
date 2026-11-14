@@ -3,6 +3,7 @@ import { onHide, onLaunch, onShow } from '@dcloudio/uni-app'
 import { getCurrentInstance, nextTick, onMounted, onUnmounted } from 'vue'
 import { enablePrivacyConsent, ensurePrivacyConsent } from '@/pages/auth/agreement'
 import { identityForPath } from '@/pages/auth/session'
+import { beginHomePromotionSession } from '@/pages/home/index'
 import { navigateToInterceptor } from '@/router/interceptor'
 import { tabbarStore } from '@/tabbar/store'
 import { permission } from '@/router/permission'
@@ -18,6 +19,7 @@ onLaunch((options) => {
   console.log('App.vue onLaunch', options)
 })
 onShow((options) => {
+  beginHomePromotionSession()
   console.log('App.vue onShow', options)
   // 处理直接进入页面路由的情况：如h5直接输入路由、微信小程序分享后进入等
   // https://github.com/unibest-tech/unibest/issues/192

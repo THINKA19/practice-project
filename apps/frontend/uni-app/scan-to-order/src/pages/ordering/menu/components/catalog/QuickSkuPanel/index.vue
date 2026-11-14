@@ -35,11 +35,11 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
-const { currencySymbol, currencyUnit } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 const groups = computed(() => (props.goods.properties || []).map(g => ({
   id: g.id,
   name: g.name,
-  choices: g.childsCurGoods.map(c => ({ id: c.id, name: c.name, active: props.isActive(g.id, c.id), priceText: typeof c.price === 'number' ? `${currencySymbol.value}${c.price}${currencyUnit.value}` : undefined })),
+  choices: g.childsCurGoods.map(c => ({ id: c.id, name: c.name, active: props.isActive(g.id, c.id), price: c.price })),
 })))
 function select(g: number, c: number) {
   const choice = props.goods.properties?.find(group => group.id === g)?.childsCurGoods.find(choice => choice.id === c)
@@ -53,7 +53,7 @@ function select(g: number, c: number) {
     <view class="sku-mask" />
     <view class="sku-container">
       <image class="close" src="/static/images/icon/close.svg" @tap="emit('close')" />
-      <goods-sku-selector :groups="groups" @select="select" />
+      <goods-sku-selector :groups="groups" :country-code="countryCode" @select="select" />
       <view class="num">
         <view class="t">
           {{ t('goodsDetail.buyNumber') }}

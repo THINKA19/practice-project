@@ -9,7 +9,7 @@ import { requireIdentity, useSessionAccountScope, useSessionState } from '@/page
 import { addressApi } from './use-requests'
 import { checkAddressDraft, defaultAddressFirst, validateAddress } from '../domain/address.rules'
 
-import { alert, chooseLocation, confirm, setTitle, showError, toast, withLoading } from '@/utils/project/interaction'
+import { alert, chooseLocation, confirm, setTitle, showError, toast } from '@/utils/project/interaction'
 
 function emptyDraft(): AddressDraft {
   return { linkMan: '', mobile: '', address: '', phoneCountry: 'VN', countryCode: '', regionText: '' }
@@ -354,10 +354,10 @@ export function useAddressPage(onSelect?: (address: Address) => void) {
     try {
       let savedId = id.value
       if (id.value) {
-        await withLoading(() => addressApi.update({ ...form, id: Number(id.value) }))
+        await addressApi.update({ ...form, id: Number(id.value) })
       }
       else {
-        const saved = await withLoading(() => addressApi.add(form))
+        const saved = await addressApi.add(form)
         savedId = saved?.id ?? null
       }
 

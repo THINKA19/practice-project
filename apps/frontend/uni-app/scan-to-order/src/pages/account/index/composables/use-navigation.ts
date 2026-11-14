@@ -1,6 +1,7 @@
 /** 账户页业务跳转，复用正式公共导航。 */
 import type { Ref } from 'vue'
 import type { IUserInfoRes } from '@/pages/auth/session'
+import { AUTH_ROUTES } from '@/pages/auth/session'
 import type { NavigationResult } from '@/utils/project/navigation'
 import { navigate } from '@/utils/project/navigation'
 import { toast } from '@/utils/project/feedback'
@@ -29,6 +30,10 @@ export function useAccountNavigation(user: Readonly<Ref<Pick<IUserInfoRes, 'user
       return open(ClientRoutes.Auth.login)
     if (title === '申请商家入驻')
       return open(ClientRoutes.Ordering.shopOnboarding)
+    if (title === '商家后台')
+      return open(AUTH_ROUTES.shop)
+    if (title === '骑手工作台')
+      return open(AUTH_ROUTES.rider)
     if (title === '扫码核销')
       return open(ClientRoutes.Account.scanResult)
     if (title === '每日签到')

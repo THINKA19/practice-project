@@ -21,11 +21,8 @@ const { t } = useI18n()
 const vm = useAccountPage()
 const { user, nick, avatar, couponCount, balance, score, assetStatus, myBg, customerServiceType } = vm
 
-onLoad(() => {
-  vm.init()
-})
-
 onShow(() => {
+  vm.init()
   vm.refresh()
 })
 </script>
@@ -64,7 +61,7 @@ onShow(() => {
         <view class="mb-32rpx">
           <view class="menu-title">
             <view class="title-dot" />
-            <text>常用功能</text>
+            <text>{{ t('account.menu.common') }}</text>
           </view>
           <view class="mb-16rpx flex gap-20rpx">
             <view class="menu-item" @tap="vm.scanOrderCode">
@@ -106,7 +103,7 @@ onShow(() => {
         <view class="mb-32rpx">
           <view class="menu-title">
             <view class="title-dot" />
-            <text>我的服务</text>
+            <text>{{ t('account.menu.myServices') }}</text>
           </view>
           <view class="menu-list">
             <MyMenuItem icon="list" :text="t('account.orders')" from="#E8F5E9" to="#C8E6C9" color="#4CAF50" @select="vm.navTo('我的订单')" />
@@ -118,7 +115,7 @@ onShow(() => {
         <view class="mb-32rpx">
           <view class="menu-title">
             <view class="title-dot" />
-            <text>其他设置</text>
+            <text>{{ t('account.menu.otherSettings') }}</text>
           </view>
           <view class="menu-list">
             <MyMenuItem icon="info-circle" :text="t('account.aboutUs')" from="#F3E5F5" to="#E1BEE7" color="#9C27B0" @select="vm.navTo('关于我们')" />
@@ -131,12 +128,12 @@ onShow(() => {
         <view class="mb-32rpx">
           <view class="menu-title">
             <view class="title-dot" />
-            <text>商家服务</text>
-            <text class="ml-16rpx text-22rpx text-#999 font-400">商家专用</text>
+            <text>{{ t('account.menu.merchantServices') }}</text>
+            <text class="ml-16rpx text-22rpx text-#999 font-400">{{ t('account.menu.merchantOnly') }}</text>
           </view>
           <view class="menu-list">
-            <MyMenuItem icon="store" text="进入商家后台" from="#E8F5E9" to="#C8E6C9" color="#4CAF50" @select="vm.navTo('商家后台')" />
-            <MyMenuItem icon="edit" text="申请商家入驻" from="#FFF3E0" to="#FFE0B2" color="#FF9800" @select="vm.navTo('申请商家入驻')" />
+            <MyMenuItem icon="store" :text="t('account.menu.merchantDashboard')" from="#E8F5E9" to="#C8E6C9" color="#4CAF50" @select="vm.navTo('商家后台')" />
+            <MyMenuItem icon="edit" :text="t('account.menu.merchantApplication')" from="#FFF3E0" to="#FFE0B2" color="#FF9800" @select="vm.navTo('申请商家入驻')" />
           </view>
         </view>
 
@@ -144,11 +141,11 @@ onShow(() => {
         <view class="mb-32rpx">
           <view class="menu-title">
             <view class="title-dot" />
-            <text>骑手管理</text>
-            <text class="ml-16rpx text-22rpx text-#999 font-400">骑手专用</text>
+            <text>{{ t('account.menu.riderManagement') }}</text>
+            <text class="ml-16rpx text-22rpx text-#999 font-400">{{ t('account.menu.riderOnly') }}</text>
           </view>
           <view class="menu-list">
-            <MyMenuItem icon="dashboard" text="进入骑手工作台" from="#E3F2FD" to="#BBDEFB" color="#2196F3" @select="vm.navTo('骑手工作台')" />
+            <MyMenuItem icon="dashboard" :text="t('account.menu.riderWorkspace')" from="#E3F2FD" to="#BBDEFB" color="#2196F3" @select="vm.navTo('骑手工作台')" />
           </view>
         </view>
       </view>
@@ -174,6 +171,7 @@ onShow(() => {
 }
 
 .title-dot {
+  flex-shrink: 0;
   width: 8rpx;
   height: 28rpx;
   margin-right: 16rpx;
@@ -184,6 +182,7 @@ onShow(() => {
 .menu-item {
   display: flex;
   flex: 1;
+  min-width: 0;
   flex-direction: column;
   align-items: center;
   padding: 32rpx 16rpx;
@@ -207,6 +206,7 @@ onShow(() => {
   line-height: 1.4;
   color: #666;
   text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .menu-list {

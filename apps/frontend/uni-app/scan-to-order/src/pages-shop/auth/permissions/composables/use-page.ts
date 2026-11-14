@@ -6,6 +6,7 @@
 import { readonly, ref } from 'vue'
 import { onHide, onShow, onUnload } from '@dcloudio/uni-app'
 import { AUTH_ROUTES, useSessionState } from '@/pages/auth/session'
+import { ShopRoutes } from '@/pages-shop/routes'
 import { MERCHANT_PAGE_PERMISSIONS } from '../models/enums'
 import { useMerchantShopStore } from './use-shop-store'
 
@@ -38,15 +39,16 @@ export function useMerchantPage() {
     }
     await store.refresh()
 
-    if (started !== epoch || !store.current)
+    if (started !== epoch)
       return
 
     const path = `/${(getCurrentPages().at(-1)?.route ?? '').replace(/^\//, '')}`
 
     const permission = MERCHANT_PAGE_PERMISSIONS[path]
 
-    if (permission && !store.can(permission)) {
+    if ((!store.current && path !== ShopRoutes.Management.account) || (permission && !store.can(permission))) {
       uni.showToast({ title: '没有此功能权限', icon: 'none' })
+      uni.redirectTo({ url: ShopRoutes.Workspace.workspace })
 
       return
     }

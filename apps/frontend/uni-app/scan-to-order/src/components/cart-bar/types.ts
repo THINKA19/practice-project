@@ -4,9 +4,7 @@ export interface CartBarProps {
   checkoutText: string
   selectShopText: string
   closedText: string
-  currencySymbol: string
-  currencyUnit: string
-  currencyName: string
+  countryCode?: string
   checkingOut: boolean
   number: number
   price: number

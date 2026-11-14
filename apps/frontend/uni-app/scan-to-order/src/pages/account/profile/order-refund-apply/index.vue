@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 /**
  * 售后申请 / 售后详情（View：只做装配与渲染）
  * 来源：bee-master/pages/refund-apply
@@ -40,7 +41,7 @@ onShow(() => {
       {{ t('refund.missingOrder') }}
     </view>
     <view v-else-if="loading" class="p-32rpx text-center">
-      {{ t('refund.loading') }}
+      <PageLoading :title="t('refund.loading')" />
     </view>
     <view v-else-if="failed" class="p-32rpx text-center">
       <button @tap="vm.loadOrder()">
@@ -153,7 +154,8 @@ onShow(() => {
 
         <!-- 提交 -->
         <view class="submit-box">
-          <button class="submit-btn" :loading="submitting" :disabled="submitting" @tap="form.submit()">
+          <button class="submit-btn" :disabled="submitting" @tap="form.submit()">
+            <PageLoading v-if="submitting" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
             {{ t('refund.submitBtn') }}
           </button>
         </view>
@@ -164,6 +166,7 @@ onShow(() => {
   </view>
 
   <!-- 售后详情 -->
+  <PageLoading v-if="detail.busy.value" overlay />
   <RefundDetailPopup
     v-model="popShow"
     :record="curRefund"

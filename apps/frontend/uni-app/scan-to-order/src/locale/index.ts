@@ -1,5 +1,5 @@
 /**
- * 应用国际化入口：三语资源、语言恢复/切换和普通 TS 文案插值。
+ * 应用国际化入口：多语言资源、语言恢复/切换和普通 TS 文案插值。
  * 导出 currentLocale、normalizeLocale、setLocale、getTemplateByKey、t；默认导出 Vue 插件。
  * @example setLocale('en'); t('home.user.guest') // Guest
  */
@@ -8,9 +8,23 @@ import { createI18n } from 'vue-i18n'
 import en from './en.json'
 import zhHans from './zh-Hans.json'
 import vi from './vi.json'
+import th from './th.json'
+import lo from './lo.json'
+import id from './id.json'
+import si from './si.json'
+import ja from './ja.json'
+import ko from './ko.json'
+import my from './my.json'
+import fil from './fil.json'
 
-const messages = { en, 'zh-Hans': zhHans, vi }
+const messages = { en, 'en-AU': en, 'zh-Hans': zhHans, vi, th, lo, id, si, ja, ko, my, fil }
 export type SupportedLocale = keyof typeof messages
+
+const englishFirst: SupportedLocale[] = ['th', 'lo', 'id', 'si', 'ja', 'ko', 'my', 'fil']
+const fallbackLocale = {
+  ...Object.fromEntries(englishFirst.map(locale => [locale, ['en', 'zh-Hans']])),
+  default: ['zh-Hans'],
+}
 
 /**
  * 规范化缓存或系统语言；不支持的值使用简体中文。
@@ -20,10 +34,20 @@ export type SupportedLocale = keyof typeof messages
  */
 export function normalizeLocale(value: unknown): SupportedLocale {
   const code = typeof value === 'string' ? value.trim().replace(/_/g, '-').toLowerCase() : ''
+  if (code === 'en-au' || code.startsWith('en-au-'))
+    return 'en-AU'
   if (code === 'en' || code.startsWith('en-'))
     return 'en'
   if (code === 'vi' || code.startsWith('vi-'))
     return 'vi'
+  const language = code.split('-')[0]
+  if (language === 'in')
+    return 'id'
+  if (language === 'tl')
+    return 'fil'
+  const supported = englishFirst.find(locale => locale === language)
+  if (supported)
+    return supported
   return 'zh-Hans'
 }
 
@@ -51,7 +75,7 @@ function readInitialLocale(): SupportedLocale {
 
 const initialLocale = readInitialLocale()
 try {
-  uni.setLocale(initialLocale)
+  uni.setLocale?.(initialLocale)
 }
 catch (error) {
   console.warn('[i18n] 同步初始平台语言失败', error)
@@ -60,7 +84,7 @@ catch (error) {
 const i18n = createI18n({
   legacy: false,
   locale: initialLocale,
-  fallbackLocale: 'zh-Hans',
+  fallbackLocale,
   messages,
   allowComposition: true,
 })
@@ -71,20 +95,21 @@ export const currentLocale = computed(() => i18n.global.locale.value)
  * 切换当前会话语言；平台同步或缓存写入失败不会阻断界面切换。
  * @param locale 支持的精确语言代码；非法值忽略。
  * @returns {void} 无返回值。
- * @example setLocale('vi') // 更新已绑定的三语文案
+ * @example setLocale('vi') // 更新已绑定的多语言文案
  */
-export function setLocale(locale: string): void {
+export function setLocale(locale: string, source: 'manual' | 'market' = 'manual'): void {
   if (!Object.prototype.hasOwnProperty.call(messages, locale))
     return
   i18n.global.locale.value = locale as SupportedLocale
   try {
-    uni.setLocale(locale)
+    uni.setLocale?.(locale)
   }
   catch (error) {
     console.warn('[i18n] 同步平台语言失败', error)
   }
   try {
     uni.setStorageSync('Language', locale)
+    uni.setStorageSync('LanguageSource', source)
   }
   catch (error) {
     console.warn('[i18n] 保存语言失败，本次会话仍生效', error)
@@ -109,7 +134,7 @@ function readPath(source: unknown, key: string): unknown {
 }
 
 /**
- * 获取字符串模板；缺失时回退中文，对象/数组或未知键返回键名。
+ * 获取字符串模板；缺失时按语言回退顺序查找，对象/数组或未知键返回键名。
  * @param key 语言资源键。
  * @returns 可安全插值的字符串，空键返回空字符串。
  * @example getTemplateByKey('home.user.guest') // 游客
@@ -117,11 +142,14 @@ function readPath(source: unknown, key: string): unknown {
 export function getTemplateByKey(key: string): string {
   if (!key)
     return ''
-  const value = readPath(messages[normalizeLocale(currentLocale.value)], key)
-  if (typeof value === 'string')
-    return value
-  const fallback = readPath(zhHans, key)
-  return typeof fallback === 'string' ? fallback : key
+  const locale = normalizeLocale(currentLocale.value)
+  const candidates = [messages[locale], ...(englishFirst.includes(locale) ? [en, zhHans] : [zhHans])]
+  for (const bundle of candidates) {
+    const value = readPath(bundle, key)
+    if (typeof value === 'string')
+      return value
+  }
+  return key
 }
 
 /**

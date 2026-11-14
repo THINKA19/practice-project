@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import GoodsTags from '../GoodsTags.vue'
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -30,7 +31,7 @@ const emit = defineEmits<{
   add: []
 }>()
 
-const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 </script>
 
 <template>
@@ -45,8 +46,8 @@ const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
         {{ goods.characteristic }}
       </view>
       <view class="price">
-        {{ currencySymbol }}{{ goods.minPrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
-        <text v-if="goods.originalPrice && goods.originalPrice > 0" class="original-price">{{ currencySymbol }}{{ goods.originalPrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text></text>
+        <FgPrice :amount="goods.minPrice" :country-code="countryCode" show-currency-name />
+        <text v-if="goods.originalPrice && goods.originalPrice > 0" class="original-price"><FgPrice :amount="goods.originalPrice" :country-code="countryCode" show-currency-name /></text>
       </view>
       <view class="buy-info">
         <view v-if="showSellerNumber" class="num">

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { useI18n } from 'vue-i18n'
 import { useSignInCalendar } from './composables/use-calendar'
 
@@ -37,7 +38,8 @@ onShow(() => vm.refresh())
     <view v-if="failed" class="mb-24rpx text-center text-26rpx text-red-500" @tap="vm.refresh()">
       签到记录加载失败，点击重试
     </view>
-    <wd-button block :loading="signing || loading" :disabled="signed || failed" custom-style="background: linear-gradient(135deg, #D4A574, #A67C52); border: none; color: #fff;" @click="vm.sign()">
+    <wd-button block :disabled="signed || failed || signing || loading" custom-style="background: linear-gradient(135deg, #D4A574, #A67C52); border: none; color: #fff;" @click="vm.sign()">
+      <PageLoading v-if="signing || loading" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
       {{ signed ? t('account.sign.signed') : t('account.sign.button') }}
     </wd-button>
   </view>

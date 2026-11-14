@@ -2,6 +2,7 @@ import { afterEach, expect, it, vi } from 'vitest'
 import { effectScope } from 'vue'
 import type { EffectScope } from 'vue'
 import { useRiderLoginAuth } from '..'
+import { currentLocale, setLocale, t } from '@/locale'
 import { useSessionState } from '@/pages/auth/session'
 import { seedSession } from '@/pages/auth/session/__tests__/fixtures'
 import { sessionApi } from '@/pages/auth/session/api/session'
@@ -83,4 +84,25 @@ it('退出确认不能重复打开', async () => {
   expect(uni.showModal).toHaveBeenCalledTimes(1)
   finish({ confirm: false, cancel: true, errMsg: '' })
   await pending
+})
+
+it.each(['zh-Hans', 'en', 'vi', 'th'])('uses explicit localized exit dialog text for %s', async (locale) => {
+  const previousLocale = currentLocale.value
+  seedSession({}, 'rider')
+  const auth = riderAuth()
+  try {
+    setLocale(locale)
+    vi.mocked(uni.showModal).mockResolvedValueOnce({ confirm: false, cancel: true, errMsg: '' })
+    await auth.goBackClient()
+    expect(uni.showModal).toHaveBeenLastCalledWith({
+      title: t('rider.login.exitTitle'),
+      content: t('rider.login.exitConfirm'),
+      cancelText: t('common.cancel'),
+      confirmText: t('common.confirm'),
+    })
+    expect(useSessionState().identity).toBe('rider')
+  }
+  finally {
+    setLocale(previousLocale)
+  }
 })

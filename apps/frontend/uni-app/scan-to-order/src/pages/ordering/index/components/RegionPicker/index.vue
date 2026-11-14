@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 /**
  * ============================================================================
  * 【文件概述】门店选择与上下文 / components/RegionPicker/index.vue
@@ -70,7 +71,7 @@ function confirm() {
         {{ summary }}
       </view>
       <view v-if="loading" class="px-32rpx py-48rpx text-center">
-        正在加载开放地区…
+        <PageLoading title="正在加载开放地区…" />
       </view>
       <view v-else-if="error" class="px-32rpx py-48rpx text-center">
         <text>{{ error }}</text>
@@ -143,6 +144,7 @@ function confirm() {
 
 <style lang="scss" scoped>
 .region-panel {
+  --region-accent: #067a45;
   background: #fff;
 }
 .region-columns {
@@ -189,7 +191,7 @@ function confirm() {
   font-size: 24rpx;
 }
 .region-option.active {
-  color: #333333;
+  color: var(--region-accent);
   background: #fff;
   font-weight: 600;
 }
@@ -206,8 +208,12 @@ function confirm() {
   line-height: 80rpx;
   border-radius: 40rpx;
   flex: 1;
-  background: #333;
+  background: var(--region-accent);
   color: #fff;
+}
+.region-confirm[disabled] {
+  background: #f2f2f2;
+  color: #666666;
 }
 .region-confirm::after {
   border: 0;

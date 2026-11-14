@@ -82,6 +82,9 @@ export async function createSession(target: SessionIdentity, exchange: () => Pro
   if (state.authenticating)
     throw new Error('正在登录，请稍后重试')
 
+  if (state.snapshot && Date.now() >= state.snapshot.expiresAt)
+    clearSession()
+
   if (state.snapshot)
     throw new Error('请先退出当前账号，再登录其他身份')
 

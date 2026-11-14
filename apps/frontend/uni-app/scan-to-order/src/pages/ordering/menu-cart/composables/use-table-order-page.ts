@@ -19,7 +19,8 @@ import type { NextAction } from '@/pages/ordering/menu-pay'
 import { useOrderingLocale as useI18n } from '@/pages/ordering/menu'
 import { requireIdentity } from '@/pages/auth/session'
 import { orderApi } from '@/pages/account/profile/order'
-import { setTitle, withLoading } from '@/utils/project/interaction'
+import { setTitle } from '@/utils/project/interaction'
+import { usePageLoading } from '@/hooks/project/usePageLoading'
 
 /** nextAction type 9：扫码点餐桌台订单买单 */
 const NEXT_ACTION_TABLE_ORDER = 9
@@ -34,6 +35,7 @@ const NEXT_ACTION_TABLE_ORDER = 9
 export function useCartTableOrderPage() {
   const { t } = useI18n()
 
+  const { loading, withLoading } = usePageLoading()
   const orderInfo = ref<TableOrder | null>(null)
 
   const goodsList = ref<TableOrderGoods[]>([])
@@ -111,6 +113,7 @@ export function useCartTableOrderPage() {
   return {
     t,
     orderInfo,
+    loading,
     goodsList,
     paymentShow,
     paySuccess,

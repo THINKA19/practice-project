@@ -17,13 +17,18 @@ withDefaults(defineProps<{
 }>(), { iconOnly: false })
 
 const { selectedLanguage, openLanguagePicker, showLangSheet, langOptions, selectLang } = useLanguageSwitcherPicker()
+const showScrollbar = [
+  // #ifdef H5
+  true,
+  // #endif
+].includes(true)
 </script>
 
 <template>
   <!-- 语言切换触发入口按钮 -->
   <button class="language-button" :class="{ 'language-button--icon-only': iconOnly }" :aria-label="t('common.selectLang')" @tap="openLanguagePicker">
     <image class="language-icon" :src="selectedLanguage.icon" mode="aspectFit" />
-    <text v-if="!iconOnly">{{ t('common.selectLang') }} · {{ selectedLanguage.label }}</text>
+    <text v-if="!iconOnly">{{ t('common.selectLang') }}</text>
   </button>
 
   <!-- 底部语言选择弹出层 (Popup) -->
@@ -35,16 +40,28 @@ const { selectedLanguage, openLanguagePicker, showLangSheet, langOptions, select
       </view>
 
       <!-- 可选语言列表：高亮当前选中项并展示勾选图标 -->
-      <view
-        v-for="opt in langOptions"
-        :key="opt.code"
-        class="lang-picker__item"
-        :class="{ 'lang-picker__item--active': opt.active }"
-        @tap="selectLang(opt.code)"
+      <scroll-view
+        scroll-y
+        enhanced
+        class="lang-picker__options"
+        :show-scrollbar="showScrollbar"
       >
-        <text>{{ opt.label }}</text>
-        <wd-icon v-if="opt.active" name="check" size="18px" color="#018d71" />
-      </view>
+        <button
+          v-for="opt in langOptions"
+          :key="opt.code"
+          class="lang-picker__item"
+          :class="{ 'lang-picker__item--active': opt.active }"
+          :aria-pressed="opt.active"
+          @tap="selectLang(opt.code)"
+        >
+          <image class="lang-picker__flag" :src="opt.icon" mode="aspectFit" />
+          <view class="lang-picker__labels">
+            <text>{{ opt.label }}</text>
+            <text class="lang-picker__country">{{ t(`market.${opt.country}`) }}</text>
+          </view>
+          <wd-icon v-if="opt.active" name="check" size="18px" color="#018d71" />
+        </button>
+      </scroll-view>
 
       <!-- 底部取消按钮 -->
       <view class="lang-picker__cancel" @tap="showLangSheet = false">
@@ -59,16 +76,20 @@ const { selectedLanguage, openLanguagePicker, showLangSheet, langOptions, select
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16rpx;
+  gap: 8rpx;
   margin: 0;
-  padding: 12rpx 24rpx;
-  color: #018d71;
+  padding: 10rpx 14rpx;
+  border-radius: 32rpx;
+  color: #08755e;
   background: #f0faf6;
-  font-size: 28rpx;
+  font-size: 24rpx;
+  line-height: 1.4;
 }
 .language-icon {
-  width: 40rpx;
-  height: 40rpx;
+  flex-shrink: 0;
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
 }
 .language-button--icon-only {
   flex-shrink: 0;
@@ -79,46 +100,95 @@ const { selectedLanguage, openLanguagePicker, showLangSheet, langOptions, select
   border-radius: 50%;
   box-shadow: 0 2rpx 12rpx rgb(0 0 0 / 6%);
 }
-.language-button--icon-only::after {
+.language-button::after {
   border: none;
 }
-.language-button--icon-only .language-icon {
-  width: 36rpx;
-  height: 36rpx;
-  border-radius: 50%;
-}
 .lang-picker__sheet {
-  padding: 24rpx 32rpx;
-  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
 }
 .lang-picker__title {
-  padding-bottom: 20rpx;
+  padding-bottom: 8px;
   border-bottom: 1rpx solid #f0f0f0;
   color: #999;
   font-size: 26rpx;
   text-align: center;
 }
+.lang-picker__options {
+  display: block;
+  width: 100%;
+  max-height: min(192px, 38vh);
+}
+/* #ifdef H5 */
+.lang-picker__options :deep(.uni-scroll-view) {
+  max-height: inherit;
+  overscroll-behavior-y: contain;
+}
+@media (hover: hover) and (pointer: fine) {
+  .lang-picker__options :deep(.uni-scroll-view) {
+    scrollbar-color: #82918b #f0f4f2;
+    scrollbar-width: auto;
+  }
+}
+@media (hover: none), (pointer: coarse) {
+  .lang-picker__options :deep(.uni-scroll-view) {
+    scrollbar-width: none;
+  }
+  .lang-picker__options :deep(.uni-scroll-view::-webkit-scrollbar) {
+    display: none;
+  }
+}
+/* #endif */
 .lang-picker__item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 96rpx;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 6px 8px;
   border-bottom: 1rpx solid #f0f0f0;
+  border-radius: 0;
+  background: #fff;
   color: #333;
-  font-size: 30rpx;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: left;
+}
+.lang-picker__item::after {
+  border: none;
+}
+.lang-picker__flag {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.lang-picker__labels {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4rpx 16rpx;
+  min-width: 0;
+}
+.lang-picker__country {
+  color: #666;
+  font-size: 13px;
+  font-weight: 400;
 }
 .lang-picker__item--active {
+  background: #f0faf6;
   color: #018d71;
   font-weight: 600;
 }
 .lang-picker__cancel {
-  height: 96rpx;
-  margin-top: 16rpx;
+  height: 40px;
+  margin-top: 8px;
   border-radius: 16rpx;
   background: #f7f7f7;
   color: #999;
-  font-size: 30rpx;
-  line-height: 96rpx;
+  font-size: 14px;
+  line-height: 40px;
   text-align: center;
 }
 </style>

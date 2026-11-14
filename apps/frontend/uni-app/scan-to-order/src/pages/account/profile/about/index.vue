@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { useAboutPage } from './composables/use-page'
 
@@ -30,7 +31,7 @@ onLoad((query) => {
 
     <view class="rounded-28rpx bg-white p-32rpx shadow-sm">
       <view v-if="loading" class="py-64rpx text-center text-28rpx text-#a1876d" role="status">
-        正在加载介绍…
+        <PageLoading title="正在加载介绍…" />
       </view>
       <view v-else-if="failed" class="py-40rpx text-center">
         <view class="mb-24rpx text-28rpx text-#8b7355">

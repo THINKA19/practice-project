@@ -16,7 +16,7 @@ import type { AddCartCommand } from '@/pages/ordering/menu-cart'
 import { useCartStore } from '@/pages/ordering/menu-cart'
 import { requireIdentity } from '@/pages/auth/session'
 import { usePagedList } from '@/hooks/project/usePagedList'
-import { hideLoading, setTitle, showError, showLoading, toast } from '@/utils/project/interaction'
+import { setTitle, showError, toast } from '@/utils/project/interaction'
 import { navigate as go } from '@/utils/project/navigation'
 import { ClientRoutes } from '@/pages/routes'
 import { computed, getCurrentScope, onScopeDispose, ref, watch } from 'vue'
@@ -93,16 +93,9 @@ export function useGoodsSearchPage() {
   }
 
   const paged = usePagedList<Goods>(async (page, pageSize) => {
-    showLoading()
+    const res = await catalogApi.goodsList({ shopId: useShopStore().goodsShopScope || undefined, orderBy: orderBy.value, page, pageSize, k: name.value || undefined, categoryId: categoryId.value || undefined }).then(toGoodsList)
 
-    try {
-      const res = await catalogApi.goodsList({ shopId: useShopStore().goodsShopScope || undefined, orderBy: orderBy.value, page, pageSize, k: name.value || undefined, categoryId: categoryId.value || undefined }).then(toGoodsList)
-
-      return { list: res.result || [], totalPage: res.totalPage }
-    }
-    finally {
-      hideLoading()
-    }
+    return { list: res.result || [], totalPage: res.totalPage }
   }, { scopeKey: () => [useShopStore().goodsShopScope, name.value, categoryId.value, orderBy.value].join('|'), beforeLoad: () => true })
 
   const goods = paged.list

@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import type { SkuGroup } from './types'
 import { useSkuSelector } from './use-sku-selector'
 
-const props = defineProps<{ groups: SkuGroup[] }>()
+const props = defineProps<{ groups: SkuGroup[], countryCode?: string }>()
 const emit = defineEmits<{ select: [groupId: number, choiceId: number] }>()
 const { select } = useSkuSelector(() => props.groups, (g, c) => emit('select', g, c))
 </script>
@@ -24,7 +25,7 @@ const { select } = useSkuSelector(() => props.groups, (g, c) => emit('select', g
           :aria-disabled="!!choice.disabled"
           @tap="select(group.id, choice.id)"
         >
-          {{ choice.name }}<text v-if="choice.priceText" class="ml-8rpx">{{ choice.priceText }}</text>
+          {{ choice.name }}<text v-if="choice.price != null" class="ml-8rpx">{{ choice.isSurcharge ? '+' : '' }}<FgPrice :amount="choice.price" :country-code="countryCode" /></text>
         </view>
       </view>
     </view>

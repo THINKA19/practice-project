@@ -1,0 +1,120 @@
+{
+  "market": {
+    "loading": "ກຳລັງໂຫຼດປະເທດ…",
+    "select": "ເລືອກປະເທດ",
+    "failed": "ໂຫຼດລາຍຊື່ປະເທດບໍ່ສຳເລັດ",
+    "empty": "ບໍ່ມີປະເທດໃຫ້ເລືອກ",
+    "member": "ສູນສະມາຊິກ",
+    "VN": "ຫວຽດນາມ",
+    "TH": "ໄທ",
+    "LA": "ລາວ",
+    "ID": "ອິນໂດເນເຊຍ",
+    "CN": "ຈີນ",
+    "GB": "ສະຫະລາຊະອານາຈັກ",
+    "AU": "ອົດສະຕຣາລີ",
+    "JP": "ຍີ່ປຸ່ນ",
+    "KR": "ເກົາຫຼີໃຕ້",
+    "MM": "ມຽນມາ",
+    "PH": "ຟີລິບປິນ",
+    "MY": "ມາເລເຊຍ",
+    "SG": "ສິງກະໂປ",
+    "LK": "ສີລັງກາ"
+  },
+  "common": {
+    "selectLang": "ເລືອກພາສາ",
+    "cancel": "ຍົກເລີກ",
+    "confirm": "ຢືນຢັນ",
+    "forgotPassword": "ລືມລະຫັດຜ່ານບໍ?",
+    "passwordHelpTitle": "ລືມລະຫັດຜ່ານ",
+    "passwordResetHelp": "ຕິດຕໍ່ຜູ້ດູແລເພື່ອຕັ້ງລະຫັດຜ່ານໃໝ່",
+    "empty": "ບໍ່ມີຂໍ້ມູນ",
+    "loading": "ກຳລັງໂຫຼດ",
+    "noMore": "ບໍ່ມີລາຍການເພີ່ມ",
+    "loadFailed": "ໂຫຼດບໍ່ສຳເລັດ",
+    "retry": "ແຕະເພື່ອລອງໃໝ່",
+    "navigationFailed": "ເປີດໜ້ານີ້ບໍ່ໄດ້ ກະລຸນາລອງໃໝ່",
+    "pageNotFound": "ບໍ່ພົບໜ້າ",
+    "submitSuccess": "ສົ່ງແລ້ວ"
+  },
+  "tabbar": {
+    "pickup1": "ຮັບອາຫານ 1",
+    "home": "ໜ້າຫຼັກ",
+    "ordering": "ສັ່ງອາຫານ",
+    "service": "ບໍລິການ",
+    "queue": "ຮັບຄິວ",
+    "pickup": "ຮັບອາຫານ",
+    "me": "ບັນຊີ",
+    "i18n": "ພາສາ"
+  },
+  "home": {
+    "banner": {
+      "unsupportedLink": "ຍັງບໍ່ຮອງຮັບລິ້ງນີ້"
+    },
+    "user": {
+      "guest": "ແຂກ",
+      "coupon": "ຄູປອງ"
+    },
+    "delivery": {
+      "title": "ວິທີຮັບອາຫານ",
+      "pickupDescription": "ຮັບອາຫານຢູ່ຮ້ານ",
+      "takeoutDescription": "ສົ່ງໄປຫາທີ່ຢູ່ຂອງທ່ານ",
+      "pickup": "ຮັບຢູ່ຮ້ານ",
+      "rider": "ຈັດສົ່ງໂດຍຜູ້ສົ່ງ",
+      "takeout": "ຈັດສົ່ງ"
+    },
+    "features": {
+      "title": "ບໍລິການເພີ່ມເຕີມ",
+      "favorites": "ລາຍການທີ່ມັກ",
+      "memberCard": "ບັດສະມາຊິກ",
+      "groupBuy": "ຊື້ເປັນກຸ່ມ",
+      "welfare": "ສິດພິເສດ"
+    }
+  },
+  "shop": {
+    "messages": {
+      "merchantSignIn": "ເຂົ້າລະບົບຮ້ານຄ້າ",
+      "merchantWorkspace": "ໜ້າຈັດການຮ້ານຄ້າ",
+      "merchantAccount": "ບັນຊີຮ້ານຄ້າ",
+      "orders2": "ຈັດການຄຳສັ່ງຊື້",
+      "orderDetails": "ລາຍລະອຽດຄຳສັ່ງຊື້",
+      "products": "ຈັດການສິນຄ້າ",
+      "editProduct": "ແກ້ໄຂສິນຄ້າ",
+      "tables": "ຈັດການໂຕະ",
+      "statistics": "ສະຖິຕິ",
+      "staff2": "ຈັດການພະນັກງານ",
+      "deliveryAndRiders": "ການຈັດສົ່ງ ແລະ ຜູ້ສົ່ງ",
+      "storeSettings": "ຕັ້ງຄ່າຮ້ານຄ້າ",
+      "selectAStore": "ເລືອກຮ້ານຄ້າທີ່ຈະຈັດການ",
+      "signIn": "ເຂົ້າລະບົບ",
+      "account": "ບັນຊີ",
+      "password": "ລະຫັດຜ່ານ",
+      "enterYourMerchantAccount": "ປ້ອນບັນຊີຮ້ານຄ້າ",
+      "enterYourPassword": "ປ້ອນລະຫັດຜ່ານ",
+      "enterYourAccountAndPassword": "ປ້ອນບັນຊີ ແລະ ລະຫັດຜ່ານ",
+      "signinFailed": "ເຂົ້າລະບົບບໍ່ສຳເລັດ",
+      "select": "ເລືອກ",
+      "edit": "ແກ້ໄຂ",
+      "create": "ສ້າງ",
+      "saved": "ບັນທຶກແລ້ວ",
+      "businessOpenLabel": "ເປີດຮ້ານ",
+      "businessClosedLabel": "ປິດຮ້ານ",
+      "voiceBroadcast": "ແຈ້ງເຕືອນຄຳສັ່ງຊື້",
+      "previewOrderAudio": "ຫຼິ້ນສຽງຕົວຢ່າງ",
+      "newOrderVoiceAlerts": "ສຽງແຈ້ງເຕືອນຄຳສັ່ງຊື້ໃໝ່",
+      "workspaceNewOrders": "ຄຳສັ່ງຊື້ໃໝ່",
+      "workspacePreparing": "ກຳລັງກະກຽມ",
+      "workspaceFulfillment": "ຈັດສົ່ງ / ພ້ອມຮັບ",
+      "workspaceLoadingOrders": "ກຳລັງໂຫຼດຄຳສັ່ງຊື້",
+      "workspaceAccept": "ຮັບຄຳສັ່ງຊື້",
+      "workspaceFinishCooking": "ໝາຍວ່າພ້ອມແລ້ວ",
+      "workspaceCallRider": "ເອີ້ນຜູ້ສົ່ງ",
+      "refreshWorkspace": "ໂຫຼດໜ້າຈັດການຄືນໃໝ່",
+      "managementTools": "ເຄື່ອງມືຈັດການ",
+      "riderManagement": "ຈັດການຜູ້ສົ່ງ",
+      "selectStore": "ເລືອກຮ້ານຄ້າ",
+      "todaysOrders": "ຄຳສັ່ງຊື້ມື້ນີ້",
+      "todaysOrderValue": "ຍອດສັ່ງຊື້ມື້ນີ້",
+      "pending": "ລໍຖ້າດຳເນີນການ"
+    }
+  }
+}

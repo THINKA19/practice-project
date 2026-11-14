@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 /**
  * 积分明细（分页，触底加载）
  */
@@ -27,6 +28,15 @@ onShow(() => {
 
 <template>
   <z-paging ref="paging" :auto="false" :default-page-size="15" :inside-more="true" @query="query">
+    <template #loading>
+      <PageLoading class="py-48rpx" />
+    </template>
+    <template #refresher="{ refresherStatus }">
+      <PageLoading inline :refresh-status="refresherStatus" class="h-80rpx w-full" />
+    </template>
+    <template #loadingMoreLoading>
+      <PageLoading inline class="w-full py-24rpx" />
+    </template>
     <template #loadingMoreDefault>
       <view class="py-24rpx text-center text-24rpx text-#999">
         继续上滑加载更多

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import IdentitySwitch from '@/pages/auth/session/components/IdentitySwitch/index.vue'
+import PageLoading from '@/components/page-loading/index.vue'
 import AuthPageShell from './components/AuthPageShell/index.vue'
 import AgreementConsent from './components/AgreementConsent/index.vue'
 import { useLoginView } from './composables/use-view'
@@ -19,23 +21,26 @@ async function signIn() {
 </script>
 
 <template>
-  <AuthPageShell :title="t('auth.wxTitle')">
-    <view class="login-intro">
-      <text class="login-hint">
-        {{ t('auth.wxAccountHint') }}
-      </text>
-    </view>
-    <AgreementConsent v-model="agreed" :disabled="loading" @read-user="readUserAgreement" @read-privacy="readPrivacyPolicy" />
-    <view v-if="error" role="alert" class="mt-24rpx text-26rpx text-[#d93025]">
-      {{ error }}
-    </view>
-    <wd-button block :disabled="loading" :loading="loading" custom-class="mt-32rpx !bg-[#087743] !border-0" @click="signIn">
-      {{ t('auth.wechatLogin') }}
-    </wd-button>
-    <button class="return-button" @tap="cancelLogin">
-      暂不登录，返回
-    </button>
-  </AuthPageShell>
+  <IdentitySwitch target="customer">
+    <AuthPageShell :title="t('auth.wxTitle')">
+      <view class="login-intro">
+        <text class="login-hint">
+          {{ t('auth.wxAccountHint') }}
+        </text>
+      </view>
+      <AgreementConsent v-model="agreed" :disabled="loading" @read-user="readUserAgreement" @read-privacy="readPrivacyPolicy" />
+      <view v-if="error" role="alert" class="mt-24rpx text-26rpx text-[#d93025]">
+        {{ error }}
+      </view>
+      <wd-button block :disabled="loading" custom-class="mt-32rpx !bg-[#087743] !border-0" @click="signIn">
+        <PageLoading v-if="loading" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
+        {{ t('auth.wechatLogin') }}
+      </wd-button>
+      <button class="return-button" @tap="cancelLogin">
+        暂不登录，返回
+      </button>
+    </AuthPageShell>
+  </IdentitySwitch>
 </template>
 
 <style scoped>

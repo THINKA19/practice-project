@@ -8,7 +8,7 @@ import { useI18n } from 'vue-i18n'
 import { requireIdentity, useSessionAccountScope } from '@/pages/auth/session'
 
 import { attachRefundGoods, orderApi } from '@/pages/account/profile/order'
-import { alert, hideLoading, setTitle, showLoading } from '@/utils/project/interaction'
+import { alert, setTitle } from '@/utils/project/interaction'
 
 import { useOrderRefundApplyDetail } from './use-detail'
 import { useOrderRefundApplyForm } from './use-form'
@@ -27,7 +27,7 @@ export function useOrderRefundApplyPage() {
   let generation = 0
   const scope = useSessionAccountScope(() => {
     generation++
-    hideLoading()
+
     goods.value = []
     refundApplyList.value = []
     loading.value = false
@@ -60,7 +60,6 @@ export function useOrderRefundApplyPage() {
     const current = () => scope.current(ticket) && request === generation
     loading.value = true
     failed.value = false
-    showLoading()
 
     try {
       const res = await orderApi.detail(id)
@@ -80,13 +79,12 @@ export function useOrderRefundApplyPage() {
       failed.value = true
       goods.value = []
       refundApplyList.value = []
-      hideLoading()
+
       await alert(e instanceof Error ? e.message : '售后资料加载失败')
     }
     finally {
       if (current()) {
         loading.value = false
-        hideLoading()
       }
     }
   }

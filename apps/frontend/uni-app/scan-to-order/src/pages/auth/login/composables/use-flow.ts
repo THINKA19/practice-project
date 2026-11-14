@@ -85,7 +85,7 @@ export function useLoginFlow() {
         return
       session.updateNowTime()
       if (session.hasLogin && session.identity !== 'customer')
-        throw new Error(t('auth.wxDifferentRole'))
+        return
       if (session.hasLogin && session.identity === 'customer') {
         await finish()
         return
@@ -151,7 +151,8 @@ export function useLoginFlow() {
       return
     }
 
-    void poll()
+    if (!session.updateNowTime().hasLogin)
+      void poll()
   }
   function pause() {
     revision++
@@ -166,11 +167,8 @@ export function useLoginFlow() {
     if (!session.updateNowTime().hasLogin && session.identity === 'customer')
       session.clearSession()
 
-    if (session.hasLogin && session.identity !== 'customer') {
-      error.value = t('auth.wxDifferentRole')
-
+    if (session.hasLogin && session.identity !== 'customer')
       return
-    }
     if (session.hasLogin) {
       try {
         await finish()
@@ -205,11 +203,8 @@ export function useLoginFlow() {
 
     session.updateNowTime()
 
-    if (session.hasLogin && session.identity !== 'customer') {
-      error.value = t('auth.wxDifferentRole')
-
+    if (session.hasLogin && session.identity !== 'customer')
       return
-    }
     if (session.hasLogin) {
       try {
         await finish()
@@ -234,10 +229,8 @@ export function useLoginFlow() {
     }
     if (!session.updateNowTime().hasLogin && session.identity === 'customer')
       session.clearSession()
-    if (session.hasLogin && session.identity !== 'customer') {
-      error.value = t('auth.wxDifferentRole')
+    if (session.hasLogin && session.identity !== 'customer')
       return
-    }
     if (session.hasLogin) {
       try {
         await finish()
@@ -374,10 +367,8 @@ export function useLoginFlow() {
       error.value = !agreed.value ? t('auth.agreementRequired') : '请输入含国家区号的手机号和六位验证码'
       return
     }
-    if (session.updateNowTime().hasLogin && session.identity !== 'customer') {
-      error.value = t('auth.wxDifferentRole')
+    if (session.updateNowTime().hasLogin && session.identity !== 'customer')
       return
-    }
     await authenticateCustomer(() => loginApi.exchangeSms(phone, code, AGREEMENT_VERSION))
   }
 

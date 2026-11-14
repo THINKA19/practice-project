@@ -7,7 +7,7 @@
  */
 import { computed, getCurrentScope, onScopeDispose, ref } from 'vue'
 import type { MapMarker, Shop, ShopDetail } from '@/pages/ordering/index'
-import { convertShopPoint, googleEmbedUrl, googleNavigationUrl, shopApi, toShopDetail, useShopPhoneContact } from '@/pages/ordering/index'
+import { convertShopPoint, googleEmbedUrl, googleNavigationUrl, shopApi, toShopDetail } from '@/pages/ordering/index'
 import { alert, setTitle } from '@/utils/project/interaction'
 import { openLink, openLocation } from '@/pages/ordering/menu'
 import { navigate } from '@/utils/project/navigation'
@@ -110,9 +110,6 @@ export function useShopDetailPage() {
     }
   }
 
-  const phoneContact = useShopPhoneContact(() => shopInfo.value?.linkPhone)
-  const phoneCall = phoneContact.open
-
   function guideNow() {
     if (!shopInfo.value) {
       return
@@ -142,5 +139,5 @@ export function useShopDetailPage() {
     // #endif
   }
 
-  return { detail, shopInfo, markers, location, mapUrl, loading, error, photos, services, introductionExpanded, previewPhoto, init, phoneContact, phoneCall, guideNow, startNavigation }
+  return { detail, shopInfo, markers, location, mapUrl, loading, error, photos, services, introductionExpanded, previewPhoto, init, guideNow, startNavigation }
 }

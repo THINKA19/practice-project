@@ -5,7 +5,6 @@
  */
 import { computed } from 'vue'
 import type { CartBarActions, CartBarProps } from '@/components/cart-bar'
-import { useOrderingCurrency } from '@/pages/ordering/index'
 import { useOrderingLocale } from './use-locale'
 import type { useOrderingCartBar } from './use-cart-bar'
 import type { useOrderingShopSection } from './use-shop-section'
@@ -22,16 +21,13 @@ export function useOrderingCartBarBinding(
   shop: Pick<ReturnType<typeof useOrderingShopSection>, 'shop' | 'isOpened' | 'loadShop'>,
 ) {
   const { t } = useOrderingLocale()
-  const currency = useOrderingCurrency()
   const props = computed<CartBarProps>(() => ({
     number: cart.totalNumber.value,
     price: cart.totalPrice.value,
     checkingOut: cart.checkingOut.value,
     opened: !cart.checkoutReason.value,
     hasShop: !!shop.shop.value,
-    currencySymbol: currency.currencySymbol.value,
-    currencyUnit: currency.currencyUnit.value,
-    currencyName: currency.currencyName.value,
+    countryCode: shop.shop.value?.countryCode,
     cartText: t('cart.title'),
     checkoutText: t('index.submit'),
     selectShopText: t('index.selectShop'),

@@ -40,16 +40,16 @@ const emit = defineEmits<{
   selectTime: [dayIndex: number, slotIndex: number]
 }>()
 
-const { currencySymbol, currencyUnit } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 const propertyGroups = computed(() => (props.properties || []).map(g => ({
   id: g.id,
   name: g.name,
-  choices: g.childsCurGoods.map(c => ({ id: c.id, name: c.name, priceText: typeof c.price === 'number' ? `${currencySymbol.value}${c.price}${currencyUnit.value}` : undefined, active: props.isPropActive(g.id, c.id) })),
+  choices: g.childsCurGoods.map(c => ({ id: c.id, name: c.name, price: c.price, active: props.isPropActive(g.id, c.id) })),
 })))
 const additionGroups = computed(() => (props.additions || []).map(g => ({
   id: g.id,
   name: g.name,
-  choices: g.items.map(c => ({ id: c.id, name: c.name, priceText: `+${currencySymbol.value}${c.price}${currencyUnit.value}`, active: props.isAdditionActive(c) })),
+  choices: g.items.map(c => ({ id: c.id, name: c.name, price: c.price, isSurcharge: true, active: props.isAdditionActive(c) })),
 })))
 const timeGroups = computed(() => (props.schedule || []).map((d, di) => ({
   id: di,
@@ -71,8 +71,8 @@ function selectAddition(g: number, c: number) {
 
 <template>
   <view>
-    <goods-sku-selector :groups="propertyGroups" @select="selectProperty" />
-    <goods-sku-selector :groups="additionGroups" @select="selectAddition" />
-    <goods-sku-selector :groups="timeGroups" @select="(g, c) => emit('selectTime', g, c)" />
+    <goods-sku-selector :groups="propertyGroups" :country-code="countryCode" @select="selectProperty" />
+    <goods-sku-selector :groups="additionGroups" :country-code="countryCode" @select="selectAddition" />
+    <goods-sku-selector :groups="timeGroups" :country-code="countryCode" @select="(g, c) => emit('selectTime', g, c)" />
   </view>
 </template>

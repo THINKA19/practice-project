@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 /**
  * ============================================================================
  * 【文件概述】商品搜索页面 / index.vue
@@ -96,6 +97,8 @@ onReachBottom(() => {
         @add="vm.addShopCar(item)"
       />
     </view>
+
+    <PageLoading v-if="loading && goods.length" inline class="w-full py-16rpx" />
 
     <QuickSkuPanel
       v-if="skuGoods"

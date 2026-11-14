@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 /**
  * ============================================================================
  * 【文件概述】公共组件 / cart-bar/index.vue
@@ -15,6 +16,7 @@
  * 底部购物车条：购物车入口 + 数量徽章、合计金额、去结算 / 获取门店 / 未营业
  */
 
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import type { CartBarProps } from './types'
 import { useCartBar } from './use-cart-bar'
 
@@ -46,10 +48,10 @@ const { badge, mode, loading, disabled, buttonText, openCart, activate } = useCa
     </view>
     <view class="flex items-center gap-24rpx">
       <view class="amount">
-        {{ currencySymbol }}{{ price }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+        <FgPrice :amount="price" :country-code="countryCode" show-currency-name />
       </view>
       <view class="topay" :class="{ noopen: mode === 'closed' }" role="button" :aria-disabled="disabled" @tap="activate">
-        <wd-loading v-if="loading" size="32rpx" color="#fff" />
+        <PageLoading inline indicator-only v-if="loading" size="32rpx" color="#fff" />
         <text v-else>{{ buttonText }}</text>
       </view>
     </view>

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import PageLoading from '@/components/page-loading/index.vue'
 import { useFeedbackPage } from './composables/use-page'
 
 defineOptions({ name: 'MeFeedback' })
@@ -146,9 +147,9 @@ const { form, demo, picsList, videoUrls, submitting, choosePics, chooseVideo, pr
         <wd-button
           block
           size="large"
-          custom-class="!h-96rpx !rounded-50rpx !bg-[linear-gradient(135deg,#D4A574_0%,#C49563_100%)] !shadow-[0_16rpx_48rpx_rgba(212,165,116,0.35),0_8rpx_24rpx_rgba(196,149,99,0.2)]"
-          :loading="submitting" :disabled="submitting" @click="bindSave"
+          custom-class="!h-96rpx !rounded-50rpx !bg-[linear-gradient(135deg,#D4A574_0%,#C49563_100%)] !shadow-[0_16rpx_48rpx_rgba(212,165,116,0.35),0_8rpx_24rpx_rgba(196,149,99,0.2)]" :disabled="submitting" @click="bindSave"
         >
+          <PageLoading v-if="submitting" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
           提交反馈
         </wd-button>
       </view>

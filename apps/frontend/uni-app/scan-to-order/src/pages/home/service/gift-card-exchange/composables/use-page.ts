@@ -21,7 +21,7 @@ import { ref } from 'vue'
 import { requireIdentity, useSessionAccountScope } from '@/pages/auth/session'
 import { useI18n } from 'vue-i18n'
 import { cardExchangeApi } from '../api/exchange.api'
-import { alert, setTitle, showError, toast, withLoading } from '@/utils/project/interaction'
+import { alert, setTitle, showError, toast } from '@/utils/project/interaction'
 
 import { navigate } from '@/utils/project/navigation'
 import { ClientRoutes } from '@/pages/routes'
@@ -144,7 +144,7 @@ export function useCardExchangePage() {
     submitting.value = true
 
     try {
-      await withLoading(() => cardExchangeApi.exchange({ number: number.value.trim() }))
+      await cardExchangeApi.exchange({ number: number.value.trim() })
 
       if (!scope.current(ticket))
         return

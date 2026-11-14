@@ -1,90 +1,128 @@
-/**
- * 【文件概述】骑手登录页面编排，使用唯一会话，校验跳转目标。
- * 【方法与导出清单】useRiderLoginPage
- * 【综合使用示例】通过本模块 index.ts 调用公开能力。
- */
-import { computed, onScopeDispose, ref } from 'vue'
+import type { IAuthLoginRes } from '@/pages/auth/session'
 import { onLoad, onShow } from '@dcloudio/uni-app'
+import { computed, onScopeDispose, ref } from 'vue'
+import { t } from '@/locale'
 import { useSessionState } from '@/pages/auth/session'
+import { RiderRoutes } from '@/pages-rider/routes'
 import { getAllPages } from '@/utils'
+import { loginWithWechatPhone, riderWechatLoginAvailable } from '../api/login.api'
 import { isDemo, login, serviceReady } from './use-actions'
-/** 登录成功留在当前页展示身份；仅恢复真实存在且属于该端的原目标页面。 */
+
+/** 装配骑手登录和回跳，共享 Session 负责校验身份与提交凭证。 */
 export function useRiderLoginPage() {
   const session = useSessionState()
-
   const username = ref('')
-
   const password = ref('')
-
   const loading = ref(false)
-
   const error = ref('')
+  const authenticated = computed(() => session.hasLogin && session.identity === 'rider')
   let disposed = false
+  let target = RiderRoutes.Workspace.workspace as string
+
   onScopeDispose(() => {
     disposed = true
     password.value = ''
   })
 
-  const authenticated = computed(() => session.hasLogin && session.identity === 'rider')
-
   onShow(() => {
     session.updateNowTime()
-
     if (session.identity === 'rider' && !session.hasLogin && !session.authenticating)
       session.clearSession()
   })
 
-  let target = ''
-
   onLoad((query) => {
     try {
       const value = decodeURIComponent(String(query?.redirect ?? ''))
-
       const pathname = value.split(/[?#]/)[0]
 
       if (pathname.startsWith('/pages-rider/') && !pathname.includes('/auth/login/') && getAllPages().some(page => page.path === pathname))
         target = value
     }
     catch {
-      target = ''
+      target = RiderRoutes.Workspace.workspace
     }
   })
 
-  async function submit() {
+  function enterWorkspace() {
+    if (!disposed && authenticated.value)
+      uni.redirectTo({ url: target })
+  }
+
+  async function authenticate(exchange: () => Promise<IAuthLoginRes>) {
     if (disposed || loading.value)
       return
 
     loading.value = true
-
     error.value = ''
-
     try {
-      await session.authenticate('rider', () => login(username.value, password.value))
-      // 会话由共享模块提交；离页仅停止本页面的提示和回跳，不撤销已完成的登录。
-      if (disposed)
-        return
-
+      await session.authenticate('rider', exchange)
       password.value = ''
-
-      if (target && session.hasLogin && session.identity === 'rider')
-        uni.redirectTo({ url: target })
+      enterWorkspace()
     }
     catch (reason) {
       if (!disposed)
-        error.value = reason instanceof Error ? reason.message : '登录失败'
+        error.value = reason instanceof Error ? reason.message : t('rider.login.signInFailed')
     }
     finally {
       if (!disposed)
         loading.value = false
     }
   }
+
+  async function submit() {
+    if (serviceReady)
+      await authenticate(() => login(username.value, password.value))
+  }
+
+  async function authorizeWechatPhone(event: { detail?: { code?: string } }) {
+    if (disposed || loading.value || session.hasLogin || session.authenticating || !riderWechatLoginAvailable)
+      return
+
+    const phoneCode = event.detail?.code
+    if (!phoneCode) {
+      error.value = t('rider.login.phoneDenied')
+      return
+    }
+
+    await authenticate(async () => {
+      const loginCode = await new Promise<string>((resolve, reject) => {
+        uni.login({
+          provider: 'weixin',
+          success: ({ code }) => {
+            if (code)
+              resolve(code)
+            else
+              reject(new Error(t('rider.login.wechatMissingCode')))
+          },
+          fail: () => reject(new Error(t('rider.login.wechatUnavailable'))),
+        })
+      })
+
+      if (disposed)
+        throw new Error('登录页面已关闭')
+
+      return loginWithWechatPhone({ loginCode, phoneCode })
+    })
+  }
+
   async function logout() {
+    if (disposed || loading.value)
+      return
+
+    loading.value = true
+    error.value = ''
     try {
       await session.logout()
     }
     catch (reason) {
-      error.value = reason instanceof Error ? reason.message : '服务端退出失败，本地会话已清除'
+      if (!disposed)
+        error.value = reason instanceof Error ? reason.message : t('rider.login.signOutFailed')
+    }
+    finally {
+      if (!disposed)
+        loading.value = false
     }
   }
-  return { username, password, loading, error, authenticated, session, serviceReady, isDemo, submit, logout }
+
+  return { username, password, loading, error, authenticated, session, serviceReady, isDemo, riderWechatLoginAvailable, enterWorkspace, authorizeWechatPhone, submit, logout }
 }

@@ -1,12 +1,16 @@
 import { mount } from '@vue/test-utils'
 import { ref, watch } from 'vue'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
+import PhoneDialog from '@/components/phone-contact/PhoneDialog.vue'
+import { alert } from '@/utils/project/interaction'
 import type { Shop } from '@/pages/ordering/index'
+
+vi.mock('@/utils/project/interaction', () => ({ alert: vi.fn(), makePhoneCall: vi.fn() }))
 
 const state = vi.hoisted(() => ({ create: vi.fn(), navigate: vi.fn() }))
 vi.mock('../composables/use-detail-page', () => ({ useShopDetailPage: state.create }))
 vi.mock('@/pages/ordering/menu', () => ({ useOrderingLocale: () => ({ t: (key: string) => key }) }))
-vi.mock('@/pages/ordering/index', () => ({ ShopPhoneDialog: { template: '<div />' }, ShopFavorite: { template: '<view />' }, ShopLabels: { template: '<view />' }, ShopBusinessBadge: { template: '<text />' } }))
+vi.mock('@/pages/ordering/index', () => ({ ShopFavorite: { template: '<view />' }, ShopLabels: { template: '<view />' }, ShopBusinessBadge: { template: '<text />' } }))
 beforeEach(() => {
   for (const name of ['definePage', 'onShow', 'onHide', 'onLoad'])
     vi.stubGlobal(name, vi.fn())
@@ -16,9 +20,9 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllGlobals())
 async function page(shop: Shop) {
   const shopInfo = ref(shop)
-  state.create.mockReturnValue({ shopInfo, photos: ref(['/shop.jpg']), services: ref([]), introductionExpanded: ref(false), loading: ref(false), error: ref(''), guideNow: state.navigate, phoneContact: { successVisible: ref(false), copyFallbackAvailable: ref(false), visible: ref(false), phone: ref(''), message: ref(''), copying: ref(false) } })
+  state.create.mockReturnValue({ shopInfo, photos: ref(['/shop.jpg']), services: ref([]), introductionExpanded: ref(false), loading: ref(false), error: ref(''), guideNow: state.navigate })
   const Page = (await import('../index.vue')).default
-  const wrapper = mount(Page, { global: { stubs: { WdOverlay: { template: '<div><slot /></div>' }, ShopPhotoGallery: true } } })
+  const wrapper = mount(Page, { global: { stubs: { WdOverlay: { template: '<div><slot /></div>' }, ShopPhotoGallery: true, PhoneDialog: true } } })
   return { wrapper, shopInfo }
 }
 it('位置区域展示图片并进入位置页，不重复显示地址；失败及缺图有提示', async () => {
@@ -40,5 +44,19 @@ it('位置区域展示图片并进入位置页，不重复显示地址；失败�
   await wrapper.vm.$nextTick()
   expect(section.text()).toContain('门店暂未上传位置图片')
   expect(wrapper.text()).toContain('门店暂未提供地址')
+  wrapper.unmount()
+})
+
+it('详情电话使用公共组件，以当前门店号码打开复制面板', async () => {
+  const { wrapper, shopInfo } = await page({ id: 1, name: '店铺', linkPhone: ' +84 123456789 ' })
+  await wrapper.find('.action-btn').trigger('tap')
+  const dialog = wrapper.findComponent(PhoneDialog)
+  expect(dialog.props('modelValue')).toBe(true)
+  expect(dialog.props('phone')).toBe('+84 123456789')
+  shopInfo.value = { id: 2, name: '另一家店铺' }
+  await wrapper.vm.$nextTick()
+  expect(dialog.props('modelValue')).toBe(false)
+  await wrapper.find('.action-btn').trigger('tap')
+  expect(alert).toHaveBeenCalledWith('门店暂未提供联系电话')
   wrapper.unmount()
 })

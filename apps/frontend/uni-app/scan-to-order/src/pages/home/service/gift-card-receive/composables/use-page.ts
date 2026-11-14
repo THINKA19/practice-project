@@ -23,7 +23,7 @@ import type { CardShareFetchResult } from '../models/types'
 import { parseSharePreview } from '../models/mappers'
 import { useI18n } from 'vue-i18n'
 import { cardReceiveApi } from '../api/receive.api'
-import { confirm, setTitle, withLoading } from '@/utils/project/interaction'
+import { confirm, setTitle } from '@/utils/project/interaction'
 import { navigate } from '@/utils/project/navigation'
 import { ClientRoutes } from '@/pages/routes'
 
@@ -167,7 +167,7 @@ export function useGiftReceivePage() {
     failureMessage.value = ''
 
     try {
-      const res = await withLoading(() => cardReceiveApi.fetchShare({ id: id.value, shareToken: shareToken.value, calculate }))
+      const res = await cardReceiveApi.fetchShare({ id: id.value, shareToken: shareToken.value, calculate })
 
       if (!scope.current(ticket) || request !== generation)
         return

@@ -9,5 +9,7 @@ export function isMerchantShop(value: unknown): value is MerchantShop {
 
   return typeof item.id === 'string' && !!item.id && typeof item.merchantId === 'string' && !!item.merchantId && typeof item.name === 'string' && typeof item.soundNotify === 'boolean'
     && ['owner', 'employee'].includes(String(item.roleTemplate)) && Number.isSafeInteger(item.grantVersion)
+    && (item.countryCode === undefined || ['VN', 'TH', 'LA', 'CN'].includes(String(item.countryCode)))
+    && (item.currencyCode === undefined || (typeof item.currencyCode === 'string' && /^[A-Z]{3}$/.test(item.currencyCode)))
     && Array.isArray(item.permissions) && item.permissions.every(p => typeof p === 'string')
 }

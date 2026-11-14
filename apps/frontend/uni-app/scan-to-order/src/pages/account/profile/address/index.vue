@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import AddressEditForm from './components/AddressEditForm/index.vue'
 import { useAddressView } from './composables/use-view'
 
@@ -22,7 +23,7 @@ const { t, vm, addressRegion, addressList, loaded, addressEdit, addressData, fai
       </template>
     </wd-navbar>
     <view v-if="loading && !addressEdit" class="p-48rpx text-center text-28rpx text-#666">
-      正在加载收货地址…
+      <PageLoading title="正在加载收货地址…" />
     </view>
     <view v-if="failed && !addressEdit && !addressList.length" class="px-48rpx py-120rpx text-center text-28rpx text-#91775e">
       {{ t('account.profile.address.unavailable') }}
@@ -84,7 +85,7 @@ const { t, vm, addressRegion, addressList, loaded, addressEdit, addressData, fai
     </view>
 
     <view v-if="addressEdit && editingLoading" class="p-48rpx text-center">
-      正在加载地址详情…
+      <PageLoading title="正在加载地址详情…" />
     </view>
     <AddressEditForm
       v-if="addressEdit && !editingLoading"

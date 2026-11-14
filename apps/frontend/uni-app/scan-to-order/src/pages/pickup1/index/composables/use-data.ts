@@ -82,10 +82,5 @@ export function useOrderDetailData() {
     catch { /* 请求失败保留待付款状态，可重试。 */ }
     finally { paying.value = false }
   }
-  function callShop() {
-    const phoneNumber = shopSubdetail.value?.info.linkPhone
-    if (phoneNumber)
-      uni.makePhoneCall({ phoneNumber })
-  }
-  return { scene, scenes, selectScene, loading, failed, paying, orderId, money, paymentShow, paymentConfirm, orderDetail, shopSubdetail, fetchOrderDetail, toPayTap, callShop }
+  return { scene, scenes, selectScene, loading, failed, paying, orderId, money, paymentShow, paymentConfirm, orderDetail, shopSubdetail, fetchOrderDetail, toPayTap }
 }

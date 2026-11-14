@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 /**
  * 预约订座：联系人、电话、到店时间、用餐人数
  */
@@ -185,7 +186,8 @@ onShow(() => {
           <wd-button v-if="!vm.canBook.value" block :disabled="!time || configFailed" @click="vm.login">
             登录后继续预约
           </wd-button>
-          <wd-button v-else block custom-class="mb-20rpx" custom-style="height: 96rpx; border-radius: 48rpx; background: #C9935B; border: none; color: white;" :loading="submitting || configLoading" :disabled="configLoading || configFailed || submitting || pending || !time" @click="vm.submit()">
+          <wd-button v-else block custom-class="mb-20rpx" custom-style="height: 96rpx; border-radius: 48rpx; background: #C9935B; border: none; color: white;" :disabled="configLoading || configFailed || submitting || pending || !time || submitting || configLoading" @click="vm.submit()">
+            <PageLoading v-if="submitting || configLoading" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
             {{ t('booking.title') }}
           </wd-button>
           <view class="px-20rpx text-center text-24rpx text-#999 leading-relaxed">

@@ -1,13 +1,11 @@
 /**
- * 【文件概述】骑手分包本地模拟凭证交换；仅由本模块开发分支加载。
- * 【方法与导出清单】login
- * 【综合使用示例】通过本模块 index.ts 调用公开能力。
+ * ============================================================================
+ * 【文件概述】骑手登录模拟凭证交换的公开出口，供三端身份隔离测试使用。
+ * 【方法与导出清单】
+ * - login：校验演示凭证并签发骑手候选会话。
+ * 【综合使用示例】
+ * import { login } from '@/pages-rider/auth/login/mock'
+ * await login('rider', '123456') // 测试中取得骑手候选凭证
+ * ============================================================================
  */
-import { sessionState } from '@/pages/auth/session/mock'
-/** 模拟账号 rider / 123456；仅签发该端身份。 */
-export async function login(username: string, password: string) {
-  if (username !== 'rider' || password !== '123456')
-    throw new Error('模拟账号或密码错误')
-
-  return sessionState.issue('rider', import.meta.env.VITE_AUTH_MODE === 'double')
-}
+export { login } from './state'

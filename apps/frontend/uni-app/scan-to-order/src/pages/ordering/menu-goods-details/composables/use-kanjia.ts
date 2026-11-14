@@ -21,7 +21,7 @@ import { needsLogin, useOrderingLocale as useI18n } from '@/pages/ordering/menu'
 import type { KanjiaInfo, KanjiaSet } from '@/pages/ordering/menu'
 import { getIdentity, getToken, requireIdentity, useSessionState } from '@/pages/auth/session'
 import { kanjiaApi } from '@/pages/ordering/menu-goods-details'
-import { alert, showError, withLoading } from '@/utils/project/interaction'
+import { alert, showError } from '@/utils/project/interaction'
 
 /**
  * 砍价设置（marketing.KanjiaSet 未声明的展示字段在此补充）
@@ -210,8 +210,10 @@ export function useGoodsDetailKanjia(options: { reload: () => Promise<void> }) {
 
   /** 报名参加砍价 */
 
+  const joining = ref(false)
+
   async function joinKanjia() {
-    if (!((getIdentity() === 'customer' && !!getToken()))) {
+    if (joining.value || !(getIdentity() === 'customer' && !!getToken())) {
       return
     }
 
@@ -221,8 +223,9 @@ export function useGoodsDetailKanjia(options: { reload: () => Promise<void> }) {
       return
     }
 
+    joining.value = true
     try {
-      await withLoading(() => kanjiaApi.join(set.id))
+      await kanjiaApi.join(set.id)
 
       kjJoinUid.value = String(session.userInfo.userId)
 
@@ -233,9 +236,13 @@ export function useGoodsDetailKanjia(options: { reload: () => Promise<void> }) {
     catch (e) {
       await handleError(e)
     }
+    finally {
+      joining.value = false
+    }
   }
 
   return {
+    joining,
     curGoodsKanjia,
     curKanjiaprogress,
     myHelpDetail,

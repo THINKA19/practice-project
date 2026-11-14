@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import CouponCard from './components/CouponCard/index.vue'
 import CouponPwdDialog from './components/CouponPwdDialog/index.vue'
 import { useCouponView } from './composables/use-view'
@@ -43,6 +44,15 @@ const {
     :hide-empty-view="activeIndex === CouponTab.EXCHANGE"
     @query="query"
   >
+    <template #loading>
+      <PageLoading class="py-48rpx" />
+    </template>
+    <template #refresher="{ refresherStatus }">
+      <PageLoading inline :refresh-status="refresherStatus" class="h-80rpx w-full" />
+    </template>
+    <template #loadingMoreLoading>
+      <PageLoading inline class="w-full py-24rpx" />
+    </template>
     <template #loadingMoreDefault>
       <view class="py-24rpx text-center text-24rpx text-#999">
         继续上滑加载更多

@@ -1,7 +1,9 @@
+import { shopText as st } from '@/locale/shop-text'
 import { merchantShopPreference } from '../storage/merchant-shop.storage'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
 import type { MerchantShop, ShopRequestContext } from '../models/types'
+import { hasShopPermission } from '../models/policy'
 import { fetchMerchantGrant, fetchMerchantShops } from './use-grants'
 import { useSessionState } from '@/pages/auth/session'
 
@@ -44,7 +46,7 @@ export const useMerchantShopStore = defineStore('merchant-shop-context', () => {
   watch(token, clear, { flush: 'sync' })
 
   function can(permission: string) {
-    return !!token.value && !loading.value && !!current.value?.permissions.includes(permission)
+    return !!token.value && !loading.value && !!current.value && hasShopPermission(current.value, permission)
   }
   async function refreshInternal() {
     const sentToken = token.value
@@ -70,7 +72,7 @@ export const useMerchantShopStore = defineStore('merchant-shop-context', () => {
 
       shops.value = result
 
-      current.value = result.find(s => s.id === remembered) || (result.length === 1 ? result[0] : null)
+      current.value = result.find(s => s.id === remembered) ?? result[0] ?? null
 
       if (JSON.stringify(previous) !== JSON.stringify(current.value))
         revision.value++
@@ -146,7 +148,7 @@ export const useMerchantShopStore = defineStore('merchant-shop-context', () => {
   }
   function capture(permission: string): ShopRequestContext {
     if (!can(permission) || !current.value || loading.value)
-      throw new Error('当前门店没有操作权限或正在切换，请刷新')
+      throw new Error(st('当前门店没有操作权限或正在切换，请刷新'))
 
     return { token: token.value, shopId: current.value.id, revision: revision.value }
   }

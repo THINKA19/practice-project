@@ -1,26 +1,24 @@
-# 骑手业务权限
+# 骑手资格与权限
 
-身份登录由 session 负责；本模块校验骑手资格和具体操作权限。RiderGrant 必须来自后端业务接口，不能从登录账号、昵称或本地可编辑字段推断。当前只有纯规则，业务功能接入时提供服务端授权资料。
+本模块负责服务端骑手资格、权限列表和敏感动作前的授权检查。实现沿用项目 uniapp-business-development Skill；参考源码仅用于比较，不被运行时代码引用。
 
-## 当前目录与职责边界
+## 目录与维护边界
 
-本模块位于 `src/pages-rider/auth/permissions`。本模块提供复用能力，不为凑目录创建页面。
+- api/：所属 endpoints、HTTP 请求及必要 DTO；不直接导入 Mock。
+- models/：领域类型与外部响应校验。
+- composables/：useRiderPermissionsStore 存在本模块 composables/use-store.ts。每个任务写动作先刷新权限，再核对当前账号、资格和具体 permission；权限失败按拒绝处理。
+- mock/：fixtures.ts 创建账号专属的演示权限；entry.mock.ts 从模拟会话识别 riderId。模拟权限不代表真实账号获得生产授权。
+- __tests__/：permissions.test.ts 检查缺权、无资格、跨账号授权、网络失败、迟到响应与未登录。
+- index.ts：跨模块公开出口；没有外部消费者的页面模块不暴露内部实现。
 
-- 页面入口：无独立页面。
-- 对外能力：经 `index.ts` 导出 `canRiderOperate`、`RiderGrant`。
-- 依赖领域：无跨领域业务依赖；框架与公共基础设施按已有入口使用。
-- 外部调用只走所属模块的 `index.ts`；模块内部直接引用实现，避免从自身聚合出口绕回。
+## 接口与状态
 
-### 文件职责
+GET /operator/rider/permissions。riderId: 当前会话 userId 的字符串形式；qualified: boolean；permissions: string[]。实际业务后端仍须检查身份、门店、任务归属和版本。
 
-- `models/`：types.ts 为前端模型；enums.ts 为实际使用的常量；mappers.ts 负责边界数据转换，仅以 import type 引用 DTO。
-- `domain/`：不依赖 Vue、Pinia、HTTP 和页面运行时的纯业务规则。
+接口使用公共 Alova 客户端、骑手 Authorization 请求头和 cacheFor: 0。真实配送业务需先确认后端契约并设置 VITE_RIDER_BACKEND_ENABLED=true；登录单独使用登录配置。开发环境开启 Mock 时，骑手 API 按需加载本模块模拟数据。真实服务使用公共 Alova 请求链。见 [分包说明](../../README.md)。
 
-### 状态归属
+## 验证
 
-- 共享身份、凭证和用户资料：唯一事实源仍为 `@/pages/auth/session`，本模块不复制会话。
-- 本领域：没有额外的领域状态；纯规则、类型及静态展示不创建 Store。
+在应用根执行 pnpm test:run src/pages-rider、pnpm exec eslint src/pages-rider、pnpm type-check；构建使用 pnpm build:h5、pnpm build:mp。全量基线失败与本模块测试分开报告。真实服务、真机、后台推送及结算尚未验证。
 
-### 验证
-
-在应用根目录使用 `pnpm test:run --maxWorkers=2`、`pnpm type-check`、`pnpm lint`；构建使用 `pnpm build:h5` 和 `pnpm build:mp`。局部测试或构建通过不代表真实后端、支付或真机能力验证通过。
+数据归属见 [docs/db.md](docs/db.md)。

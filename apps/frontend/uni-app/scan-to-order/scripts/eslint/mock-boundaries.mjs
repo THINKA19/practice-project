@@ -28,13 +28,24 @@ export default {
             return
           const publicMock = /\/src\/mock(?:\/|$)/.test(normalized)
           if (!ownMock) {
+            // 骑手接口只读取演示开关，不允许业务代码加载 Mock 数据。
+            if (publicMock && normalized.endsWith('/config') && [
+              '/src/pages-rider/account/index/api/account.api.ts',
+              '/src/pages-rider/account/profile/api/profile.api.ts',
+              '/src/pages-rider/account/settings/api/rules.api.ts',
+              '/src/pages-rider/auth/permissions/api/permissions.api.ts',
+              '/src/pages-rider/delivery/task/api/tasks.api.ts',
+              '/src/pages-rider/workspace/index/api/workspace.api.ts',
+            ].some(allowed => file.endsWith(allowed))) {
+              return
+            }
             // Existing application mode flags are an explicit exception; they load no business data.
             if (publicMock && normalized.endsWith('/config') && ['/src/main.ts', '/src/http/alova.ts', '/src/pages/auth/session/api/session.ts', '/src/pages-shop/auth/login/api/login.api.ts', '/src/pages-rider/auth/login/api/login.api.ts', '/src/pages/auth/login/api/login.api.ts', '/src/pages/auth/login/composables/use-flow.ts'].some(allowed => file.endsWith(allowed)))
               return
             if (['/src/http/alova.ts', '/src/main.ts'].some(allowed => file.endsWith(allowed)) && /\/src\/mock(?:\/index)?$/.test(normalized))
               return
             // 分包登录 API 的本地开发接缝；主包不加载分包 Mock。
-            if (['shop', 'rider'].some(role => file.endsWith(`/src/pages-${role}/auth/login/api/login.api.ts`) && normalized.endsWith(`/src/pages-${role}/auth/login/mock`)))
+            if (['shop'].some(role => file.endsWith(`/src/pages-${role}/auth/login/api/login.api.ts`) && normalized.endsWith(`/src/pages-${role}/auth/login/mock`)))
               return
             report(node, '普通业务代码不得引用 Mock；通过业务 API 发起请求')
           }

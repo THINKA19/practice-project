@@ -18,6 +18,16 @@ const credential = { token: 'valid', expiresIn: 3600 }
 
 const user = (identity: 'customer' | 'shop' | 'rider') => ({ userId: 1, username: 'u', nickname: 'U', identity })
 
+it('其他身份的凭证过期后可以直接登录目标身份', async () => {
+  const state = seedSession({}, 'shop')
+  state.snapshot!.expiresAt = Date.now() - 1
+
+  await authenticate('rider', async () => credential, async () => user('rider'))
+
+  expect(getIdentity()).toBe('rider')
+  expect(getToken()).toBe('valid')
+})
+
 it('脚手架 Token 入口跟随唯一会话登录、过期与退出状态', async () => {
   const token = useTokenStore()
   expect(token.hasLogin).toBe(false)

@@ -1,0 +1,120 @@
+{
+  "market": {
+    "loading": "රටවල් පූරණය වෙමින්…",
+    "select": "රට තෝරන්න",
+    "failed": "රටවල් පූරණය කළ නොහැකි විය",
+    "empty": "තෝරා ගැනීමට රටවල් නැත",
+    "member": "සාමාජික මධ්‍යස්ථානය",
+    "VN": "වියට්නාමය",
+    "TH": "තායිලන්තය",
+    "LA": "ලාඕසය",
+    "ID": "ඉන්දුනීසියාව",
+    "CN": "චීනය",
+    "GB": "එක්සත් රාජධානිය",
+    "AU": "ඕස්ට්‍රේලියාව",
+    "JP": "ජපානය",
+    "KR": "දකුණු කොරියාව",
+    "MM": "මියන්මාරය",
+    "PH": "පිලිපීනය",
+    "MY": "මැලේසියාව",
+    "SG": "සිංගප්පූරුව",
+    "LK": "ශ්‍රී ලංකාව"
+  },
+  "common": {
+    "selectLang": "භාෂාව තෝරන්න",
+    "cancel": "අවලංගු කරන්න",
+    "confirm": "තහවුරු කරන්න",
+    "forgotPassword": "මුරපදය අමතකද?",
+    "passwordHelpTitle": "මුරපදය අමතකයි",
+    "passwordResetHelp": "මුරපදය නැවත සැකසීමට පරිපාලකයා අමතන්න.",
+    "empty": "දත්ත නැත",
+    "loading": "පූරණය වෙමින්",
+    "noMore": "තවත් අයිතම නැත",
+    "loadFailed": "පූරණය අසාර්ථක විය",
+    "retry": "නැවත උත්සාහ කිරීමට තට්ටු කරන්න",
+    "navigationFailed": "මෙම පිටුව විවෘත කළ නොහැක. නැවත උත්සාහ කරන්න.",
+    "pageNotFound": "පිටුව හමු නොවීය",
+    "submitSuccess": "යවන ලදී"
+  },
+  "tabbar": {
+    "pickup1": "ලබා ගැනීම 1",
+    "home": "මුල් පිටුව",
+    "ordering": "ඇණවුම් කරන්න",
+    "service": "සේවා",
+    "queue": "පෝලිම",
+    "pickup": "ලබා ගැනීම",
+    "me": "ගිණුම",
+    "i18n": "භාෂාව"
+  },
+  "home": {
+    "banner": {
+      "unsupportedLink": "මෙම සබැඳියට තවම සහාය නොදක්වයි"
+    },
+    "user": {
+      "guest": "අමුත්තා",
+      "coupon": "කූපනය"
+    },
+    "delivery": {
+      "title": "ඇණවුම ලබා ගන්නා ආකාරය",
+      "pickupDescription": "වෙළඳසැලෙන් ඇණවුම ලබා ගන්න",
+      "takeoutDescription": "ඔබේ ලිපිනයට බෙදා හරිනු ලැබේ",
+      "pickup": "වෙළඳසැලෙන් ලබා ගැනීම",
+      "rider": "බෙදාහරින්නෙකු මඟින්",
+      "takeout": "බෙදාහැරීම"
+    },
+    "features": {
+      "title": "තවත් සේවා",
+      "favorites": "ප්‍රියතම",
+      "memberCard": "සාමාජික කාඩ්පත",
+      "groupBuy": "කණ්ඩායම් මිලදී ගැනීම",
+      "welfare": "ප්‍රතිලාභ"
+    }
+  },
+  "shop": {
+    "messages": {
+      "merchantSignIn": "වෙළෙන්දා ලෙස පිවිසෙන්න",
+      "merchantWorkspace": "වෙළෙන්දාගේ පාලක පුවරුව",
+      "merchantAccount": "වෙළෙන්දාගේ ගිණුම",
+      "orders2": "ඇණවුම් කළමනාකරණය",
+      "orderDetails": "ඇණවුම් විස්තර",
+      "products": "නිෂ්පාදන කළමනාකරණය",
+      "editProduct": "නිෂ්පාදනය සංස්කරණය",
+      "tables": "මේස කළමනාකරණය",
+      "statistics": "සංඛ්‍යාලේඛන",
+      "staff2": "සේවක කළමනාකරණය",
+      "deliveryAndRiders": "බෙදාහැරීම් සහ බෙදාහරින්නන්",
+      "storeSettings": "වෙළඳසැල් සැකසුම්",
+      "selectAStore": "කළමනාකරණය කිරීමට වෙළඳසැල තෝරන්න",
+      "signIn": "පිවිසෙන්න",
+      "account": "ගිණුම",
+      "password": "මුරපදය",
+      "enterYourMerchantAccount": "වෙළෙන්දාගේ ගිණුම ඇතුළත් කරන්න",
+      "enterYourPassword": "මුරපදය ඇතුළත් කරන්න",
+      "enterYourAccountAndPassword": "ගිණුම සහ මුරපදය ඇතුළත් කරන්න",
+      "signinFailed": "පිවිසීම අසාර්ථක විය",
+      "select": "තෝරන්න",
+      "edit": "සංස්කරණය කරන්න",
+      "create": "සාදන්න",
+      "saved": "සුරකින ලදී",
+      "businessOpenLabel": "විවෘතයි",
+      "businessClosedLabel": "වසා ඇත",
+      "voiceBroadcast": "ඇණවුම් දැනුම්දීම්",
+      "previewOrderAudio": "ආදර්ශ හඬ වාදනය කරන්න",
+      "newOrderVoiceAlerts": "නව ඇණවුම් හඬ දැනුම්දීම්",
+      "workspaceNewOrders": "නව ඇණවුම්",
+      "workspacePreparing": "සූදානම් කරමින්",
+      "workspaceFulfillment": "බෙදාහැරීම / ලබා ගැනීමට සූදානම්",
+      "workspaceLoadingOrders": "ඇණවුම් පූරණය වෙමින්",
+      "workspaceAccept": "ඇණවුම පිළිගන්න",
+      "workspaceFinishCooking": "සූදානම් බව සලකුණු කරන්න",
+      "workspaceCallRider": "බෙදාහරින්නෙකු කැඳවන්න",
+      "refreshWorkspace": "පාලක පුවරුව යාවත්කාලීන කරන්න",
+      "managementTools": "කළමනාකරණ මෙවලම්",
+      "riderManagement": "බෙදාහරින්නන් කළමනාකරණය",
+      "selectStore": "වෙළඳසැල තෝරන්න",
+      "todaysOrders": "අද ඇණවුම්",
+      "todaysOrderValue": "අද ඇණවුම් වටිනාකම",
+      "pending": "පොරොත්තුවෙන්"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # 门店与桌台：后端数据参考
 
-核实日期：2026-10-09。来源：[api/endpoints.ts](../api/endpoints.ts)、[入驻资料](../../../../pages-shop/onboarding/docs/db.md)、[api/shop.api.ts](../api/shop.api.ts)、[models/types.ts](../models/types.ts)，以及迁移前代码和现有规则测试。未获取后端源码、SQL DDL 或权威数据库字典；本次未调用生产接口核实。本文仅供开发参考，不被运行代码导入，不自动生成类型。
+核实日期：2026-10-09。来源：[api/endpoints.ts](../api/endpoints.ts)、[入驻资料](../../../../pages-shop/auth/onboarding/docs/db.md)、[api/shop.api.ts](../api/shop.api.ts)、[models/types.ts](../models/types.ts)，以及迁移前代码和现有规则测试。未获取后端源码、SQL DDL 或权威数据库字典；本次未调用生产接口核实。本文仅供开发参考，不被运行代码导入，不自动生成类型。
 
 ## 表及关联
 

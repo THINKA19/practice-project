@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { useBillPayPage } from './composables/use-page'
 
 defineOptions({ name: 'BillPay' })
@@ -47,10 +48,10 @@ onShow(() => {
         block
         size="large"
         custom-class="!h-100rpx !rounded-50rpx !text-36rpx !font-semibold !tracking-2rpx !bg-[linear-gradient(135deg,#D4A574_0%,#C9935B_100%)] !text-white !border-none !shadow-[0_8rpx_24rpx_rgba(201,147,91,0.3)] active:!scale-98"
-        :loading="loading"
         :disabled="!demo || !loaded || loading || failed || submitting || paymentShow"
         @click="bindSave"
       >
+        <PageLoading v-if="loading" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
         <view class="flex items-center justify-center">
           <text>立即买单</text>
           <view class="i-carbon-arrow-right ml-12rpx text-40rpx text-white" />
@@ -145,9 +146,10 @@ onShow(() => {
           block
           size="large"
           custom-class="!h-88rpx !rounded-44rpx !text-30rpx !font-semibold !bg-[linear-gradient(135deg,#D4A574_0%,#C9935B_100%)] !text-white !border-none !shadow-[0_8rpx_24rpx_rgba(201,147,91,0.3)]"
-          :loading="submitting"
+          :disabled="submitting"
           @click="paymentOk"
-        >
+          >
+          <PageLoading v-if="submitting" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
           确认模拟买单
         </wd-button>
       </view>

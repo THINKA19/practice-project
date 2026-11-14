@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
+import PhoneContact from '@/components/phone-contact/index.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import ContactChannelCard from './components/ContactChannelCard/index.vue'
 import { useContactConfig } from './composables/use-config'
 
 definePage({ style: { navigationBarTitleText: '联系客服' } })
-const { serviceData, recommendedId, canOpenLinks, toggleChannel, isExpanded, openLink, nativeContactAvailable, loading, loaded, failed, load, copy, previewQr, qrErrors, markQrFailed, retryQr, showTelTips } = useContactConfig()
+const { serviceData, recommendedId, canOpenLinks, toggleChannel, isExpanded, openLink, nativeContactAvailable, loading, loaded, failed, load, copy, previewQr, qrErrors, markQrFailed, retryQr, resolveServicePhone } = useContactConfig()
 onLoad(() => {
   void load()
 })
@@ -25,7 +27,7 @@ onLoad(() => {
     </view>
 
     <view v-if="loading && !loaded" class="rounded-28rpx bg-white p-48rpx text-center text-28rpx" role="status">
-      正在加载联系方式…
+      <PageLoading title="正在加载联系方式…" />
     </view>
     <view v-else-if="failed && !loaded" class="rounded-28rpx bg-white p-40rpx text-center">
       <view class="mb-24rpx text-28rpx">
@@ -43,7 +45,7 @@ onLoad(() => {
         更新失败，已保留上次配置。<text class="underline" @tap="load">点击重试</text>
       </view>
       <view v-if="loading" class="mb-24rpx text-24rpx" role="status">
-        正在更新联系方式…
+        <PageLoading title="正在更新联系方式…" />
       </view>
       <view v-if="!serviceData.channels.length && !serviceData.phone && !nativeContactAvailable" class="rounded-28rpx bg-white p-40rpx text-center text-28rpx leading-relaxed">
         暂未配置联系方式，请稍后再试。
@@ -68,9 +70,13 @@ onLoad(() => {
           {{ serviceData.phone }}
         </view>
         <view class="flex gap-20rpx">
-          <button class="contact-button primary flex-1" @tap="showTelTips">
-            拨打电话
-          </button>
+          <PhoneContact :phone="serviceData.phone" :resolve-phone="resolveServicePhone">
+            <template #trigger="{ open }">
+              <button class="contact-button primary flex-1" @tap="open">
+                拨打电话
+              </button>
+            </template>
+          </PhoneContact>
           <button class="contact-button flex-1" @tap="copy(serviceData.phone)">
             复制号码
           </button>

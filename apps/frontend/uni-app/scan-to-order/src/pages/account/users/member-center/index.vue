@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { onPullDownRefresh, onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
 import { useMemberCenterPage } from './composables/use-page'
@@ -57,7 +58,7 @@ onPullDownRefresh(async () => {
     </view>
 
     <view class="relative mx-32rpx h-40rpx pt-16rpx text-24rpx text-#8B7355" role="status">
-      <text v-if="loading">资产加载中…</text>
+      <view v-if="loading"><PageLoading inline title="资产加载中…" /></view>
     </view>
     <button v-if="failed || levelFailed" class="relative mx-32rpx mt-32rpx" @tap="refresh">
       加载失败，点击重试
@@ -73,7 +74,7 @@ onPullDownRefresh(async () => {
       </view>
 
       <view class="h-48rpx text-center text-24rpx text-#999" role="status">
-        <text v-if="levelLoading">{{ levelList.length ? '正在更新等级…' : '等级加载中…' }}</text>
+        <view v-if="levelLoading"><PageLoading inline :title="levelList.length ? '正在更新等级…' : '等级加载中…'" /></view>
       </view>
       <view v-if="!levelLoading && !levelsAvailable" class="py-24rpx text-center text-#999">
         会员等级服务暂未接入

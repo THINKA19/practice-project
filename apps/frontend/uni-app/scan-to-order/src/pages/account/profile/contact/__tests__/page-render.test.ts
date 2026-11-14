@@ -11,7 +11,7 @@ vi.mock('../composables/use-config', () => ({ useContactConfig: () => {
   const expanded = ref([data.channels[0].id])
   return { serviceData: ref(data), recommendedId: ref(data.channels[0].id), canOpenLinks: ref(true), nativeContactAvailable: ref(false), isExpanded: (id: string) => expanded.value.includes(id), toggleChannel: (id: string) => {
     expanded.value = expanded.value.includes(id) ? expanded.value.filter(value => value !== id) : [...expanded.value, id]
-  }, loaded: ref(true), loading: ref(false), failed: ref(false), qrErrors: ref({}), markQrFailed: vi.fn(), retryQr: vi.fn(), showTelTips: vi.fn(), ...actions }
+  }, loaded: ref(true), loading: ref(false), failed: ref(false), qrErrors: ref({}), markQrFailed: vi.fn(), retryQr: vi.fn(), resolveServicePhone: vi.fn(), ...actions }
 } }))
 afterEach(() => vi.unstubAllGlobals())
 it('推荐渠道默认展开，复制按钮紧凑，点击二维码预览，其他渠道可展开', async () => {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import OrderGoodsCard from './components/OrderGoodsCard/index.vue'
+import PhoneContact from '@/components/phone-contact/index.vue'
 import OrderStatusCard from './components/OrderStatusCard/index.vue'
 import OrderPaymentPopup from './components/OrderPaymentPopup/index.vue'
 import { useOrderDetailView } from './composables/use-view'
@@ -12,7 +13,7 @@ definePage({
   },
 })
 
-const { PageState, ClientRoutes, navigate, t, scene, scenes, selectScene, loading, failed, orderId, money, paymentShow, paymentConfirm, orderDetail, shopSubdetail, fetchOrderDetail, toPayTap, callShop, setTitle, pageVisible } = useOrderDetailView()
+const { PageState, ClientRoutes, navigate, t, scene, scenes, selectScene, loading, failed, orderId, money, paymentShow, paymentConfirm, orderDetail, shopSubdetail, fetchOrderDetail, toPayTap, setTitle, pageVisible } = useOrderDetailView()
 </script>
 
 <template>
@@ -59,12 +60,16 @@ const { PageState, ClientRoutes, navigate, t, scene, scenes, selectScene, loadin
                 {{ shopSubdetail.info.address }}
               </view>
             </view>
-            <view v-if="shopSubdetail.info.linkPhone" class="ml-24rpx flex flex-col items-center justify-center rounded-16rpx bg-[linear-gradient(135deg,#FFF8F0_0%,#F5E6D3_100%)] p-20rpx px-24rpx" @click="callShop">
-              <view class="i-carbon-phone text-48rpx text-[#8B4513]" />
-              <view class="mt-8rpx text-22rpx text-[#8B4513]">
-                {{ t('orderDetail.contact') }}
-              </view>
-            </view>
+            <PhoneContact v-if="shopSubdetail.info.linkPhone" :phone="shopSubdetail.info.linkPhone">
+              <template #trigger="{ open }">
+                <view class="ml-24rpx flex flex-col items-center justify-center rounded-16rpx bg-[linear-gradient(135deg,#FFF8F0_0%,#F5E6D3_100%)] p-20rpx px-24rpx" @click="open">
+                  <view class="i-carbon-phone text-48rpx text-[#8B4513]" />
+                  <view class="mt-8rpx text-22rpx text-[#8B4513]">
+                    {{ t('orderDetail.contact') }}
+                  </view>
+                </view>
+              </template>
+            </PhoneContact>
           </view>
         </view>
 

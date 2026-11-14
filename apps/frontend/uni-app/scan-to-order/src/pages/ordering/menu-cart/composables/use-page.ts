@@ -20,7 +20,8 @@ import { useCartStore } from '../store'
 import { useShopCheckoutAvailability, useShopStore } from '@/pages/ordering/index'
 import { requireIdentity } from '@/pages/auth/session'
 import { orderApi } from '@/pages/account/profile/order'
-import { setTitle, showError, withLoading } from '@/utils/project/interaction'
+import { setTitle, showError } from '@/utils/project/interaction'
+import { usePageLoading } from '@/hooks/project/usePageLoading'
 
 import { ClientRoutes } from '@/pages/routes'
 
@@ -34,6 +35,7 @@ import { ClientRoutes } from '@/pages/routes'
 export function useCartPage() {
   const { t } = useI18n()
 
+  const { loading, withLoading } = usePageLoading()
   const cartStore = useCartStore()
   const availability = useShopCheckoutAvailability()
   /** 购物车（null 表示空） */
@@ -139,5 +141,5 @@ export function useCartPage() {
     redirect(ClientRoutes.Ordering.cartOrder)
   }
 
-  return { t, cart, init, loadCart, changeNumber, clearCart, goCreateOrder, submitting, checkoutReason: availability.reason }
+  return { t, cart, loading, init, loadCart, changeNumber, clearCart, goCreateOrder, submitting, checkoutReason: availability.reason }
 }

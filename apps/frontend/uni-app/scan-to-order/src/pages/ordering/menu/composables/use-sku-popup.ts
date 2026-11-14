@@ -11,7 +11,6 @@
  * // 使用该类型约束调用方数据，字段语义以声明为准。
  * ============================================================================
  */
-import { useOrderingCurrency } from '@/pages/ordering/index'
 import { catalogApi } from '../api/catalog.api'
 import { propertyChildIds, skuPicture } from '../domain/catalog.rules'
 import { toGoodsDetail } from '../models/goods.mappers'
@@ -54,7 +53,6 @@ export interface SkuPopupOptions {
  */
 export function useOrderingSkuPopup(options: SkuPopupOptions) {
   const { t } = useI18n()
-  const { currencySymbol, currencyUnit } = useOrderingCurrency()
 
   const visible = ref(false)
   const submitting = ref(false)
@@ -86,7 +84,7 @@ export function useOrderingSkuPopup(options: SkuPopupOptions) {
     (detail.value?.properties || []).map(p => ({
       id: p.id,
       name: p.name,
-      choices: p.childsCurGoods.map(c => ({ id: c.id, name: c.name, priceText: typeof c.price === 'number' ? `${currencySymbol.value}${c.price}${currencyUnit.value}` : undefined, active: sku.isPropActive(p.id, c.id) })),
+      choices: p.childsCurGoods.map(c => ({ id: c.id, name: c.name, price: c.price, active: sku.isPropActive(p.id, c.id) })),
     })),
   )
 
@@ -94,7 +92,7 @@ export function useOrderingSkuPopup(options: SkuPopupOptions) {
     (additions.value || []).map(g => ({
       id: g.id,
       name: g.name,
-      choices: g.items.map(i => ({ id: i.id, name: i.name, priceText: `+${currencySymbol.value}${i.price}${currencyUnit.value}`, active: sku.isAdditionActive(i) })),
+      choices: g.items.map(i => ({ id: i.id, name: i.name, price: i.price, isSurcharge: true, active: sku.isAdditionActive(i) })),
     })),
   )
 

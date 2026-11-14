@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 /**
  * 我的-资产卡片（纯展示）：优惠券数、余额、积分
  */
@@ -37,7 +38,7 @@ function loading(value: number | string | null) {
         <wd-icon name="gift" size="24px" color="#FF9800" />
       </view>
       <view class="asset-value" :class="{ 'asset-empty': couponCount === null }">
-        <view v-if="loading(couponCount)" class="asset-skeleton" />
+        <PageLoading v-if="loading(couponCount)" inline indicator-only size="28rpx" />
         <text v-else>{{ display(couponCount) }}</text>
       </view>
       <view class="text-24rpx text-#999">
@@ -52,7 +53,7 @@ function loading(value: number | string | null) {
         <text v-if="balance !== null" class="mr-4rpx text-28rpx font-500">
           ¥
         </text>
-        <view v-if="loading(balance)" class="asset-skeleton" />
+        <PageLoading v-if="loading(balance)" inline indicator-only size="28rpx" />
         <text v-else>{{ display(balance) }}</text>
       </view>
       <view class="text-24rpx text-white">
@@ -64,7 +65,7 @@ function loading(value: number | string | null) {
         <wd-icon name="star" size="24px" color="#FFD700" />
       </view>
       <view class="asset-value" :class="{ 'asset-empty': score === null }">
-        <view v-if="loading(score)" class="asset-skeleton" />
+        <PageLoading v-if="loading(score)" inline indicator-only size="28rpx" />
         <text v-else>{{ display(score) }}</text>
       </view>
       <view class="text-24rpx text-#999">
@@ -130,11 +131,4 @@ function loading(value: number | string | null) {
   font-weight: 400;
 }
 
-.asset-skeleton {
-  width: 80rpx;
-  height: 28rpx;
-  background: currentColor;
-  border-radius: 8rpx;
-  opacity: 0.12;
-}
 </style>

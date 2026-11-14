@@ -13,7 +13,7 @@ import { ClientRoutes } from '@/pages/routes'
 import { orderApi } from '@/pages/account/profile/order'
 import { parseRefundLogisticsContent } from '../models/mappers'
 import { refundImageList } from '../domain/refund-apply.rules'
-import { hideLoading, previewImage, showError, showLoading, toast } from '@/utils/project/interaction'
+import { previewImage, showError, toast } from '@/utils/project/interaction'
 
 /**
  * 维护售后详情和寄回物流草稿；账号变化时清理私有资料，操作结果由服务端确认。
@@ -37,7 +37,6 @@ export function useOrderRefundApplyDetail(reload: () => void) {
   const trackingNumber = ref('')
   const busy = ref(false)
   const scope = useSessionAccountScope(() => {
-    hideLoading()
     curRefund.value = null
     imageList.value = []
     logisticsContent.value = null
@@ -83,14 +82,12 @@ export function useOrderRefundApplyDetail(reload: () => void) {
     }
 
     busy.value = true
-    showLoading()
 
     try {
       await orderApi.refundApplyCancel(info.orderId ?? '', info.orderGoodsId ?? '')
 
       if (!scope.current(ticket))
         return
-      hideLoading()
 
       toast(t('refund.cancelSuccess'), 'success')
 
@@ -101,14 +98,12 @@ export function useOrderRefundApplyDetail(reload: () => void) {
     catch (e) {
       if (!scope.current(ticket))
         return
-      hideLoading()
 
       showError(e)
     }
     finally {
       if (scope.current(ticket)) {
         busy.value = false
-        hideLoading()
       }
     }
   }
@@ -154,7 +149,6 @@ export function useOrderRefundApplyDetail(reload: () => void) {
     }
 
     busy.value = true
-    showLoading()
 
     try {
       await orderApi.refundApplySetBackLogistics({
@@ -166,7 +160,6 @@ export function useOrderRefundApplyDetail(reload: () => void) {
 
       if (!scope.current(ticket))
         return
-      hideLoading()
 
       toast(t('refund.submitSuccess'), 'success')
 
@@ -179,14 +172,12 @@ export function useOrderRefundApplyDetail(reload: () => void) {
     catch (e) {
       if (!scope.current(ticket))
         return
-      hideLoading()
 
       toast((e as Error)?.message || t('refund.submitFail'))
     }
     finally {
       if (scope.current(ticket)) {
         busy.value = false
-        hideLoading()
       }
     }
   }
@@ -203,6 +194,7 @@ export function useOrderRefundApplyDetail(reload: () => void) {
 
   return {
     popShow,
+    busy,
     curRefund,
     imageList,
     logisticsContent,

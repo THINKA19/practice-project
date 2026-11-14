@@ -1,0 +1,120 @@
+{
+  "market": {
+    "loading": "Memuat daftar negara…",
+    "select": "Pilih negara",
+    "failed": "Gagal memuat daftar negara",
+    "empty": "Tidak ada negara yang tersedia",
+    "member": "Pusat anggota",
+    "VN": "Vietnam",
+    "TH": "Thailand",
+    "LA": "Laos",
+    "ID": "Indonesia",
+    "CN": "Tiongkok",
+    "GB": "Britania Raya",
+    "AU": "Australia",
+    "JP": "Jepang",
+    "KR": "Korea Selatan",
+    "MM": "Myanmar",
+    "PH": "Filipina",
+    "MY": "Malaysia",
+    "SG": "Singapura",
+    "LK": "Sri Lanka"
+  },
+  "common": {
+    "selectLang": "Pilih bahasa",
+    "cancel": "Batal",
+    "confirm": "Konfirmasi",
+    "forgotPassword": "Lupa kata sandi?",
+    "passwordHelpTitle": "Lupa kata sandi",
+    "passwordResetHelp": "Hubungi administrator untuk mereset kata sandi.",
+    "empty": "Tidak ada data",
+    "loading": "Memuat",
+    "noMore": "Tidak ada item lagi",
+    "loadFailed": "Gagal memuat",
+    "retry": "Ketuk untuk mencoba lagi",
+    "navigationFailed": "Halaman ini tidak dapat dibuka. Silakan coba lagi.",
+    "pageNotFound": "Halaman tidak ditemukan",
+    "submitSuccess": "Terkirim"
+  },
+  "tabbar": {
+    "pickup1": "Ambil pesanan 1",
+    "home": "Beranda",
+    "ordering": "Pesan",
+    "service": "Layanan",
+    "queue": "Antrean",
+    "pickup": "Ambil pesanan",
+    "me": "Akun",
+    "i18n": "Bahasa"
+  },
+  "home": {
+    "banner": {
+      "unsupportedLink": "Tautan ini belum didukung"
+    },
+    "user": {
+      "guest": "Tamu",
+      "coupon": "Kupon"
+    },
+    "delivery": {
+      "title": "Metode penerimaan pesanan",
+      "pickupDescription": "Ambil pesanan di toko",
+      "takeoutDescription": "Diantar ke alamat Anda",
+      "pickup": "Ambil di toko",
+      "rider": "Pengiriman dengan kurir",
+      "takeout": "Pengiriman"
+    },
+    "features": {
+      "title": "Layanan lainnya",
+      "favorites": "Favorit",
+      "memberCard": "Kartu anggota",
+      "groupBuy": "Beli bersama",
+      "welfare": "Manfaat"
+    }
+  },
+  "shop": {
+    "messages": {
+      "merchantSignIn": "Masuk sebagai merchant",
+      "merchantWorkspace": "Dasbor merchant",
+      "merchantAccount": "Akun merchant",
+      "orders2": "Kelola pesanan",
+      "orderDetails": "Detail pesanan",
+      "products": "Kelola produk",
+      "editProduct": "Edit produk",
+      "tables": "Kelola meja",
+      "statistics": "Statistik",
+      "staff2": "Kelola staf",
+      "deliveryAndRiders": "Pengiriman dan kurir",
+      "storeSettings": "Pengaturan toko",
+      "selectAStore": "Pilih toko yang akan dikelola",
+      "signIn": "Masuk",
+      "account": "Akun",
+      "password": "Kata sandi",
+      "enterYourMerchantAccount": "Masukkan akun merchant",
+      "enterYourPassword": "Masukkan kata sandi",
+      "enterYourAccountAndPassword": "Masukkan akun dan kata sandi",
+      "signinFailed": "Gagal masuk",
+      "select": "Pilih",
+      "edit": "Edit",
+      "create": "Buat",
+      "saved": "Tersimpan",
+      "businessOpenLabel": "Buka",
+      "businessClosedLabel": "Tutup",
+      "voiceBroadcast": "Notifikasi pesanan",
+      "previewOrderAudio": "Putar contoh",
+      "newOrderVoiceAlerts": "Notifikasi suara pesanan baru",
+      "workspaceNewOrders": "Pesanan baru",
+      "workspacePreparing": "Sedang disiapkan",
+      "workspaceFulfillment": "Pengiriman / Siap diambil",
+      "workspaceLoadingOrders": "Memuat pesanan",
+      "workspaceAccept": "Terima pesanan",
+      "workspaceFinishCooking": "Tandai siap",
+      "workspaceCallRider": "Panggil kurir",
+      "refreshWorkspace": "Muat ulang dasbor",
+      "managementTools": "Alat pengelolaan",
+      "riderManagement": "Kelola kurir",
+      "selectStore": "Pilih toko",
+      "todaysOrders": "Pesanan hari ini",
+      "todaysOrderValue": "Nilai pesanan hari ini",
+      "pending": "Menunggu"
+    }
+  }
+}

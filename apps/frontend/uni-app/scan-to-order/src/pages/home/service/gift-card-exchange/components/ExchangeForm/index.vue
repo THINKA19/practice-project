@@ -16,6 +16,7 @@ const vm = useCardExchangePage() // 在父页面 setup 中调用
 ============================================================================
 -->
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { useI18n } from 'vue-i18n'
 import type { useCardExchangePage } from '../../composables/use-page'
 
@@ -88,7 +89,8 @@ const { t } = useI18n()
       </view>
 
       <view class="my-48rpx">
-        <button class="submit-btn" hover-class="submit-pressed" :disabled="submitting" :loading="submitting" @tap="vm.submit()">
+        <button class="submit-btn" hover-class="submit-pressed" :disabled="submitting" @tap="vm.submit()">
+          <PageLoading v-if="submitting" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
           <text>{{ submitting ? '兑换中…' : '立即兑换' }}</text>
         </button>
       </view>

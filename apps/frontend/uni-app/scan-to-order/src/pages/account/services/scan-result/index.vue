@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { useOrderVerificationDetail } from './composables/use-detail'
 
 definePage({ style: { navigationBarTitleText: '扫码核销' } })
@@ -17,7 +18,8 @@ onShow(() => vm.refresh())
       <view class="mb-32rpx text-26rpx text-gray-500">
         扫描顾客取餐码，核对订单后确认核销
       </view>
-      <wd-button custom-style="background: #4D8A63; border-color: #4D8A63; color: #fff;" block :loading="scanning" :disabled="loading || submitting" @click="vm.scan">
+      <wd-button custom-style="background: #4D8A63; border-color: #4D8A63; color: #fff;" block :disabled="loading || submitting || scanning" @click="vm.scan">
+        <PageLoading v-if="scanning" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
         扫描取餐码
       </wd-button>
       <!-- #ifdef H5 -->
@@ -26,7 +28,8 @@ onShow(() => vm.refresh())
       </view>
       <!-- #endif -->
       <wd-input v-model="inputCode" label="核销码" placeholder="也可手动输入核销码" clearable custom-class="mt-32rpx" :disabled="loading || submitting || scanning" />
-      <wd-button custom-style="color: #A67C52; border-color: #C9935B; background: #FFFAF3;" plain block custom-class="mt-24rpx" :loading="loading" :disabled="!inputCode.trim() || submitting || scanning" @click="vm.loadVerify(inputCode)">
+      <wd-button custom-style="color: #A67C52; border-color: #C9935B; background: #FFFAF3;" plain block custom-class="mt-24rpx" :disabled="(!inputCode.trim() || submitting || scanning) || (loading)" @click="vm.loadVerify(inputCode)">
+        <PageLoading v-if="loading" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
         查询订单
       </wd-button>
       <view v-if="!allowed" class="mt-24rpx text-24rpx text-gray-500">
@@ -49,7 +52,8 @@ onShow(() => vm.refresh())
       <view v-if="verified" class="text-green-600">
         订单已核销完成
       </view>
-      <wd-button v-else custom-style="background: #4D8A63; border-color: #4D8A63; color: #fff;" block :loading="submitting" :disabled="!canVerify" @click="vm.confirm">
+      <wd-button v-else custom-style="background: #4D8A63; border-color: #4D8A63; color: #fff;" block :disabled="!canVerify || submitting" @click="vm.confirm">
+        <PageLoading v-if="submitting" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
         确认核销
       </wd-button>
       <view v-if="!verified && !canVerify && !submitting" class="mt-16rpx text-24rpx text-gray-500">

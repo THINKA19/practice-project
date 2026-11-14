@@ -121,6 +121,10 @@ export default defineManifestConfig({
   /* 小程序特有相关 */
   'mp-weixin': {
     appid: VITE_WX_APPID,
+    permission: {
+      'scope.userLocation': { desc: '用于定位附近门店和校验骑手接单服务区' },
+    },
+    requiredPrivateInfos: ['getLocation'],
     setting: {
       urlCheck: false,
       // 是否启用 ES6 转 ES5

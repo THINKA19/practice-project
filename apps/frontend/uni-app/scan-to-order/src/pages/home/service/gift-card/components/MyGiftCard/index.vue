@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 /**
  * 展示持卡状态，并提供赠送、撤回和查看详情入口。
  */
@@ -71,7 +72,8 @@ watch(() => props.card.cardInfo?.pic, () => {
             再次分享
             <!-- #endif -->
           </button>
-          <button class="action-btn secondary" hover-class="action-pressed" :disabled="cancelling" :loading="cancelling" @tap="emit('cancelShare')">
+          <button class="action-btn secondary" hover-class="action-pressed" :disabled="cancelling" @tap="emit('cancelShare')">
+            <PageLoading v-if="cancelling" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
             {{ cancelling ? '撤回中…' : '撤回赠送' }}
           </button>
         </view>

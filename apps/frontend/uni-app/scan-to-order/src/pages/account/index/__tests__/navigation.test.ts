@@ -42,13 +42,15 @@ it('我的各入口使用当前已实现页面，昵称根据登录状态跳转'
   await vm.navTo('会员中心')
   expect(mocks.navigate).toHaveBeenLastCalledWith('/pages/home/user/member-center/index')
   await vm.navTo('申请商家入驻')
-  expect(mocks.navigate).toHaveBeenLastCalledWith('/pages-shop/onboarding/index')
-  for (const title of ['商家后台', '骑手工作台']) {
-    mocks.navigate.mockClear()
-    await vm.navTo(title)
-    expect(mocks.navigate).not.toHaveBeenCalled()
-    expect(mocks.toast).toHaveBeenLastCalledWith('该功能暂未开放')
-  }
+  expect(mocks.navigate).toHaveBeenLastCalledWith('/pages-shop/auth/onboarding/index')
+  mocks.toast.mockClear()
+  await vm.navTo('骑手工作台')
+  expect(mocks.navigate).toHaveBeenLastCalledWith('/pages-rider/auth/login/index')
+  expect(mocks.toast).not.toHaveBeenCalled()
+  mocks.navigate.mockClear()
+  await vm.navTo('商家后台')
+  expect(mocks.navigate).toHaveBeenLastCalledWith('/pages-shop/auth/login/index')
+  expect(mocks.toast).not.toHaveBeenCalled()
 })
 
 it('快速连续点击只跳转一次，完成后允许下次点击', async () => {

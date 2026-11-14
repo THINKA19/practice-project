@@ -2,16 +2,14 @@
 import type { SessionIdentity } from '../models/types'
 import { redirectToLogin } from './use-login-navigation'
 import { getIdentity, getToken } from './use-actions'
+import { canAccessIdentity } from '../domain/access.rules'
 
 /** 检查当前身份，未登录时引导至对应登录页。@example requireIdentity('customer') */
 export function requireIdentity(target: SessionIdentity): boolean {
-  if (getToken() && getIdentity() === target)
+  if (canAccessIdentity(getIdentity(), !!getToken(), target))
     return true
 
-  if (getIdentity() && getIdentity() !== target)
-    uni.showToast({ title: '请先退出当前身份', icon: 'none' })
-  else
-    redirectToLogin({ identity: target })
+  redirectToLogin({ identity: target })
 
   return false
 }

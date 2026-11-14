@@ -3,6 +3,16 @@ import { computed, defineComponent, h, nextTick, onMounted, ref } from 'vue'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 
 const lifecycle = vi.hoisted(() => ({ show: [] as (() => void)[], hide: [] as (() => void)[] }))
+vi.mock('@dcloudio/uni-app', () => ({
+  onHide: (fn: () => void) => lifecycle.hide.push(fn),
+  onShow: (fn: () => void) => lifecycle.show.push(fn),
+  onLoad: vi.fn(),
+  onShareAppMessage: vi.fn(),
+  onShareTimeline: vi.fn(),
+}))
+vi.mock('@/pages/home/index/components/HomePromotionPopup/api/promotion.api', () => ({
+  fetchHomePromotion: vi.fn(),
+}))
 vi.mock('@/pages/home/index/composables/use-page', () => ({
   useHomePage: () => ({
     banners: ref([]),
@@ -33,6 +43,7 @@ beforeEach(() => {
   vi.stubGlobal('onLoad', vi.fn())
   vi.stubGlobal('onShow', (fn: () => void) => lifecycle.show.push(fn))
   vi.stubGlobal('onHide', (fn: () => void) => lifecycle.hide.push(fn))
+  vi.stubGlobal('onReady', vi.fn())
   vi.stubGlobal('onShareAppMessage', vi.fn())
   vi.stubGlobal('onShareTimeline', vi.fn())
   Object.assign(uni, { getLocale: () => 'zh-Hans', setLocale: vi.fn(), setTabBarItem: vi.fn(), hideTabBar: vi.fn(), setNavigationBarTitle: vi.fn() })
@@ -56,6 +67,16 @@ it('updates the mounted home, login entry, picker and native tabs without naviga
   const tabs = mount(Tabbar)
   try {
     lifecycle.show.forEach(fn => fn())
+    setLocale('zh-Hans')
+    await nextTick()
+    const options = wrapper.findAll('.lang-picker__item')
+    expect(options.map(option => option.get('.lang-picker__country').text()))
+      .toEqual(['中国', '英国', '越南', '泰国', '老挝', '印度尼西亚', '斯里兰卡', '澳大利亚', '日本', '韩国', '缅甸', '菲律宾'])
+    expect(new Set(options.map(option => option.get('.lang-picker__flag').attributes('src'))).size).toBe(12)
+    expect(wrapper.find('.country-entry').exists()).toBe(false)
+    const languageButton = wrapper.get('.language-button')
+    expect(languageButton.text()).toBe('选择语言')
+    expect(languageButton.find('.language-icon').exists()).toBe(true)
     for (const [code, login, title, cancel, home] of [
       ['en', 'Authorize login', 'Delivery Method', 'Cancel', 'Home'],
       ['vi', 'Đăng nhập ủy quyền', 'Phương thức giao hàng', 'Hủy', 'Trang chủ'],

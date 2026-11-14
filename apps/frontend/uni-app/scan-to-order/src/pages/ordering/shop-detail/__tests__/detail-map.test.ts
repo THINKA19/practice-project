@@ -2,7 +2,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { navigate } from '@/utils/project/navigation'
 import { openLink } from '@/pages/ordering/menu'
 import { ClientRoutes } from '@/pages/routes'
-import { alert, makePhoneCall } from '@/utils/project/interaction'
+import { alert } from '@/utils/project/interaction'
 import { useShopDetailPage } from '../composables/use-detail-page'
 import { effectScope } from 'vue'
 
@@ -46,32 +46,6 @@ it('开始导航使用 Google 路线链接，目的地使用 WGS84 坐标', asyn
   await vm.init({ id: '1' })
   vm.startNavigation()
   expect(openLink).toHaveBeenCalledWith('https://www.google.com/maps/dir/?api=1&destination=22.5431%2C114.0579&dir_action=navigate')
-})
-
-it('桌面详情电话打开共用复制面板', () => {
-  const setClipboardData = vi.fn()
-  const makePhoneCall = vi.fn()
-  vi.stubGlobal('uni', { setClipboardData, makePhoneCall, getSystemInfoSync: () => ({ platform: 'windows' }) })
-  try {
-    const vm = useShopDetailPage()
-    vm.shopInfo.value = { id: 1, name: '门店', linkPhone: ' +84 123456789 ' }
-    vm.phoneCall()
-    expect(vm.phoneContact.visible.value).toBe(true)
-    expect(vm.phoneContact.phone.value).toBe('+84 123456789')
-    expect(makePhoneCall).not.toHaveBeenCalled()
-    vm.phoneContact.copy()
-    expect(setClipboardData).toHaveBeenCalledWith(expect.objectContaining({ data: '+84 123456789' }))
-  }
-  finally {
-    vi.unstubAllGlobals()
-  }
-})
-
-it('未提供电话时说明原因', () => {
-  const vm = useShopDetailPage()
-  vm.phoneCall()
-  expect(alert).toHaveBeenCalledWith('门店暂未提供联系电话')
-  expect(makePhoneCall).not.toHaveBeenCalled()
 })
 
 it('无坐标仍可进入位置页复制地址，但不能开始导航', async () => {

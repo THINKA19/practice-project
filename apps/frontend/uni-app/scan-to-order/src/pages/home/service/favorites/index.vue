@@ -8,6 +8,7 @@ import View from '@/pages/home/service/favorites/index.vue'
 ============================================================================
 -->
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import FavoriteCard from './components/FavoriteCard/index.vue'
 import { useFavoritesPage } from './composables/use-page'
 import ListEnd from '@/components/list-end/index.vue'
@@ -41,7 +42,7 @@ onPullDownRefresh(async () => {
       加载失败，点击重试
     </button>
     <view v-else-if="loading" class="py-6 text-center">
-      正在加载收藏…
+      <PageLoading title="正在加载收藏…" />
     </view>
     <view v-else-if="!items.length" class="py-16 text-center text-gray-500">
       还没有收藏商品

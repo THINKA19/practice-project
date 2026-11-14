@@ -19,7 +19,7 @@ vi.mock('../composables/use-page', () => ({
     ...actions,
   }),
 }))
-vi.mock('@/pages/ordering/index', () => ({ ShopLocationMap: { template: '<div />' } }))
+vi.mock('@/components/location-map/index.vue', () => ({ default: { template: '<div />' } }))
 vi.mock('@/components/page-state', () => ({ PageState: { template: '<div />' } }))
 afterEach(() => vi.unstubAllGlobals())
 

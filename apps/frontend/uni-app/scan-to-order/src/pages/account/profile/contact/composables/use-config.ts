@@ -3,7 +3,7 @@ import { computed, onScopeDispose, ref } from 'vue'
 import type { ContactChannel } from '../models/types'
 import { parseServiceConfig } from '../models/mappers'
 import { contactApi } from './use-requests'
-import { confirm, showError, toast } from '@/utils/project/interaction'
+import { confirm, toast } from '@/utils/project/interaction'
 
 /** 页面 onLoad 调用 load；销毁或新请求发起后丢弃过期结果。 */
 export function useContactConfig() {
@@ -110,13 +110,13 @@ export function useContactConfig() {
   function retryQr(id: string) {
     delete qrErrors.value[id]
   }
-  async function showTelTips() {
+  async function resolveServicePhone() {
     const phone = serviceData.value.phone
     const ticket = generation
     if (!phone || disposed)
       return toast('暂无有效联系电话')
     if (await confirm({ title: '拨打客服', content: phone, confirmText: '呼叫' }) && !disposed && ticket === generation)
-      uni.makePhoneCall({ phoneNumber: phone, fail: showError })
+      return phone
   }
-  return { serviceData, expandedIds, recommendedId, canOpenLinks, toggleChannel, isExpanded, openLink, nativeContactAvailable, loading, loaded, failed, load, copy, previewQr, qrErrors, markQrFailed, retryQr, showTelTips }
+  return { serviceData, expandedIds, recommendedId, canOpenLinks, toggleChannel, isExpanded, openLink, nativeContactAvailable, loading, loaded, failed, load, copy, previewQr, qrErrors, markQrFailed, retryQr, resolveServicePhone }
 }

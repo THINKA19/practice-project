@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { onLoad, onShareAppMessage, onShareTimeline, onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
 import GiftCardItem from './components/GiftCardItem/index.vue'
@@ -19,7 +20,12 @@ onShareTimeline(vm.shareTimeline)
 </script>
 
 <template>
-  <scroll-view scroll-y class="gift-page" refresher-enabled :refresher-triggered="vm.refreshing.value" @refresherrefresh="vm.pullRefresh()" @scrolltolower="hasMore && vm.loadMore()">
+  <scroll-view scroll-y class="gift-page" refresher-enabled refresher-default-style="none" :refresher-triggered="vm.refreshing.value" @refresherrefresh="vm.pullRefresh()" @scrolltolower="hasMore && vm.loadMore()">
+    <!-- uni-app scroll-view uses the platform slot attribute. -->
+    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+    <view slot="refresher">
+      <PageLoading inline :refresh-status="vm.refreshing.value ? 'loading' : 'default'" class="h-80rpx w-full" />
+    </view>
     <view class="sticky top-0 z-10">
       <view class="gift-tabs" role="tablist" aria-label="礼品卡分类">
         <button class="gift-tab" :class="{ 'is-active': active === 0 }" role="tab" :aria-selected="active === 0" @tap="vm.tabChange(0)">
@@ -59,7 +65,7 @@ onShareTimeline(vm.shareTimeline)
         </button>
       </view>
       <view v-if="loading" class="gift-state">
-        加载中…
+        <PageLoading title="加载中…" />
       </view>
       <view v-else-if="failed" class="gift-state">
         礼品卡加载失败<button class="retry-button" @tap="vm.refresh()">

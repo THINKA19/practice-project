@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { useUserCodeView } from './composables/use-view'
 
 definePage({ style: { navigationBarTitleText: '会员码', navigationStyle: 'custom', enablePullDownRefresh: true } })
@@ -41,7 +42,7 @@ const { goBack, user, demo, balance, score, loading, failed, memberCode, codeSta
             {{ !user ? '登录后查看会员信息' : codeStatus === 'unavailable' ? '动态会员码服务暂未接入' : '开发会员码演示（不可核销）' }}
           </text>
           <text v-if="memberCode" class="mt-24rpx break-all text-center text-26rpx text-#8b5a3c font-mono">{{ memberCode.code }}</text>
-          <text v-if="codeStatus === 'loading'" class="mt-16rpx text-24rpx">会员码加载中…</text>
+          <view v-if="codeStatus === 'loading'" class="mt-16rpx text-24rpx"><PageLoading inline title="会员码加载中…" /></view>
           <button v-if="codeStatus === 'error' || codeStatus === 'expired'" class="mt-24rpx" @tap="refresh">
             {{ codeStatus === 'expired' ? '演示码已过期，点击刷新' : '会员码加载失败，点击重试' }}
           </button>
@@ -72,7 +73,7 @@ const { goBack, user, demo, balance, score, loading, failed, memberCode, codeSta
           <view class="mb-8rpx text-26rpx text-#999">
             余额
           </view>
-          <view v-if="loading && balance === '—'" class="asset-placeholder" />
+          <PageLoading v-if="loading && balance === '—'" inline indicator-only size="28rpx" />
           <text v-else class="asset-number text-36rpx text-#8b5a3c font-bold">¥{{ balance }}</text>
         </view>
       </view>
@@ -85,7 +86,7 @@ const { goBack, user, demo, balance, score, loading, failed, memberCode, codeSta
           <view class="mb-8rpx text-26rpx text-#999">
             我的积分
           </view>
-          <view v-if="loading && score === null" class="asset-placeholder" />
+          <PageLoading v-if="loading && score === null" inline indicator-only size="28rpx" />
           <text v-else class="asset-number text-36rpx text-#8b5a3c font-bold">{{ score ?? '—' }}</text>
         </view>
       </view>
@@ -222,12 +223,6 @@ const { goBack, user, demo, balance, score, loading, failed, memberCode, codeSta
   font-variant-numeric: tabular-nums;
 }
 
-.asset-placeholder {
-  width: 120rpx;
-  height: 50rpx;
-  background: #f5ede4;
-  border-radius: 8rpx;
-}
 
 .member-panel {
   padding: 40rpx 24rpx;

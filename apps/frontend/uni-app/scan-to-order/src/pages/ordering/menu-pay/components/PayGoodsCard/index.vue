@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { OrderImage } from '@/components/order-image'
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -26,7 +27,7 @@ defineProps<{
   totalPrice: number
 }>()
 
-const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 
 const { t } = useI18n()
 
@@ -63,7 +64,7 @@ function showSelection(item: CartItem) {
             </view>
             <view class="goods-controls">
               <view class="goods-price">
-                {{ currencySymbol }}{{ item.price }}{{ currencyUnit }}
+                <FgPrice :amount="item.price" :country-code="countryCode" />
               </view>
               <view class="goods-quantity">
                 ×{{ item.number }}
@@ -81,7 +82,7 @@ function showSelection(item: CartItem) {
         ×{{ totalNumber }}
       </text>
       <text class="text-36rpx text-#c93636 font-bold">
-        {{ currencySymbol }}{{ totalPrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+        <FgPrice :amount="totalPrice" :country-code="countryCode" show-currency-name />
       </text>
     </view>
   </view>

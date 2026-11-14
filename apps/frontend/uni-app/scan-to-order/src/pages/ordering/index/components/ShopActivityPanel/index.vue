@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 /**
  * ============================================================================
  * 【文件概述】门店活动底部详情；打开及可见期间刷新服务端快照，关闭后忽略旧响应。
@@ -101,7 +102,7 @@ onScopeDispose(() => {
           </button>
         </view>
         <view v-else-if="loading && !shop" class="py-48rpx text-center text-26rpx text-[#777]">
-          正在加载活动…
+          <PageLoading title="正在加载活动…" />
         </view>
         <view v-else-if="!activities.length" class="py-48rpx text-center text-26rpx text-[#777]">
           活动已结束或已下架，暂无可查看的优惠活动
@@ -123,7 +124,8 @@ onScopeDispose(() => {
     </scroll-view>
     <view v-if="showEnter && activities.length && !error" class="px-32rpx pb-24rpx">
       <button v-if="showEnter" class="rounded-full bg-[#8b4513] text-28rpx text-white" :disabled="!canEnter" @tap="enter">
-        {{ loading ? '正在确认门店…' : '进入门店' }}
+        <PageLoading v-if="loading" inline size="28rpx" title="正在确认门店…" color="currentColor" />
+        <text v-else>进入门店</text>
       </button>
     </view>
   </wd-popup>

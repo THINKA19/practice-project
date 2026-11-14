@@ -8,11 +8,15 @@
  * ============================================================================
  */
 import { defineMock } from '@alova/mock'
+import { createHomePromotion } from '../../components/HomePromotionPopup/mock'
 import { createHomeBanners } from './data'
 import { endpoints } from '../../api/endpoints'
 import { ok } from '@/mock/response'
 import { withFailure } from '@/mock/scenario'
 
 export default defineMock({
-  [`[GET]${endpoints.banners}`]: withFailure(({ query }) => ok(createHomeBanners(String(query.type || '')))),
+  [`[GET]${endpoints.banners}`]: withFailure(({ query }) => {
+    const type = String(query.type || '')
+    return ok(type === 'shouye_popup' ? createHomePromotion() : createHomeBanners(type))
+  }),
 })

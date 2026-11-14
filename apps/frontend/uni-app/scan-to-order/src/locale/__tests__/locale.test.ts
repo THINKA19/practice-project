@@ -22,6 +22,31 @@ beforeEach(() => {
 })
 
 describe('language switching and native tabbar', () => {
+  it.each([
+    ['th_TH', 'th', 'จัดการสินค้า', 'หน้าแรก'],
+    ['lo_LA', 'lo', 'ຈັດການສິນຄ້າ', 'ໜ້າຫຼັກ'],
+    ['id_ID', 'id', 'Kelola produk', 'Beranda'],
+    ['si_LK', 'si', 'නිෂ්පාදන කළමනාකරණය', 'මුල් පිටුව'],
+    ['en_AU', 'en-AU', 'Products', 'Home'],
+    ['ja_JP', 'ja', 'Products', 'ホーム'],
+    ['ko_KR', 'ko', 'Products', '홈'],
+    ['my_MM', 'my', 'Products', 'ပင်မစာမျက်နှာ'],
+    ['fil_PH', 'fil', 'Products', 'Home'],
+  ])('restores %s and resolves shop and navigation text', async (saved, code, title, home) => {
+    vi.mocked(uni.getStorageSync).mockReturnValue(saved)
+    const { default: i18n, currentLocale, t } = await import('../index')
+    const { shopText } = await import('../shop-text')
+    const { useLanguageSwitcherPicker } = await import('../../components/language-switcher/composables/use-picker')
+
+    expect(currentLocale.value).toBe(code)
+    expect(useLanguageSwitcherPicker().selectedLanguage.value.code).toBe(code)
+    expect(shopText('商品管理')).toBe(title)
+    expect(t('tabbar.home')).toBe(home)
+    expect(i18n.global.t('shop.messages.products')).toBe(title)
+    expect(t('shop.messages.enterAValidPrice')).toBe('Enter a valid price')
+    expect(i18n.global.t('shop.messages.enterAValidPrice')).toBe('Enter a valid price')
+  })
+
   it('resolves shared locale keys through both translators and preserves interpolation', async () => {
     const { default: i18n, t, setLocale } = await import('../index')
     setLocale('en')
@@ -49,6 +74,12 @@ describe('language switching and native tabbar', () => {
     expect(tabbarList.map(item => getI18nText(item.text))).toEqual(labels)
     labels.forEach((text, index) => expect(uni.setTabBarItem).toHaveBeenCalledWith({ index, text }))
     expect(getI18nText('中文原文')).toBe('中文原文')
+  })
+
+  it('provides native tab labels before any page lifecycle runs', async () => {
+    const { tabBar } = await import('../../tabbar/config')
+    expect(tabBar?.list?.map(item => item.text)).toEqual(['首页', '点餐', '服务', '取号', '取餐', '取餐一', '我的'])
+    expect(uni.setTabBarItem).not.toHaveBeenCalled()
   })
 
   it('restores a saved language on fresh module initialization', async () => {

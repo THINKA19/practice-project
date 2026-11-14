@@ -13,7 +13,7 @@ it('首页始终显示会员中心文字入口，点击交由首页导航处理'
   })
   try {
     const entry = card.find('button.member-entry')
-    expect(entry.text()).toBe('会员中心')
+    expect(entry.text()).toBe('market.member')
     await entry.trigger('tap')
     expect(card.emitted('member')).toHaveLength(1)
   }

@@ -3,12 +3,26 @@ import { useMerchantShopStore } from '../composables/use-shop-store'
 import { seedSession } from '@/pages/auth/session/__tests__/fixtures'
 import { fetchMerchantGrant, fetchMerchantShops } from '../composables/use-grants'
 import type { MerchantShop } from '../models/types'
+import { formatSettlementPrice } from '@/utils/project/price'
+import { merchantCurrency } from '../models/market'
 
 vi.mock('../composables/use-grants', () => ({ fetchMerchantShops: vi.fn(), fetchMerchantGrant: vi.fn() }))
 
 function shop(id: string): MerchantShop {
   return { id, merchantId: 'M1', name: id, roleTemplate: 'employee', soundNotify: true, permissions: ['order.read'], grantVersion: 1 }
 }
+
+it('按门店结算币种展示越南盾符号，保留其他币种和缺失金额的展示', () => {
+  const vietnam: MerchantShop = { ...shop('A'), countryCode: 'VN' }
+  expect(formatSettlementPrice(120000, merchantCurrency(vietnam))).toBe('120000\u00A0₫')
+  expect(formatSettlementPrice('84.00', merchantCurrency({ ...vietnam, currencyCode: 'THB' }))).toBe('฿84.00')
+  expect(formatSettlementPrice(20, merchantCurrency({ ...vietnam, currencyCode: 'CNY' }))).toBe('¥20')
+  expect(formatSettlementPrice(20, merchantCurrency({ ...vietnam, currencyCode: 'LAK' }))).toBe('₭20')
+  expect(formatSettlementPrice(20, merchantCurrency({ ...vietnam, currencyCode: 'IDR' }))).toBe('Rp20')
+  expect(formatSettlementPrice(20, merchantCurrency({ ...vietnam, currencyCode: 'XYZ' }))).toBe('XYZ 20')
+  expect(formatSettlementPrice('24,000', 'VND')).toBe('24,000\u00A0₫')
+  expect(formatSettlementPrice(undefined, merchantCurrency(vietnam))).toBe('—')
+})
 function deferred<T>() {
   let resolve!: (value: T) => void
 
@@ -24,6 +38,16 @@ function session(token = 'one') {
   state.snapshot!.tokenInfo = { token, expiresIn: 3600 }
 }
 describe('当前门店上下文', () => {
+  it('首次载入多家授权门店时默认进入第一家并显示工作台功能', async () => {
+    session()
+    const store = useMerchantShopStore()
+    vi.mocked(fetchMerchantShops).mockResolvedValueOnce([shop('A'), shop('B')])
+
+    expect(await store.refresh()).toBe(true)
+    expect(store.current?.id).toBe('A')
+    expect(store.can('order.read')).toBe(true)
+  })
+
   it('切店请求乱序时只保留最后选择，失败不替换有效门店', async () => {
     session()
 

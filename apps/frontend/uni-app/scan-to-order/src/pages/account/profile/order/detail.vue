@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
+import { computed } from 'vue'
 import { onHide, onLoad, onShow } from '@dcloudio/uni-app'
 import { OrderImage } from '@/components/order-image'
-import { formatOrderPrice } from './models/presentation'
-import { currentLocale } from '@/locale'
+import { orderPresentation } from './models/presentation'
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { ORDER_TABS } from './models/enums'
 import { useOrderDetailPage } from './composables/use-detail-page'
 
 definePage({ style: { navigationBarTitleText: '订单详情' } })
 const { detail, loading, failed, needsLogin, submissionResult, cashOrder, nextStep, amountLabel, viewOrders, suspend, init, load, login } = useOrderDetailPage()
+const countryCode = computed(() => detail.value ? orderPresentation(detail.value.orderInfo).countryCode : '')
 onHide(suspend)
 onLoad(init)
 onShow(() => {
@@ -23,7 +26,7 @@ onShow(() => {
       </button>
     </view>
     <view v-else-if="loading">
-      加载中…
+      <PageLoading title="加载中…" />
     </view>
     <view v-else-if="failed">
       订单加载失败<button @tap="load">
@@ -61,10 +64,18 @@ onShow(() => {
         <OrderImage :src="goods.pic" class="goods-image" />
         <view class="goods-info">
           <view>{{ goods.goodsName }}</view><text class="goods-count">× {{ goods.number }}</text>
-        </view><text>{{ formatOrderPrice(detail.orderInfo, goods.amount, currentLocale) }}</text>
+        </view>
+        <text>
+          <FgPrice :amount="goods.amount" :country-code="countryCode" show-currency-name />
+          <text v-if="!countryCode">（币种待确认）</text>
+        </text>
       </view>
       <view class="total-row">
-        <text>{{ amountLabel }}</text><text class="total-price">{{ formatOrderPrice(detail.orderInfo, detail.orderInfo.amountReal, currentLocale) }}</text>
+        <text>{{ amountLabel }}</text>
+        <text class="total-price">
+          <FgPrice :amount="detail.orderInfo.amountReal" :country-code="countryCode" show-currency-name />
+          <text v-if="!countryCode">（币种待确认）</text>
+        </text>
       </view>
       <button v-if="submissionResult" class="view-orders" @tap="viewOrders">
         查看全部订单

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 import { PhoneInput } from '@/components/phone-input'
 import { OrderImage } from '@/components/order-image'
@@ -25,7 +27,7 @@ import PayGoodsCard from './components/PayGoodsCard/index.vue'
 import PaySubmitBar from './components/PaySubmitBar/index.vue'
 import { usePayPage } from './composables/use-page'
 
-const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 
 definePage({
   style: {
@@ -107,7 +109,7 @@ onShow(() => {
       <view v-if="delivery.peisongType === 'kd'" class="mt-8rpx">
         <view class="section-divider" />
         <view v-if="delivery.addressLoading" class="py-24rpx text-26rpx text-#666">
-          地址加载中
+          <PageLoading title="地址加载中" />
         </view>
         <view v-else-if="delivery.addressError" class="py-24rpx text-26rpx text-#666" @tap="vm.refresh()">
           地址加载失败，点击重试
@@ -251,7 +253,7 @@ onShow(() => {
         <text class="fee-value" :class="{ 'fee-status': preview.status !== 'ready' }">
           <template v-if="preview.status === 'ready' && preview.yunPrice === 0">免配送费</template>
           <template v-else-if="preview.status === 'ready'">
-            {{ currencySymbol }}{{ preview.yunPrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+            <FgPrice :amount="preview.yunPrice" :country-code="countryCode" show-currency-name />
           </template>
           <template v-else>{{ vm.deliveryFeeText.value }}</template>
         </text>
@@ -261,7 +263,7 @@ onShow(() => {
           {{ preview.peisongfee?.fwf1Name }}
         </text>
         <text class="fee-value">
-          {{ currencySymbol }}{{ preview.peisongfee?.amount1 }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+          <FgPrice :amount="preview.peisongfee?.amount1" :country-code="countryCode" show-currency-name />
         </text>
       </view>
       <view v-if="preview.peisongfee?.amount2" class="fee-item">
@@ -269,7 +271,7 @@ onShow(() => {
           {{ preview.peisongfee?.fwf2Name }}
         </text>
         <text class="fee-value">
-          {{ currencySymbol }}{{ preview.peisongfee?.amount2 }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+          <FgPrice :amount="preview.peisongfee?.amount2" :country-code="countryCode" show-currency-name />
         </text>
       </view>
       <view v-if="preview.peisongfee?.amount3" class="fee-item">
@@ -277,7 +279,7 @@ onShow(() => {
           {{ preview.peisongfee?.fwf3Name }}
         </text>
         <text class="fee-value">
-          {{ currencySymbol }}{{ preview.peisongfee?.amount3 }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+          <FgPrice :amount="preview.peisongfee?.amount3" :country-code="countryCode" show-currency-name />
         </text>
       </view>
     </view>

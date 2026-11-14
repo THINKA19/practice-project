@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -27,7 +29,7 @@ withDefaults(defineProps<{
 
 const emit = defineEmits<{ submit: [] }>()
 
-const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 
 /**
  * 结算页 - 底部提交栏（原 van-submit-bar，纯展示）
@@ -45,17 +47,17 @@ const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
           <text class="shrink-0 text-28rpx text-#333">
             {{ label }}：
           </text>
-          <text class="text-40rpx text-#c93636 font-semibold">{{ currencySymbol }}{{ amount }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text></text>
+          <text class="text-40rpx text-#c93636 font-semibold"><FgPrice :amount="amount" :country-code="countryCode" show-currency-name /></text>
         </view>
         <text v-if="hint" class="text-22rpx text-#999">{{ hint }}</text>
       </view>
       <wd-button
         custom-class="pay-btn"
         round
-        :disabled="disabled"
-        :loading="loading"
+        :disabled="disabled || loading"
         @click="emit('submit')"
       >
+        <PageLoading v-if="loading" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
         {{ buttonText }}
       </wd-button>
     </view>

@@ -25,6 +25,8 @@ describe('首页 Mock 接入契约', () => {
     const ads = await bannerApi.banners('ordering_ad')
     expect(ads).toHaveLength(3)
     expect(ads.every(item => item.type === 'ordering_ad')).toBe(true)
+    const { fetchHomePromotion } = await import('../../components/HomePromotionPopup/api/promotion.api')
+    expect(await fetchHomePromotion()).toMatchObject({ picUrl: '/src/mock/assets/images/home/banner/popup-poster.jpeg' })
     expect(await bannerApi.banners('card')).toEqual([])
     expect(uni.request).not.toHaveBeenCalled()
   })

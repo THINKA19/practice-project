@@ -6,12 +6,15 @@
 import { computed, onScopeDispose, ref } from 'vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useSessionState } from '@/pages/auth/session'
+import { MERCHANT_PAGE_PERMISSIONS, useMerchantShopStore } from '@/pages-shop/auth/permissions'
+import { ShopRoutes } from '@/pages-shop/routes'
 import { getAllPages } from '@/utils'
 import { isDemo, login, serviceReady } from './use-actions'
-/** 登录成功留在当前页展示身份；仅恢复真实存在且属于该端的原目标页面。 */
+/** 验证账号在已授权门店的岗位，并按当前门店岗位进入工作台。 */
 export function useShopLoginPage() {
   const session = useSessionState()
 
+  const store = useMerchantShopStore()
   const username = ref('')
 
   const password = ref('')
@@ -34,7 +37,7 @@ export function useShopLoginPage() {
       session.clearSession()
   })
 
-  let target = ''
+  let target: string = ShopRoutes.Workspace.workspace
 
   onLoad((query) => {
     try {
@@ -46,9 +49,25 @@ export function useShopLoginPage() {
         target = value
     }
     catch {
-      target = ''
+      target = ShopRoutes.Workspace.workspace
     }
   })
+
+  async function enterWorkspace() {
+    if (!authenticated.value || disposed)
+      return
+
+    if (target !== ShopRoutes.Workspace.workspace)
+      await store.refresh()
+    if (!authenticated.value || disposed)
+      return
+
+    const permission = MERCHANT_PAGE_PERMISSIONS[target.split(/[?#]/)[0]]
+    const destination = store.current && (!permission || store.can(permission))
+      ? target
+      : ShopRoutes.Workspace.workspace
+    uni.redirectTo({ url: destination })
+  }
 
   async function submit() {
     if (disposed || loading.value)
@@ -66,8 +85,7 @@ export function useShopLoginPage() {
 
       password.value = ''
 
-      if (target && session.hasLogin && session.identity === 'shop')
-        uni.redirectTo({ url: target })
+      await enterWorkspace()
     }
     catch (reason) {
       if (!disposed)
@@ -86,5 +104,5 @@ export function useShopLoginPage() {
       error.value = reason instanceof Error ? reason.message : '服务端退出失败，本地会话已清除'
     }
   }
-  return { username, password, loading, error, authenticated, session, serviceReady, isDemo, submit, logout, apply: () => uni.navigateTo({ url: '/pages-shop/onboarding/index' }) }
+  return { enterWorkspace, username, password, loading, error, authenticated, session, serviceReady, isDemo, submit, logout }
 }

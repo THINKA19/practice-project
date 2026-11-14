@@ -16,6 +16,7 @@ const vm = useCardLogsPage() // 在父页面 setup 中调用
 ============================================================================
 -->
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import type { useCardLogsPage } from '../../composables/use-page'
 import { myCardState } from '../../../gift-card'
 import { cardLogAmount, cardLogTitle } from '../../domain/log.rules'
@@ -88,7 +89,7 @@ const { card, list, loaded, failed, loading, invalidCard, hasMore } = vm
         卡片信息有误，请从「我的」重新打开。
       </view>
       <view v-else-if="loading && !list.length" class="record-state">
-        正在加载明细记录…
+        <PageLoading title="正在加载明细记录…" />
       </view>
       <view v-else-if="loaded && !failed && !list.length" class="record-state">
         暂无明细记录。未使用的卡片没有消费记录，记录以服务端返回为准。
@@ -123,7 +124,8 @@ const { card, list, loaded, failed, loading, invalidCard, hasMore } = vm
         </button>
       </view>
       <button v-else-if="hasMore" class="record-button" :disabled="loading" @tap="vm.loadMore()">
-        {{ loading ? '加载中…' : '加载更多明细' }}
+        <PageLoading v-if="loading" inline />
+        <text v-else>加载更多明细</text>
       </button>
       <view v-else-if="loaded && !loading && list.length" class="record-state">
         已经到底了

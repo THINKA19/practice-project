@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 /**
  * ============================================================================
  * 【文件概述】平台商家列表组件；由底部点餐入口装配。
@@ -7,7 +8,7 @@
  * ============================================================================
  */
 import { useOrderingLocale as useI18n } from '@/pages/ordering/menu'
-import { nextTick, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import { clearShopSelectionTarget, takeShopListFreshEntry } from '../../navigation'
 import RegionPicker from '../RegionPicker/index.vue'
 import ShopCard from '../ShopCard/index.vue'
@@ -19,6 +20,8 @@ const { t } = useI18n()
 const vm = useShopSelectPage(props.booking ? 'table-booking' : undefined)
 const { paging, shops, searchValue, countryCode, cityCode, districtCode, regionLabel } = vm
 const regionOpen = ref(false)
+const hasFilters = computed(() => Boolean(searchValue.value.trim() || countryCode.value || cityCode.value || districtCode.value))
+const hasNoFavorites = computed(() => vm.favorites.ready && vm.favorites.ids.length === 0)
 const categories = [{ key: 'all', label: '全部' }, { key: 'promotions', label: '优惠活动' }, { key: 'favorites', label: '我的收藏' }] as const
 /** 打开时刷新后台开放范围。无参数。@returns void。@example openRegions() */
 function openRegions() {
@@ -73,12 +76,22 @@ onHide(() => {
     :to-bottom-loading-more-enabled="true"
     :loading-more-default-as-loading="true"
     :paging-style="{ background: '#fff9f0' }"
+    :empty-view-center="vm.category.value !== 'favorites'"
     :empty-view-text="booking ? '没有找到支持订座的门店' : vm.emptyText.value"
     loading-more-no-more-text="已经显示全部门店"
     @query="vm.query"
     @scroll-top-change="vm.rememberScroll"
     @content-height-changed="vm.restorePosition"
   >
+    <template #loading>
+      <PageLoading class="py-48rpx" />
+    </template>
+    <template #refresher="{ refresherStatus }">
+      <PageLoading inline :refresh-status="refresherStatus" class="h-80rpx w-full" />
+    </template>
+    <template #loadingMoreLoading>
+      <PageLoading inline class="w-full py-24rpx" />
+    </template>
     <template #top>
       <view class="region-tip">
         <view class="h-40rpx flex shrink-0 items-center">
@@ -107,25 +120,39 @@ onHide(() => {
           {{ tab.label }}
         </view>
       </view>
-      <view v-if="vm.category.value === 'favorites' && !vm.favoritesNeedLogin.value && vm.favorites.error" class="px-24rpx pb-16rpx text-24rpx text-[#8b4513]" @tap="vm.favorites.load()">
-        {{ vm.favorites.error }}
-      </view>
     </template>
     <template v-if="vm.category.value === 'favorites'" #empty="{ isLoadFailed }">
-      <view class="px-48rpx py-64rpx text-center">
-        <text class="block text-30rpx text-[#555]">{{ vm.favoritesNeedLogin.value ? '登录后查看收藏门店' : isLoadFailed ? '收藏加载失败，请重试' : vm.emptyText.value }}</text>
+      <view class="favorites-state px-48rpx py-64rpx text-center">
         <template v-if="vm.favoritesNeedLogin.value">
-          <text class="mt-16rpx block text-26rpx text-[#888]">收藏喜欢的门店，下次找店更方便</text>
-          <button class="favorites-login mt-32rpx rounded-full px-64rpx text-28rpx text-white" @tap="vm.loginForFavorites">
+          <text class="favorites-title">登录后查看收藏门店</text>
+          <button class="favorites-action favorites-action-primary favorites-login" @tap="vm.loginForFavorites">
             去登录
           </button>
         </template>
-        <button v-else-if="isLoadFailed" class="mt-32rpx text-28rpx text-[#8b4513]" @tap="vm.reload">
-          重新加载
-        </button>
-        <template v-else-if="vm.category.value === 'favorites'">
-          <text class="mt-16rpx block text-26rpx text-[#888]">进入门店后可点击收藏，也可以调整地区或搜索条件</text>
-          <button class="mt-32rpx text-28rpx text-[#8b4513]" @tap="vm.changeCategory('all')">
+        <template v-else-if="isLoadFailed || vm.favorites.error">
+          <text class="favorites-title">收藏加载失败，请重试</text>
+          <button class="favorites-action" @tap="isLoadFailed ? vm.reload() : vm.favorites.load()">
+            重新加载
+          </button>
+        </template>
+        <PageLoading v-else-if="!vm.favorites.ready" title="正在加载收藏…" />
+        <template v-else-if="hasNoFavorites">
+          <text class="favorites-title">还没有收藏门店</text>
+          <text class="favorites-description">在门店内点击收藏，下次就能在这里找到它。</text>
+          <button class="favorites-action favorites-action-primary" @tap="vm.resetFilters()">
+            浏览全部门店
+          </button>
+        </template>
+        <template v-else-if="hasFilters">
+          <text class="favorites-title">没有符合条件的收藏门店</text>
+          <text class="favorites-description">试试更换地区或关键词。</text>
+          <button class="favorites-action" @tap="vm.clearFilters">
+            清除筛选
+          </button>
+        </template>
+        <template v-else>
+          <text class="favorites-title">暂无可浏览的收藏门店</text>
+          <button class="favorites-action favorites-action-primary" @tap="vm.resetFilters()">
             浏览全部门店
           </button>
         </template>
@@ -139,9 +166,40 @@ onHide(() => {
 </template>
 
 <style lang="scss" scoped>
-.favorites-login {
+.favorites-state {
+  color: #262626;
+}
+
+.favorites-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.favorites-description {
+  display: block;
+  margin-top: 16rpx;
+  color: #666;
+  font-size: 26rpx;
+}
+
+.favorites-action {
   display: inline-block;
-  background: var(--app-brand-primary, #8b4513);
+  margin: 32rpx 0 0;
+  padding: 0 64rpx;
+  color: var(--app-brand-primary, #8b4513);
+  font-size: 28rpx;
+  background: transparent;
+  border-radius: 999rpx;
+}
+
+.favorites-action-primary {
+  color: #fff;
+  background: #067a45;
+}
+
+.favorites-action::after {
+  border: 0;
 }
 
 .region-tip {

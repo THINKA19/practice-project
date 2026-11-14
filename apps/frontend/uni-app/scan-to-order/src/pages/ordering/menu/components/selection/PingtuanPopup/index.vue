@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -36,7 +37,7 @@ const emit = defineEmits<{
   reopen: []
 }>()
 
-const { currencySymbol, currencyUnit, currencyName } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 
 const { t } = useI18n()
 
@@ -65,10 +66,10 @@ const steps = [
         </view>
         <view class="mt-16rpx flex items-center">
           <view class="xianjia">
-            {{ currencySymbol }}{{ goods.pingtuanPrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+            <FgPrice :amount="goods.pingtuanPrice" :country-code="countryCode" show-currency-name />
           </view>
           <view v-if="goods.minPrice > 0 && goods.minPrice !== goods.pingtuanPrice" class="yuanjia">
-            {{ t('goodsDetail.originalPrice') }} {{ currencySymbol }}{{ goods.minPrice }}{{ currencyUnit }}<text class="ml-4rpx text-20rpx font-normal">{{ currencyName }}</text>
+            {{ t('goodsDetail.originalPrice') }} <FgPrice :amount="goods.minPrice" :country-code="countryCode" show-currency-name />
           </view>
         </view>
         <view class="jilu">

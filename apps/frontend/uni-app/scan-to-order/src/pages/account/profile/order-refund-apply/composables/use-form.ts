@@ -11,7 +11,7 @@ import { requireIdentity, useSessionAccountScope } from '@/pages/auth/session'
 import { orderApi, uploadOrderFile } from '@/pages/account/profile/order'
 import { afterSaleTypes, clampRefundNumber, computeRefundAmount, supportsAfterSale } from '../domain/refund-apply.rules'
 import { REFUND_APPLYING_CODE } from '../models/enums'
-import { alert, back, chooseImage, hideLoading, previewImage, showLoading, toast } from '@/utils/project/interaction'
+import { alert, back, chooseImage, previewImage, toast } from '@/utils/project/interaction'
 
 import type { RadioOption } from '../components/OptionRadioList/types'
 
@@ -46,7 +46,6 @@ export function useOrderRefundApplyForm(orderId: Ref<string>, goods: Ref<Refunda
   const picsList = ref<string[]>([])
   const submitting = ref(false)
   const scope = useSessionAccountScope(() => {
-    hideLoading()
     curGoods.value = null
     goodsIndex.value = null
     picsList.value = []
@@ -187,7 +186,6 @@ export function useOrderRefundApplyForm(orderId: Ref<string>, goods: Ref<Refunda
     const paths = [...picsList.value]
 
     submitting.value = true
-    showLoading()
 
     try {
       const pics = await uploadPics(ticket, paths)
@@ -202,7 +200,6 @@ export function useOrderRefundApplyForm(orderId: Ref<string>, goods: Ref<Refunda
     catch (e) {
       if (!scope.current(ticket))
         return
-      hideLoading()
 
       if (e instanceof Error && e.message.includes(`[${REFUND_APPLYING_CODE}]`)) {
         await alert(t('refund.applyingTip'))
@@ -218,7 +215,6 @@ export function useOrderRefundApplyForm(orderId: Ref<string>, goods: Ref<Refunda
     finally {
       if (scope.current(ticket)) {
         submitting.value = false
-        hideLoading()
       }
     }
     if (!scope.current(ticket))

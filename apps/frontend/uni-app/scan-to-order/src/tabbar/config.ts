@@ -1,5 +1,6 @@
 import type { TabBar } from '@uni-helper/vite-plugin-uni-pages'
 import type { CustomTabBarItem, NativeTabBarItem } from './types'
+import zhHans from '../locale/zh-Hans.json'
 
 /**
  * tabbar 选择的策略，更详细的介绍见 tabbar.md 文件
@@ -162,7 +163,13 @@ export const customTabbarEnable = [TABBAR_STRATEGY_MAP.CUSTOM_TABBAR].includes(s
  */
 export const needHideNativeTabbar = selectedTabbarStrategy === TABBAR_STRATEGY_MAP.CUSTOM_TABBAR
 
-const _tabbarList = customTabbarEnable ? customTabbarList.map(item => ({ text: item.text, pagePath: item.pagePath })) : nativeTabbarList
+// 原生导航先于页面渲染，配置中直接使用默认文案，运行时再同步当前语言。
+const _tabbarList = customTabbarEnable
+  ? customTabbarList.map(item => ({ text: item.text, pagePath: item.pagePath }))
+  : nativeTabbarList.map(item => ({
+      ...item,
+      text: zhHans.tabbar[item.text.slice('%tabbar.'.length, -1) as keyof typeof zhHans.tabbar],
+    }))
 export const tabbarList = customTabbarEnable ? customTabbarList : nativeTabbarList
 
 // NATIVE_TABBAR(1) 时，显示原生Tabbar，在i18n的情况下需要 setTabbarItem (框架已经处理)

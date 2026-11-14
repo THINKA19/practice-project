@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { OrderImage } from '@/components/order-image'
+import FgPrice from '@/components/fg-price/fg-price.vue'
 import { useOrderingCurrency } from '@/pages/ordering/index'
 
 /**
@@ -37,7 +39,7 @@ const emit = defineEmits<{
   change: [item: CartItem, number: number]
 }>()
 
-const { currencySymbol, currencyUnit } = useOrderingCurrency()
+const { countryCode } = useOrderingCurrency()
 
 const { t } = useI18n()
 
@@ -66,7 +68,8 @@ function showSelection(item: CartItem) {
     @close="emit('close')"
   >
     <view class="cart-header">
-      <button class="clear-cart" :disabled="clearBlocked || clearing" :loading="clearing" @tap="!clearBlocked && !clearing && emit('clear')">
+      <button class="clear-cart" :disabled="clearBlocked || clearing" @tap="!clearBlocked && !clearing && emit('clear')">
+        <PageLoading v-if="clearing" inline indicator-only size="28rpx" color="currentColor" class="mr-8rpx" />
         <wd-icon v-if="!clearing" name="delete" size="28rpx" color="#222" />
         <text style="color: #ff4d4f">{{ clearing ? t('cart.clearing') : t('cart.clear') }}</text>
       </button>
@@ -82,7 +85,7 @@ function showSelection(item: CartItem) {
         </view>
         <view class="item-controls">
           <view class="price">
-            {{ currencySymbol }}{{ item.price }}{{ currencyUnit }}
+            <FgPrice :amount="item.price" :country-code="countryCode" />
           </view>
           <view class="stepper-box">
             <wd-input-number
@@ -94,7 +97,7 @@ function showSelection(item: CartItem) {
               :before-change="stepper(item)"
             />
             <view v-if="changingItems[item.key]" class="stepper-loading">
-              <wd-loading size="28rpx" />
+              <PageLoading inline indicator-only size="28rpx" />
             </view>
           </view>
         </view>

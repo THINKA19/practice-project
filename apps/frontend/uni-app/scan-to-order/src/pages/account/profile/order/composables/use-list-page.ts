@@ -144,7 +144,7 @@ export function useOrderListPage() {
       void navigate(ClientRoutes.Account.my)
   }
 
-  async function callShop(shopId?: number, demo = false) {
+  async function resolveShopPhone(shopId?: number, demo = false) {
     if (demo) {
       uni.showModal({ title: '演示门店', content: '当前为 Mock 订单，未配置真实商家电话。正式订单会获取商家电话并发起拨号。', showCancel: false })
       return
@@ -158,7 +158,7 @@ export function useOrderListPage() {
       const phone = await orderApi.shopPhone(shopId)
 
       if (scope.current(ticket) && phone)
-        uni.makePhoneCall({ phoneNumber: phone, fail: showError })
+        return phone
       else if (scope.current(ticket))
         toast('暂无商家联系电话')
     }
@@ -168,5 +168,5 @@ export function useOrderListPage() {
     }
   }
 
-  return { actionPending, needsLogin, login: () => requireIdentity('customer'), apiOk, loading, failed, orderList, cards, activeTab, tabs: ORDER_TABS, goBack, init: () => uni.setNavigationBarTitle({ title: '我的订单' }), refresh, toIndexPage: () => navigate(ClientRoutes.Ordering.order), toDetail: (id: number) => navigate(ClientRoutes.Account.orderDetail, { id }), cancelOrder: (id: number) => changeOrder(id, false), deleteOrder: (id: number) => changeOrder(id, true), callShop, refundApply, ...pay }
+  return { actionPending, needsLogin, login: () => requireIdentity('customer'), apiOk, loading, failed, orderList, cards, activeTab, tabs: ORDER_TABS, goBack, init: () => uni.setNavigationBarTitle({ title: '我的订单' }), refresh, toIndexPage: () => navigate(ClientRoutes.Ordering.order), toDetail: (id: number) => navigate(ClientRoutes.Account.orderDetail, { id }), cancelOrder: (id: number) => changeOrder(id, false), deleteOrder: (id: number) => changeOrder(id, true), resolveShopPhone, refundApply, ...pay }
 }

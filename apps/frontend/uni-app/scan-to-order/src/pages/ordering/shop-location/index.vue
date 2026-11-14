@@ -6,8 +6,8 @@
  * 【综合使用示例】import { ClientRoutes } from '@/pages/routes'; // 使用 Ordering.shopLocation 并携带 id 导航
  * ============================================================================
  */
+import LocationMap from '@/components/location-map/index.vue'
 import { PageState } from '@/components/page-state'
-import { ShopLocationMap } from '@/pages/ordering/index'
 import { useShopLocationPage } from './composables/use-page'
 
 definePage({ style: { navigationBarTitleText: '门店导航', disableScroll: true } })
@@ -52,7 +52,7 @@ onLoad((query) => {
         </view>
       </wd-popup>
       <view class="map-stage">
-        <ShopLocationMap :shop="shopInfo" :location="location" :markers="markers" :suspended="navigationVisible" />
+        <LocationMap :label="shopInfo.name" :address="shopInfo.address" :coordinate-type="shopInfo.coordinateType" :country-code="shopInfo.countryCode" :location="location" :markers="markers" :suspended="navigationVisible" />
       </view>
       <!-- #ifdef MP -->
       <wd-popup v-model="navigationVisible" position="bottom" root-portal round safe-area-inset-bottom :z-index="1300">

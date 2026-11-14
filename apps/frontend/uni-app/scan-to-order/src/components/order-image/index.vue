@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLoading from '@/components/page-loading/index.vue'
 import { ref, watch } from 'vue'
 
 defineOptions({ name: 'OrderImage' })
@@ -15,7 +16,8 @@ watch(() => props.src, () => {
 <template>
   <view class="order-image">
     <view v-if="!src || failed || !loaded" class="image-placeholder">
-      <text>{{ src && !failed ? '图片加载中' : label }}</text>
+      <PageLoading v-if="src && !failed" inline size="28rpx" title="图片加载中" />
+      <text v-else>{{ label }}</text>
     </view>
     <image v-if="src && !failed" :key="src" :src="src" mode="aspectFill" class="image-content" @load="loaded = true" @error="failed = true" />
   </view>

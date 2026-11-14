@@ -26,7 +26,8 @@
  * const value: OptionChoiceView = response // => 保留 OptionChoiceView 的字段与取值约束
  */
 export interface OptionChoiceView {
-  priceText?: string
+  price?: number
+  isSurcharge?: boolean
   id: number
   name: string
   active: boolean

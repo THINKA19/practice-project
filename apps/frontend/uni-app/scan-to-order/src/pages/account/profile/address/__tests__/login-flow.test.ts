@@ -3,9 +3,13 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { clearSession, getIdentity, getToken, redirectToLogin } from '@/pages/auth/session'
 import { seedSession } from '@/pages/auth/session/__tests__/fixtures'
 import { addressApi } from '../composables/use-requests'
+import Page from '../index.vue'
 
 // 保留真实会话、身份检查、登录跳转和页面，仅替换请求及平台边界。
-vi.mock('vue-i18n', () => ({ useI18n: () => ({ t: (key: string) => key }) }))
+vi.mock('vue-i18n', async importOriginal => ({
+  ...await importOriginal<typeof import('vue-i18n')>(),
+  useI18n: () => ({ t: (key: string) => key }),
+}))
 vi.mock('../composables/use-requests', () => ({ addressApi: { list: vi.fn(async () => []), add: vi.fn(), update: vi.fn() } }))
 vi.mock('@/pages/auth/session/api/session', () => ({ sessionApi: {} }))
 vi.mock('@/utils', () => ({ getLastPage: () => getCurrentPages().at(-1) }))
@@ -34,7 +38,6 @@ afterEach(() => {
 })
 
 async function openPage() {
-  const Page = (await import('../index.vue')).default
   wrapper = mount(Page, { global: { stubs: { 'wd-navbar': true, 'wd-icon': true, 'wd-popup': true } } })
   await show()
   await flushPromises()
@@ -91,7 +94,9 @@ it('其他身份不能新增顾客地址', async () => {
   seedSession({}, 'shop')
   const page = await openPage()
   await page.find('.empty-btn').trigger('tap')
-  expect(uni.showToast).toHaveBeenCalledWith({ title: '请先退出当前身份', icon: 'none' })
+  await vi.advanceTimersByTimeAsync(500)
+  expect(uni.navigateTo).toHaveBeenCalledWith({ url: '/pages/auth/login/index?redirect=%2Fpages%2Faccount%2Fprofile%2Faddress%2Findex' })
+  expect(getIdentity()).toBe('shop')
   expect(page.find('input').exists()).toBe(false)
   expect(addressApi.list).not.toHaveBeenCalled()
 })

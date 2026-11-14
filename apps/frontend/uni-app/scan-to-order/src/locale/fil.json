@@ -1,0 +1,38 @@
+{
+  "common": {
+    "selectLang": "Pumili ng wika",
+    "cancel": "Kanselahin",
+    "confirm": "Kumpirmahin"
+  },
+  "market": {
+    "select": "Pumili ng bansa",
+    "loading": "Nilo-load ang mga bansa…",
+    "failed": "Hindi ma-load ang mga bansa",
+    "empty": "Walang bansang mapipili",
+    "member": "Sentro ng miyembro",
+    "VN": "Vietnam",
+    "TH": "Thailand",
+    "LA": "Laos",
+    "ID": "Indonesia",
+    "CN": "Tsina",
+    "GB": "United Kingdom",
+    "MY": "Malaysia",
+    "SG": "Singapore",
+    "LK": "Sri Lanka",
+    "AU": "Australia",
+    "JP": "Hapon",
+    "KR": "Timog Korea",
+    "MM": "Myanmar",
+    "PH": "Pilipinas"
+  },
+  "tabbar": {
+    "pickup1": "Kunin ang order 1",
+    "home": "Home",
+    "ordering": "Umorder",
+    "service": "Mga serbisyo",
+    "queue": "Pila",
+    "pickup": "Kunin ang order",
+    "me": "Account",
+    "i18n": "Wika"
+  }
+}

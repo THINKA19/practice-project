@@ -13,7 +13,7 @@ menu 是扫码点餐主入口，menu-* 是该模块的配套页面和功能目�
 - [menu-cart](./menu-cart/README.md)：index.vue、order.vue，拥有购物车快照与操作、桌台订单页面编排；订单实体接口归账户订单领域。
 - [menu-pay](./menu-pay/README.md)：index.vue，拥有结算流程、购买草稿、配送计费和支付面板。
 - [shop-detail](./shop-detail/README.md)：index.vue，拥有门店详情与相册页面实例。
-- [shop-location](./shop-location/README.md)：index.vue，拥有地址复制、地图展示与导航面板实例。
+- [shop-location](./shop-location/README.md)：index.vue，拥有地址复制与导航面板实例，地图预览使用公共 LocationMap。
 
 本次五个配套目录统一增加 menu- 前缀，页面路径随目录迁移，只由路由加载；内部组件位于 components/组件名/index.vue，私有分区才使用 parts。分类、接口或工具目录不因此获得页面身份。页面扫描继续排除内部目录，生成 pages.json 不应出现组件路径。
 
